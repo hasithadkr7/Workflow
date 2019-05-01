@@ -1,0 +1,21 @@
+{
+  "rain_fall_file"  : "/home/hasitha/PycharmProjects/Workflow/raincelldat/DailyRain-{}.csv",
+  "db_host"            : "104.198.0.87",
+  "db_user"            : "root",
+  "db_password"        : "cfcwm07",
+  "db_name"              : "curw",
+
+  "INITIAL_PATH_PREFIX" : "results/wrf0",
+  "KEY_FILE_PATH" : "/home/hasitha/Shared/uwcc-admin.json",
+  "BUCKET_NAME" : "curwsl_nfs_1",
+  "NET_CDF_FILE" : "wrfout_d03-18:00:00_rf",
+  "FLO2D_MODEl" : "150m",
+  "NET_CDF_PATH" : "/mnt/disks/curwsl_nfs_1/results/wrf0_",
+  "WRF_DATA_DIR" : "/home/hasitha/PycharmProjects/Workflow/output/",
+
+  "klb_obs_stations" : {"Kottawa North Dharmapala School": [79.95818, 6.865576, "Leecom", "wrf_79.957123_6.859688"],
+                    "IBATTARA2": [79.919, 6.908, "CUrW IoT", "wrf_79.902664_6.913757"],
+                    "Malabe": [79.95738, 6.90396, "A&T Labs", "wrf_79.957123_6.913757"],
+                    "Kotikawatta": [80.802551, 6.890585, "Leecom", "wrf_80.802551_6.890585"],
+                    "Mulleriyawa": [79.941176, 6.923571, "A&T Labs", "wrf_79.929893_6.913757"]}
+}
