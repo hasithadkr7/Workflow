@@ -1,0 +1,19 @@
+{
+  "OBSERVED_WL_IDS" : [{"cell_id":"2265","water_level_id":"70648fc7b9abd08530b1d735b5db19b3e940b8b5b72dd696c8114b0c4b01a6d2"}],
+  "CONTROL_INTERVAL"       : 8640,
+  "CSV_NUM_METADATA_LINES" : 2,
+  "DAT_WIDTH"              : 12,
+
+  "db_host"                : "104.198.0.87",
+  "db_port"                : 3306,
+  "db_user"                : "root",
+  "db_password"            : "cfcwm07",
+  "db_name"                : "curw",
+
+  "outflow_dat"            : "OUTFLOW.DAT",
+  "WRF_DATA_DIR"           : "/home/hasitha/PycharmProjects/Workflow/output/",
+  "inflow_file"           : "INFLOW.DAT",
+  "inittidal_conf_path"    : "/home/hasitha/PycharmProjects/Workflow/outflowdat/INITTIDAL.CONF",
+
+  "initial_water_levels"   : "R         2265          0.5\nR         3559          6.6"
+}

@@ -1,0 +1,17 @@
+{
+  "TIDAL_FORECAST_ID"      : "ebcc2df39aea35de15cca81bc5f15baffd94bcebf3f169add1fd43ee1611d367",
+  "CONTROL_INTERVAL"       : 8640,
+  "CSV_NUM_METADATA_LINES" : 2,
+  "DAT_WIDTH"              : 12,
+
+  "db_host"                : "104.198.0.87",
+  "db_port"                : 3306,
+  "db_user"                : "root",
+  "db_password"            : "cfcwm07",
+  "db_name"                : "curw",
+
+  "outflow_dat"            : "OUTFLOW.DAT",
+  "WRF_DATA_DIR"           : "/home/hasitha/PycharmProjects/Workflow/output/",
+  "outflow_file"           : "OUTFLOW.DAT",
+  "inittidal_conf_path"    : "/home/hasitha/PycharmProjects/Workflow/outflowdat/INITTIDAL.CONF"
+}
