@@ -1,108 +1,34 @@
-# Download Rain cell files, download Mean-ref files.
-# Check Rain fall files are available in the bucket.
-
-import fnmatch
-import sys
-import os
 import json
-import getopt
-from datetime import datetime, timedelta
-from google.cloud import storage
-from curwmysqladapter import MySQLAdapter
+import traceback
 import numpy as np
-import pandas as pd
-import raincelldat.manager as res_mgr
-from netCDF4 import Dataset
-import logging
-import geopandas as gpd
-from scipy.spatial import Voronoi
+import os
+import copy
+import pkg_resources
 from shapely.geometry import Polygon, Point
+from scipy.spatial import Voronoi
+from netCDF4 import Dataset
+import pandas as pd
+import geopandas as gpd
+from datetime import datetime, timedelta
+from curwmysqladapter import MySQLAdapter
+import csv
+
+
+def get_resource_path(resource):
+    res = pkg_resources.resource_filename(__name__, resource)
+    if os.path.exists(res):
+        return res
+    else:
+        raise UnableFindResource(resource)
+
+
+class UnableFindResource(Exception):
+    def __init__(self, res):
+        Exception.__init__(self, 'Unable to find %s' % res)
 
 
 class CurwObservationException(Exception):
     pass
-
-
-def usage():
-    usage_text = """
-Usage: ./CSVTODAT.py [-d YYYY-MM-DD] [-t HH:MM:SS] [-h]
-
--h  --help          Show usage
--d  --date          Date in YYYY-MM-DD. 
--t  --time          Time in HH:00:00.
--f  --forward       Future day count
--b  --backward      Past day count
--T  --tag           Tag to differential simultaneous Forecast Runs E.g. wrf1, wrf2 ...
-    --wrf-rf        Path of WRF Rf(Rainfall) Directory. Otherwise using the `RF_DIR_PATH` from CONFIG.json
-    --wrf-kub       Path of WRF kelani-upper-basin(KUB) Directory. Otherwise using the `KUB_DIR_PATH` from CONFIG.json
-"""
-    print(usage_text)
-
-
-def download_netcdf(download_location, net_cdf_file_name, key_file, bucket_name):
-    try:
-        client = storage.Client.from_service_account_json(key_file)
-        bucket = client.get_bucket(bucket_name)
-        prefix = initial_path_prefix + '_'
-        blobs = bucket.list_blobs(prefix=prefix)
-        print("prefix : ", prefix)
-        print("net_cdf_file_name : ", net_cdf_file_name)
-        for blob in blobs:
-            if fnmatch.fnmatch(blob.name, "*" + net_cdf_file_name):
-                print(blob.name)
-                directory = download_location + "/" + net_cdf_file_name
-                if not os.path.exists(download_location):
-                    os.makedirs(download_location)
-                    print('download_netcdf|download_location: ', download_location)
-                blob.download_to_filename(directory)
-    except Exception as e:
-        print('Wrf net cdf file download failed.')
-        print(str(e))
-
-
-def extract_time_data(nc_f):
-    nc_fid = Dataset(nc_f, 'r')
-    times_len = len(nc_fid.dimensions['Time'])
-    try:
-        times = [''.join(x) for x in nc_fid.variables['Times'][0:times_len]]
-    except TypeError:
-        times = np.array([''.join([y.decode() for y in x]) for x in nc_fid.variables['Times'][:]])
-    nc_fid.close()
-    return times_len, times
-
-
-def get_two_element_average(prcp, return_diff=True):
-    avg_prcp = (prcp[1:] + prcp[:-1]) * 0.5
-    if return_diff:
-        return avg_prcp - np.insert(avg_prcp[:-1], 0, [0], axis=0)
-    else:
-        return avg_prcp
-
-
-def extract_area_rf_series(nc_f, lat_min, lat_max, lon_min, lon_max):
-    if not os.path.exists(nc_f):
-        raise IOError('File %s not found' % nc_f)
-
-    nc_fid = Dataset(nc_f, 'r')
-
-    times_len, times = extract_time_data(nc_f)
-    lats = nc_fid.variables['XLAT'][0, :, 0]
-    lons = nc_fid.variables['XLONG'][0, 0, :]
-
-    lon_min_idx = np.argmax(lons >= lon_min) - 1
-    lat_min_idx = np.argmax(lats >= lat_min) - 1
-    lon_max_idx = np.argmax(lons >= lon_max)
-    lat_max_idx = np.argmax(lats >= lat_max)
-
-    prcp = nc_fid.variables['RAINC'][:, lat_min_idx:lat_max_idx, lon_min_idx:lon_max_idx] + nc_fid.variables['RAINNC'][
-                                                                                            :, lat_min_idx:lat_max_idx,
-                                                                                            lon_min_idx:lon_max_idx]
-
-    diff = get_two_element_average(prcp)
-
-    nc_fid.close()
-
-    return diff, lats[lat_min_idx:lat_max_idx], lons[lon_min_idx:lon_max_idx], np.array(times[0:times_len - 1])
 
 
 def create_dir_if_not_exists(path):
@@ -111,13 +37,60 @@ def create_dir_if_not_exists(path):
     return path
 
 
-def get_observed_precip(obs_stations, start_dt, end_dt, duration_days, adapter, forecast_source='wrf0', ):
+def get_max_min_lat_lon(basin_points_file):
+    points = np.genfromtxt(basin_points_file, delimiter=',')
+    # points = [[id, longitude, latitude],[],[]]
+    kel_lon_min = np.min(points, 0)[1]
+    kel_lat_min = np.min(points, 0)[2]
+    kel_lon_max = np.max(points, 0)[1]
+    kel_lat_max = np.max(points, 0)[2]
+    print('[kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max] : ', [kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max])
+    print(points[0][1])
+    print(points[0][2])
+
+
+def get_observed_precip(stations, start_dt, end_dt, observed_duration, adapter, forecast_source='wrf0'):
+    obs = {}
+    opts = {
+        'from': start_dt,
+        'to': end_dt,
+    }
+
+    for s in stations.keys():
+        print('obs_stations[s][2]: ', stations[s][2])
+        station = {'station': s,
+                   'variable': 'Precipitation',
+                   'unit': 'mm',
+                   'type': 'Observed',
+                   'source': 'WeatherStation',
+                   'name': stations[s][2]
+                   }
+        row_ts = adapter.retrieve_timeseries(station, opts)
+        if len(row_ts) == 0:
+            print('No data for {} station from {} to {} .'.format(s, start_dt.strftime('%Y-%m-%d %H:%M:%S'), end_dt.strftime('%Y-%m-%d %H:%M:%S')))
+        else:
+            ts = np.array(row_ts[0]['timeseries'])
+            if len(ts) != 0:
+                ts_df = pd.DataFrame(data=ts, columns=['ts', 'precip'], index=ts[0:])
+                ts_sum = ts_df.groupby(by=[ts_df.ts.map(lambda x: x.strftime('%Y-%m-%d %H:00'))]).sum()
+                (row_count, column_count) = ts_sum.shape
+                print('row_count : ', row_count)
+                print('column_count : ', column_count)
+                if row_count >= observed_duration:
+                    print('valid station : ', s)
+                    obs[s] = ts_sum
+    print('get_observed_precip|success')
+    return obs
+
+
+def get_observed_precip_previous(stations, start_dt, end_dt, duration_days, adapter, forecast_source='wrf0'):
     def _validate_ts(_s, _ts_sum, _opts):
+        print('len(_ts_sum):', len(_ts_sum))
+        print('duration_days[0] * 24 + 1:', duration_days[0] * 24 + 1)
         if len(_ts_sum) == duration_days[0] * 24 + 1:
             return
 
-        logging.warning('%s Validation count fails. Trying to fill forecast for missing values' % _s)
-        f_station = {'station': obs_stations[_s][3],
+        f_station = {'station': stations[_s][3],
                      'variable': 'Precipitation',
                      'unit': 'mm',
                      'type': 'Forecast-0-d',
@@ -149,30 +122,244 @@ def get_observed_precip(obs_stations, start_dt, end_dt, duration_days, adapter, 
         'to': end_dt.strftime('%Y-%m-%d %H:%M:%S'),
     }
 
-    for s in obs_stations.keys():
-        try:
-            station = {'station': s,
-                       'variable': 'Precipitation',
-                       'unit': 'mm',
-                       'type': 'Observed',
-                       'source': 'WeatherStation',
-                       'name': obs_stations[s][2]
-                       }
-
-            ts = np.array(adapter.retrieve_timeseries(station, opts)[0]['timeseries'])
-            if len(ts) > 0:
+    for s in stations.keys():
+        print('obs_stations[s][2]: ', stations[s][2])
+        station = {'station': s,
+                   'variable': 'Precipitation',
+                   'unit': 'mm',
+                   'type': 'Observed',
+                   'source': 'WeatherStation',
+                   'name': stations[s][2]
+                   }
+        # print('station : ', s)
+        row_ts = adapter.retrieve_timeseries(station, opts)
+        if len(row_ts) == 0:
+            print('No data for {} station from {} to {} .'.format(s, start_dt.strftime('%Y-%m-%d %H:%M:%S'), end_dt.strftime('%Y-%m-%d %H:%M:%S')))
+        else:
+            ts = np.array(row_ts[0]['timeseries'])
+            #print('ts length:', len(ts))
+            if len(ts) != 0 :
                 ts_df = pd.DataFrame(data=ts, columns=['ts', 'precip'], index=ts[0:])
                 ts_sum = ts_df.groupby(by=[ts_df.ts.map(lambda x: x.strftime('%Y-%m-%d %H:00'))]).sum()
-                print('station : ', station)
                 try:
                     _validate_ts(s, ts_sum, opts)
                 except Exception as e:
-                    print('_validate_ts|Exception: ', str(e))
-                obs[s] = ts_sum
-        except Exception as e:
-            print('get_observed_precip|Exception: ', str(e))
-            print('get_observed_precip|Exception in station : ', s)
+                    print('_validate_ts|Exception : ', str(e))
+
+        obs[s] = ts_sum
+    print('get_observed_precip|success')
     return obs
+
+
+def get_forecast_precipitation(wrf_model, run_name, forecast_stations, adapter, run_datetime, forward_days=3):
+    forecast = {}
+    if forward_days == 3:
+        fcst_d0_start = run_datetime
+        fcst_d0_end = (datetime.strptime(run_datetime, '%Y-%m-%d %H:%M:%S') + timedelta(days=1)).strftime(
+                '%Y-%m-%d 00:00:00')
+        fcst_opts_d0 = {
+            'from': fcst_d0_start,
+            'to': fcst_d0_end,
+        }
+        fcst_d1_start = fcst_d0_end
+        fcst_d1_end = (datetime.strptime(fcst_d1_start, '%Y-%m-%d %H:%M:%S') + timedelta(days=1)).strftime(
+                '%Y-%m-%d 00:00:00')
+        fcst_opts_d1 = {
+            'from': fcst_d1_start,
+            'to': fcst_d1_end,
+        }
+        fcst_d2_start = fcst_d1_end
+        fcst_d2_end = (datetime.strptime(fcst_d2_start, '%Y-%m-%d %H:%M:%S') + timedelta(days=1)).strftime(
+                '%Y-%m-%d 00:00:00')
+        fcst_opts_d2 = {
+            'from': fcst_d2_start,
+            'to': fcst_d2_end,
+        }
+        print('fcst_opts_d0 : ', fcst_opts_d0)
+        print('fcst_opts_d1 : ', fcst_opts_d1)
+        print('fcst_opts_d2 : ', fcst_opts_d2)
+        for s in forecast_stations:
+            station_d0 = {'station': s,
+                              'variable': 'Precipitation',
+                              'unit': 'mm',
+                              'type': 'Forecast-0-d',
+                              'name': run_name,
+                              'source': wrf_model
+                              }
+            row_ts_d0 = adapter.retrieve_timeseries(station_d0, fcst_opts_d0)
+
+            station_d1 = {'station': s,
+                              'variable': 'Precipitation',
+                              'unit': 'mm',
+                              'type': 'Forecast-1-d-after',
+                              'name': run_name,
+                              'source': wrf_model
+                            }
+            row_ts_d1 = adapter.retrieve_timeseries(station_d1, fcst_opts_d1)
+
+            station_d2 = {'station': s,
+                          'variable': 'Precipitation',
+                          'unit': 'mm',
+                          'type': 'Forecast-2-d-after',
+                          'name': run_name,
+                          'source': wrf_model
+                          }
+            row_ts_d2 = adapter.retrieve_timeseries(station_d2, fcst_opts_d2)
+
+            ts_d0_df = pd.DataFrame(columns=['time', 'value'])
+            if len(row_ts_d0) > 0:
+                ts_d0 = np.array(row_ts_d0[0]['timeseries'])
+                if len(ts_d0) > 0:
+                    ts_d0_df = pd.DataFrame(data=ts_d0, columns=['time', 'value']).set_index(keys='time')
+            ts_d1_df = pd.DataFrame(columns=['time', 'value'])
+            if len(row_ts_d1):
+                ts_d1 = np.array(row_ts_d1[0]['timeseries'])
+                if len(ts_d1) != 0:
+                    ts_d1_df = pd.DataFrame(data=ts_d1, columns=['time', 'value']).set_index(keys='time')
+            ts_d2_df = pd.DataFrame(columns=['time', 'value'])
+            if len(row_ts_d2):
+                ts_d2 = np.array(row_ts_d2[0]['timeseries'])
+                if len(ts_d2) != 0:
+                    ts_d2_df = pd.DataFrame(data=ts_d2, columns=['time', 'value']).set_index(keys='time')
+
+            station_df = pd.concat([ts_d0_df, ts_d1_df, ts_d2_df])
+
+            if len(station_df.index) > 0:
+                forecast[s] = station_df
+        return forecast
+    else:
+        print('TODO')
+        return forecast
+
+
+def get_forecast_precipitation_from_curw(forecast_stations, start_dt, end_dt, adapter, forecast_source):
+    forecast = {}
+    opts = {
+        'from': start_dt,
+        'to': end_dt,
+    }
+
+    for s in forecast_stations:
+        station = {'station': s,
+                   'variable': 'Precipitation',
+                   'unit': 'mm',
+                   'type': 'Forecast-0-d',
+                   'source': forecast_source
+                   }
+        #print('station : ', s)
+        row_ts = adapter.retrieve_timeseries(station, opts)
+        if len(row_ts) == 0:
+            print('No data for {} station from {} to {} .'.format(s, start_dt, end_dt))
+        else:
+            ts = np.array(row_ts[0]['timeseries'])
+            if len(ts) != 0 :
+                ts_df = pd.DataFrame(data=ts, columns=['ts', 'precip'], index=ts[0:])
+                ts_sum = ts_df.groupby(by=[ts_df.ts.map(lambda x: x.strftime('%Y-%m-%d %H:00'))]).sum()
+                forecast[s] = ts_sum
+    print('get_forecast_precip|success')
+    return forecast
+
+
+def get_forecast_stations_from_point_file(basin_points_file):
+    forecast_stations_list = []
+    points = np.genfromtxt(basin_points_file, delimiter=',')
+    for point in points:
+        forecast_stations_list.append('wrf0_{}_{}'.format(point[1], point[2]))
+    return forecast_stations_list
+
+
+def get_forecast_stations_from_net_cdf(model_prefix, net_cdf_file, min_lat, min_lon, max_lat, max_lon):
+    nc_fid = Dataset(net_cdf_file, 'r')
+    init_lats = nc_fid.variables['XLAT'][:][0]
+    lats = []
+    for lat_row in init_lats:
+        lats.append(lat_row[0])
+    lons = nc_fid.variables['XLONG'][:][0][0]
+
+    lon_min_idx = np.argmax(lons >= min_lon) -1
+    lat_min_idx = np.argmax(lats >= min_lat) -1
+    lon_max_idx = np.argmax(lons >= max_lon)
+    lat_max_idx = np.argmax(lats >= max_lat)
+
+    lats = lats[lat_min_idx:lat_max_idx]
+    lons = lons[lon_min_idx:lon_max_idx]
+
+    print('get_forecast_stations_from_net_cdf : ', [lats[0], lats[-1], lons[0], lons[-1]])
+
+    width = len(lons)
+    height = len(lats)
+
+    stations = []
+    station_points = {}
+    for y in range(height):
+        for x in range(width):
+            lat = lats[y]
+            lon = lons[x]
+            station_name = '%s_%.6f_%.6f' % (model_prefix, lon, lat)
+            stations.append(station_name)
+            station_points[station_name] = [lon, lat, 'WRF', station_name]
+    return stations, station_points
+
+
+def get_forecast_stations_from_net_cdf_back(model_prefix, net_cdf_file, min_lat, min_lon, max_lat, max_lon):
+    nc_fid = Dataset(net_cdf_file, 'r')
+    init_lats = nc_fid.variables['XLAT'][:][0]
+    lats = []
+    for lat_row in init_lats:
+        lats.append(lat_row[0])
+    lons = nc_fid.variables['XLONG'][:][0][0]
+
+    lon_min_idx = np.argmax(lons >= min_lon) -1
+    lat_min_idx = np.argmax(lats >= min_lat) -1
+    lon_max_idx = np.argmax(lons >= max_lon)
+    lat_max_idx = np.argmax(lats >= max_lat)
+
+    lats = lats[lat_min_idx:lat_max_idx]
+    lons = lons[lon_min_idx:lon_max_idx]
+
+    print('get_forecast_stations_from_net_cdf : ', [lats[0], lats[-1], lons[0], lons[-1]])
+
+    width = len(lons)
+    height = len(lats)
+
+    stations = []
+    station_points = {}
+    csv_file_name = '/home/hasitha/PycharmProjects/Workflow/raincelldat/wrf0_points.csv'
+    line1 = ['wrf_point', 'latitude', 'longitude']
+    count = 1
+    with open(csv_file_name, 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerow(line1)
+        for y in range(height):
+            for x in range(width):
+                lat = lats[y]
+                lon = lons[x]
+                station_name = '%s_%.6f_%.6f' % (model_prefix, lon, lat)
+                stations.append(station_name)
+                station_points[station_name] = [lon, lat, 'WRF', station_name]
+                index = 'wrf0_point%s' % (count)
+                lat_val = '%.6f' % (lat)
+                lon_val = '%.6f' % (lon)
+                writer.writerow([index, lat_val, lon_val])
+                count = count+1
+    csvFile.close()
+    return stations, station_points
+
+
+def get_two_element_average(prcp, return_diff=True):
+    avg_prcp = (prcp[1:] + prcp[:-1]) * 0.5
+    if return_diff:
+        return avg_prcp - np.insert(avg_prcp[:-1], 0, [0], axis=0)
+    else:
+        return avg_prcp
+
+
+def is_inside_geo_df(geo_df, lon, lat, polygon_attr='geometry', return_attr='id'):
+    point = Point(lon, lat)
+    for i, poly in enumerate(geo_df[polygon_attr]):
+        if point.within(poly):
+            return geo_df[return_attr][i]
+    return None
 
 
 def _voronoi_finite_polygons_2d(vor, radius=None):
@@ -193,7 +380,7 @@ def _voronoi_finite_polygons_2d(vor, radius=None):
         Indices of vertices in each revised Voronoi regions.
     vertices : list of tuples
         Coordinates for revised Voronoi vertices. Same as coordinates
-        of input vertices, with 'points at infinity' appended to the
+        of inputs vertices, with 'points at infinity' appended to the
         end.
 
     from: https://stackoverflow.com/questions/20515554/colorize-voronoi-diagram
@@ -201,7 +388,7 @@ def _voronoi_finite_polygons_2d(vor, radius=None):
     """
 
     if vor.points.shape[1] != 2:
-        raise ValueError("Requires 2D input")
+        raise ValueError("Requires 2D inputs")
 
     new_regions = []
     new_vertices = vor.vertices.tolist()
@@ -305,195 +492,152 @@ def get_voronoi_polygons(points_dict, shape_file, shape_attribute=None, output_s
     return df
 
 
-def is_inside_geo_df(geo_df, lon, lat, polygon_attr='geometry', return_attr='id'):
-    point = Point(lon, lat)
-    for i, poly in enumerate(geo_df[polygon_attr]):
-        if point.within(poly):
-            return geo_df[return_attr][i]
-    return None
+# if __name__ == "__main__":
+def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward):
+    try:
+        res_mins = '60'
+        model_prefix = 'wrf'
+        forecast_source = 'wrf0'
+        run_name = 'Cloud-1'
+        forecast_adapter = None
+        observed_adapter = None
+        kelani_basin_points_file = get_resource_path('extraction/local/kelani_basin_points_250m.txt')
+        kelani_lower_basin_shp_file = get_resource_path('extraction/shp/klb-wgs84/klb-wgs84.shp')
+        reference_net_cdf = get_resource_path('extraction/netcdf/wrf_wrfout_d03_2019-03-31_18_00_00_rf')
+        config_path = os.path.join(os.getcwd(), 'raincelldat', 'config.json')
+        with open(config_path) as json_file:
+            config = json.load(json_file)
+            if 'forecast_db_config' in config:
+                forecast_db_config = config['forecast_db_config']
+            if 'observed_db_config' in config:
+                observed_db_config = config['observed_db_config']
+            if 'klb_obs_stations' in config:
+                obs_stations = copy.deepcopy(config['klb_obs_stations'])
 
+            res_mins = int(res_mins)
+            print('[run_date, run_time] : ', [run_date, run_time])
+            start_ts_lk = datetime.strptime('%s %s' % (run_date, run_time), '%Y-%m-%d %H:%M:%S')
+            start_ts_lk = start_ts_lk.strftime('%Y-%m-%d_%H:00')  # '2018-05-24_08:00'
+            duration_days = (int(backward), int(forward))
+            obs_start = datetime.strptime(start_ts_lk, '%Y-%m-%d_%H:%M') - timedelta(days=duration_days[0])
+            obs_end = datetime.strptime(start_ts_lk, '%Y-%m-%d_%H:%M')
+            forecast_end = datetime.strptime(start_ts_lk, '%Y-%m-%d_%H:%M') + timedelta(days=duration_days[1])
+            print([obs_start, obs_end, forecast_end])
 
-def datetime_lk_to_utc(timestamp_lk,  shift_mins=0):
-    return timestamp_lk - timedelta(hours=5, minutes=30 + shift_mins)
+            fcst_duration_start = obs_end.strftime('%Y-%m-%d %H:%M:%S')
+            fcst_duration_end = (datetime.strptime(fcst_duration_start, '%Y-%m-%d %H:%M:%S') + timedelta(days=3)).strftime('%Y-%m-%d 00:00:00')
+            obs_duration_start = (datetime.strptime(fcst_duration_start, '%Y-%m-%d %H:%M:%S') - timedelta(days=2)).strftime('%Y-%m-%d 00:00:00')
 
+            print('obs_duration_start : ', obs_duration_start)
+            print('fcst_duration_start : ', fcst_duration_start)
+            print('fcst_duration_end : ', fcst_duration_end)
 
-def extract_kelani_basin_rainfall_flo2d_with_obs(run_time, nc_f, adapter, obs_stations, output_dir, start_ts_lk,
-                                                 duration_days=None, output_prefix='RAINCELL',
-                                                 kelani_lower_basin_points=None, kelani_lower_basin_shp=None):
-    """
-    check test_extract_kelani_basin_rainfall_flo2d_obs test case
-    :param nc_f: file path of the wrf output
-    :param adapter:
-    :param obs_stations: dict of stations. {station_name: [lon, lat, name variable, nearest wrf point station name]}
-    :param output_dir:
-    :param start_ts_lk: start time of the forecast/ end time of the observations
-    :param duration_days: (optional) a tuple (observation days, forecast days) default (2,3)
-    :param output_prefix: (optional) output file name of the RAINCELL file. ex: output_prefix=RAINCELL-150m --> RAINCELL-150m.DAT
-    :param kelani_lower_basin_points: (optional)
-    :param kelani_lower_basin_shp: (optional)
-    :return:
-    """
+            observed_duration = int((datetime.strptime(fcst_duration_start, '%Y-%m-%d %H:%M:%S') - datetime.strptime(obs_duration_start, '%Y-%m-%d %H:%M:%S')).total_seconds() / (60 * res_mins))
+            forecast_duration = int((datetime.strptime(fcst_duration_end, '%Y-%m-%d %H:%M:%S') - datetime.strptime(fcst_duration_start, '%Y-%m-%d %H:%M:%S')).total_seconds() / (60 * res_mins))
+            total_duration = int((datetime.strptime(fcst_duration_end, '%Y-%m-%d %H:%M:%S') - datetime.strptime(obs_duration_start, '%Y-%m-%d %H:%M:%S')).total_seconds() / (60 * res_mins))
 
-    print('obs_stations : ', obs_stations)
+            print('observed_duration : ', observed_duration)
+            print('forecast_duration : ', forecast_duration)
+            print('total_duration : ', total_duration)
 
-    if duration_days is None:
-        duration_days = (2, 3)
+            raincell_file_path = os.path.join(dir_path, 'RAINCELL.DAT')
+            if not os.path.isfile(raincell_file_path):
+                points = np.genfromtxt(kelani_basin_points_file, delimiter=',')
 
-    if kelani_lower_basin_points is None:
-        kelani_lower_basin_points = res_mgr.get_resource_path('extraction/local/kelani_basin_points_250m.txt')
+                kel_lon_min = np.min(points, 0)[1]
+                kel_lat_min = np.min(points, 0)[2]
+                kel_lon_max = np.max(points, 0)[1]
+                kel_lat_max = np.max(points, 0)[2]
 
-    if kelani_lower_basin_shp is None:
-        kelani_lower_basin_shp = res_mgr.get_resource_path('extraction/shp/klb-wgs84/klb-wgs84.shp')
+                print('[kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max] : ', [kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max])
 
-    points = np.genfromtxt(kelani_lower_basin_points, delimiter=',')
+                forecast_adapter = MySQLAdapter(host=forecast_db_config['host'],
+                                                user=forecast_db_config['user'],
+                                                password=forecast_db_config['password'],
+                                                db=forecast_db_config['db'])
+                # #min_lat, min_lon, max_lat, max_lon
+                forecast_stations, station_points = get_forecast_stations_from_net_cdf(model_prefix, reference_net_cdf,
+                                                                                       kel_lat_min,
+                                                                                       kel_lon_min,
+                                                                                       kel_lat_max,
+                                                                                       kel_lon_max)
+                print('forecast_stations length : ', len(forecast_stations))
 
-    kel_lon_min = np.min(points, 0)[1]
-    kel_lat_min = np.min(points, 0)[2]
-    kel_lon_max = np.max(points, 0)[1]
-    kel_lat_max = np.max(points, 0)[2]
+                forecast_precipitations = get_forecast_precipitation(forecast_source, run_name, forecast_stations,
+                                                                     forecast_adapter, obs_end.strftime('%Y-%m-%d %H:%M:%S'), forward_days=3)
+                forecast_adapter.close()
+                forecast_adapter = None
+                if bool(forecast_precipitations):
+                    observed_adapter = MySQLAdapter(host=observed_db_config['host'],
+                                                    user=observed_db_config['user'],
+                                                    password=observed_db_config['password'],
+                                                    db=observed_db_config['db'])
 
-    diff, kel_lats, kel_lons, times = extract_area_rf_series(nc_f, kel_lat_min, kel_lat_max, kel_lon_min,
-                                                                       kel_lon_max)
+                    # print('obs_stations : ', obs_stations)
+                    observed_precipitations = get_observed_precip(obs_stations,
+                                                                  obs_duration_start,
+                                                                  fcst_duration_start,
+                                                                  observed_duration,
+                                                                  observed_adapter, forecast_source='wrf0')
+                    observed_adapter.close()
+                    observed_adapter = None
+                    validated_obs_station = {}
+                    # print('obs_stations.keys() : ', obs_stations.keys())
+                    # print('observed_precipitations.keys() : ', observed_precipitations.keys())
 
-    def get_bins(arr):
-        sz = len(arr)
-        return (arr[1:sz - 1] + arr[0:sz - 2]) / 2
+                    for station_name in obs_stations.keys():
+                        if station_name in observed_precipitations.keys():
+                            validated_obs_station[station_name] = obs_stations[station_name]
+                        else:
+                            print('station_name : ', station_name)
 
-    lat_bins = get_bins(kel_lats)
-    lon_bins = get_bins(kel_lons)
+                    if bool(observed_precipitations):
+                        thess_poly = get_voronoi_polygons(validated_obs_station, kelani_lower_basin_shp_file, add_total_area=False)
+                        fcst_thess_poly = get_voronoi_polygons(station_points, kelani_lower_basin_shp_file, add_total_area=False)
 
-    t0 = datetime.strptime(times[0], '%Y-%m-%d_%H:%M:%S')
-    t1 = datetime.strptime(times[1], '%Y-%m-%d_%H:%M:%S')
-    output_dir = os.path.join(output_dir, run_time)
-    create_dir_if_not_exists(output_dir)
+                        fcst_point_thess_idx = []
+                        for point in points:
+                            fcst_point_thess_idx.append(is_inside_geo_df(fcst_thess_poly, lon=point[1], lat=point[2]))
+                            pass
+                        # print('fcst_point_thess_idx : ', fcst_point_thess_idx)
 
-    obs_start = datetime.strptime(start_ts_lk, '%Y-%m-%d_%H:%M') - timedelta(days=duration_days[0])
-    obs_end = datetime.strptime(start_ts_lk, '%Y-%m-%d_%H:%M')
-    forecast_end = datetime.strptime(start_ts_lk, '%Y-%m-%d_%H:%M') + timedelta(days=duration_days[1])
-    obs = get_observed_precip(obs_stations, obs_start, obs_end, duration_days, adapter)
-    thess_poly = get_voronoi_polygons(obs_stations, kelani_lower_basin_shp, add_total_area=False)
+                        # create_dir_if_not_exists(dir_path)
+                        point_thess_idx = []
+                        for point in points:
+                            point_thess_idx.append(is_inside_geo_df(thess_poly, lon=point[1], lat=point[2]))
+                            pass
 
-    output_file_path = os.path.join(output_dir, output_prefix + '.DAT')
+                        print('len(points)', len(points))
+                        print('len(point_thess_idx)', len(point_thess_idx))
+                        print('len(fcst_point_thess_idx)', len(fcst_point_thess_idx))
 
-    # update points array with the thessian polygon idx
-    point_thess_idx = []
-    for point in points:
-        point_thess_idx.append(is_inside_geo_df(thess_poly, lon=point[1], lat=point[2]))
-        pass
+                        with open(raincell_file_path, 'w') as output_file:
+                            output_file.write("%d %d %s %s\n" % (res_mins, total_duration, obs_duration_start, fcst_duration_end))
 
-    with open(output_file_path, 'w') as output_file:
-        res_mins = int((t1 - t0).total_seconds() / 60)
-        data_hours = int(sum(duration_days) * 24 * 60 / res_mins)
-        start_ts_lk = obs_start.strftime('%Y-%m-%d %H:%M:%S')
-        end_ts = forecast_end.strftime('%Y-%m-%d %H:%M:%S')
+                            print('range 1 : ', int(24 * 60 * duration_days[0] / res_mins) + 1)
+                            print('range 2 : ', int(24 * 60 * duration_days[1] / res_mins) - 1)
 
-        output_file.write("%d %d %s %s\n" % (res_mins, data_hours, start_ts_lk, end_ts))
+                            for t in range(observed_duration):
+                                for i, point in enumerate(points):
+                                    rf = float(observed_precipitations[point_thess_idx[i]].values[t]) if point_thess_idx[i] is not None else 0
+                                    output_file.write('%d %.1f\n' % (point[0], rf))
 
-        for t in range(int(24 * 60 * duration_days[0] / res_mins) + 1):
-            for i, point in enumerate(points):
-                rf = float(obs[point_thess_idx[i]].values[t]) if point_thess_idx[i] is not None else 0
-                output_file.write('%d %.1f\n' % (point[0], rf))
-
-        forecast_start_idx = int(
-            np.where(times == datetime_lk_to_utc(obs_end, shift_mins=30).strftime('%Y-%m-%d_%H:%M:%S'))[0])
-        for t in range(int(24 * 60 * duration_days[1] / res_mins) - 1):
-            for point in points:
-                rf_x = np.digitize(point[1], lon_bins)
-                rf_y = np.digitize(point[2], lat_bins)
-                if t + forecast_start_idx + 1 < len(times):
-                    output_file.write('%d %.1f\n' % (point[0], diff[t + forecast_start_idx + 1, rf_y, rf_x]))
+                            for t in range(forecast_duration):
+                                for j, point in enumerate(points):
+                                    rf = float(forecast_precipitations[fcst_point_thess_idx[j]].values[t]) if fcst_point_thess_idx[j] is not None else 0
+                                    output_file.write('%d %.1f\n' % (point[0], rf))
+                    else:
+                        print('No observed data.')
                 else:
-                    output_file.write('%d %.1f\n' % (point[0], 0))
-
-
-def create_raincell_file(run_time, adapter, net_cdf_file_name, start_ts_lk,
-                         wrf_data_dir, klb_obs_stations, klb_points, duration_days):
-    try:
-        extract_kelani_basin_rainfall_flo2d_with_obs(run_time, net_cdf_file_name, adapter,
-                                                     klb_obs_stations,
-                                                     wrf_data_dir,
-                                                     start_ts_lk,
-                                                     kelani_lower_basin_points=klb_points,
-                                                     duration_days=duration_days)
-    except Exception as ex:
-        print("create_raincell_file|Exception: ", str(ex))
-
-
-try:
-    run_date = datetime.now().strftime("%Y-%m-%d")
-    run_time = datetime.now().strftime("%H:00:00")
-    tag = ''
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "hd:t:T:f:b:", [
-            "help", "date=", "time=", "forward=", "backward=", "wrf-rf=", "wrf-kub=", "tag="
-        ])
-    except getopt.GetoptError:
-        usage()
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt in ("-h", "--help"):
-            usage()
-            sys.exit()
-        elif opt in ("-d", "--date"):
-            run_date = arg # 2018-05-24
-        elif opt in ("-t", "--time"):
-            run_time = arg # 16:00:00
-        elif opt in ("-f","--forward"):
-            forward = arg
-        elif opt in ("-b","--backward"):
-            backward = arg
-        elif opt in ("--wrf-rf"):
-            RF_DIR_PATH = arg
-        elif opt in ("--wrf-kub"):
-            KUB_DIR_PATH = arg
-        elif opt in ("-T", "--tag"):
-            tag = arg
-    #run_date = '2019-04-29'
-    print("WrfTrigger run_date : ", run_date)
-    print("WrfTrigger run_time : ", run_time)
-    backward = 2
-    forward = 3
-    start_ts_lk = datetime.strptime('%s %s' % (run_date, run_time), '%Y-%m-%d %H:%M:%S')
-    start_ts_lk = start_ts_lk.strftime('%Y-%m-%d_%H:00')  # '2018-05-24_08:00'
-    print("WrfTrigger start_ts_lk : ", start_ts_lk)
-    duration_days = (int(backward), int(forward))
-    print("WrfTrigger duration_days : ", duration_days)
-    with open('config.json') as json_file:
-        config_data = json.load(json_file)
-        key_file = config_data["KEY_FILE_PATH"]
-        bucket_name = config_data["BUCKET_NAME"]
-        initial_path_prefix = config_data["INITIAL_PATH_PREFIX"]
-        net_cdf_file_format = config_data["NET_CDF_FILE"]
-        wrf_data_dir = config_data["WRF_DATA_DIR"]
-        net_cdf_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(hours=24)
-        net_cdf_date = net_cdf_date.strftime("%Y-%m-%d")
-        download_location = wrf_data_dir + run_date
-        print("download_location : ", download_location)
-        print("net_cdf_date : ", net_cdf_date)
-
-        MYSQL_HOST = config_data['db_host']
-        MYSQL_USER = config_data['db_user']
-        MYSQL_DB = config_data['db_name']
-        MYSQL_PASSWORD = config_data['db_password']
-        klb_observed_stations = config_data['klb_obs_stations']
-        klb_points = res_mgr.get_resource_path('extraction/local/kelani_basin_points_250m.txt')
-
-        adapter = MySQLAdapter(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, db=MYSQL_DB)
-        name_list = net_cdf_file_format.split("-")
-        net_cdf_file_name = name_list[0] + "_" + net_cdf_date + "_" + name_list[1]
+                    print('No forecast data.')
+    except Exception as e:
+        print('Raincell generation error.')
+        traceback.print_exc()
         try:
-            net_cdf_file_path = download_location + "/" + net_cdf_file_name
-            print("net_cdf_file_path : ", net_cdf_file_path)
-            if not os.path.isfile(net_cdf_file_path):
-                download_netcdf(download_location, net_cdf_file_name, key_file, bucket_name)
-            if os.path.isfile(net_cdf_file_path):
-                raincell_file_path = os.path.join(wrf_data_dir, run_date, run_time, 'RAINCELL.DAT')
-                if not os.path.isfile(raincell_file_path):
-                    create_raincell_file(run_time, adapter, net_cdf_file_path, start_ts_lk,
-                                         os.path.join(wrf_data_dir, run_date), klb_observed_stations, klb_points, duration_days)
-            adapter.close()
+            if forecast_adapter is not None:
+                forecast_adapter.close()
+            if observed_adapter is not None:
+                observed_adapter.close()
         except Exception as ex:
-            adapter.close()
-            print("Download required files|Exception: ", str(ex))
-except Exception as e:
-    print("Exception occurred: ", str(e))
+            print(str(ex))
+

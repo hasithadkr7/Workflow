@@ -47,9 +47,6 @@ try :
         # ERROR: Unable to use `-d` or `-D` option with OptionParser
         parser.add_option("--date", help="Date in YYYY-MM. Default is current date.")
         parser.add_option("--time", help="Time in HH:MM:SS. Default is current time.")
-        parser.add_option("--start-date", help="Start date of timeseries which need to run the forecast in YYYY-MM-DD format. Default is same as -d(date).")
-        parser.add_option("--start-time", help="Start time of timeseries which need to run the forecast in HH:MM:SS format. Default is same as -t(date).")
-        parser.add_option("-T", "--tag", help="Tag to differential simultaneous Forecast Runs E.g. wrf1, wrf2 ...")
         parser.add_option("--hec-hms-model-dir", help="Path of HEC_HMS_MODEL_DIR directory. Otherwise using the `HEC_HMS_MODEL_DIR` from CONFIG.json")
 
         (options, args) = parser.parse_args()
@@ -59,12 +56,7 @@ try :
             date = options.date
         if options.time :
             time = options.time
-        # if options.start_date :
-        #     startDateTS = options.start_date
-        # if options.start_time :
-        #     startTimeTS = options.start_time
-        # if options.tag :
-        #     tag = options.tag
+
         if options.hec_hms_model_dir :
             HEC_HMS_MODEL_DIR = options.hec_hms_model_dir
             # Reconstruct DSS_OUTPUT_FILE path
@@ -77,26 +69,6 @@ try :
             DSS_OUTPUT_FILE = os.path.join(HEC_HMS_MODEL_DIR, DSS_OUTPUT_FILE)
             print '"Set DSS_OUTPUT_FILE=', DSS_OUTPUT_FILE
 
-        # Default run for current day
-        # modelState = datetime.datetime.now()
-        # if date :
-        #     modelState = datetime.datetime.strptime(date, '%Y-%m-%d')
-        # date = modelState.strftime("%Y-%m-%d")
-        # if time :
-        #     modelState = datetime.datetime.strptime('%s %s' % (date, time), '%Y-%m-%d %H:%M:%S')
-        # time = modelState.strftime("%H:%M:%S")
-        #
-        # startDateTimeTS = datetime.datetime.now()
-        # if startDateTS :
-        #     startDateTimeTS = datetime.datetime.strptime(startDateTS, '%Y-%m-%d')
-        # else :
-        #     startDateTimeTS = datetime.datetime.strptime(date, '%Y-%m-%d')
-        # startDateTS = startDateTimeTS.strftime("%Y-%m-%d")
-        #
-        # if startTimeTS :
-        #     startDateTimeTS = datetime.datetime.strptime('%s %s' % (startDateTS, startTimeTS), '%Y-%m-%d %H:%M:%S')
-        # startTimeTS = startDateTimeTS.strftime("%H:%M:%S")
-
         print 'Start DSSTOCSV.py on ', date, '@', time, tag, HEC_HMS_MODEL_DIR
         # print ' With Custom starting', startDateTS, '@', startTimeTS
 
@@ -104,9 +76,7 @@ try :
         run_time = time
 
         myDss = HecDss.open(DSS_OUTPUT_FILE)
-        # fileName = DISCHARGE_CSV_FILE.rsplit('.', 1)
-        # str .format not working on this version
-        # fileName = '%s-%s%s.%s' % (fileName[0], date, '.'+tag if tag else '', fileName[1])
+
         DISCHARGE_CSV_FILE_PATH = os.path.join(OUTPUT_DIR, run_date, run_time, DISCHARGE_CSV_FILE)
         print 'Open Discharge CSV ::', DISCHARGE_CSV_FILE_PATH
         csvWriter = csv.writer(open(DISCHARGE_CSV_FILE_PATH, 'w'), delimiter=',', quotechar='|')

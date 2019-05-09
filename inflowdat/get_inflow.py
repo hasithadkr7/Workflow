@@ -183,88 +183,91 @@ def create_dir_if_not_exists(path):
     return path
 
 
-try:
-    run_date = datetime.now().strftime("%Y-%m-%d")
-    run_time = datetime.now().strftime("%H:00:00")
-    # FLO-2D parameters
-    IHOURDAILY = 0  # 0-hourly interval, 1-daily interval
-    IDEPLT = 0  # Set to 0 on running with Text mode. Otherwise cell number e.g. 8672
-    IFC = 'C'  # foodplain 'F' or a channel 'C'
-    INOUTFC = 0  # 0-inflow, 1-outflow
-    KHIN = 8655  # inflow nodes
-    HYDCHAR = 'H'  # Denote line of inflow hydrograph time and discharge pairs
+def create_inflow(dir_path, run_date, run_time):
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hd:t:T:f:b:", [
-            "help", "date=", "time=", "forward=", "backward=", "wrf-rf=", "wrf-kub=", "tag="
-        ])
-    except getopt.GetoptError:
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt in ("-h", "--help"):
-            sys.exit()
-        elif opt in ("-d", "--date"):
-            run_date = arg # 2018-05-24
-        elif opt in ("-t", "--time"):
-            run_time = arg # 16:00:00
-        elif opt in ("-f","--forward"):
-            forward = arg
-        elif opt in ("-b","--backward"):
-            backward = arg
-        elif opt in ("--wrf-rf"):
-            RF_DIR_PATH = arg
-        elif opt in ("--wrf-kub"):
-            KUB_DIR_PATH = arg
-        elif opt in ("-T", "--tag"):
-            tag = arg
-    #run_date = '2019-04-29'
-    print("WrfTrigger run_date : ", run_date)
-    print("WrfTrigger run_time : ", run_time)
-    backward = 2
-    forward = 3
-    startDateTime = datetime.strptime('%s %s' % (run_date, run_time), '%Y-%m-%d %H:%M:%S')
-    print("startDateTime : ", startDateTime)
-    with open('config.json') as json_file:
-        config_data = json.load(json_file)
-        output_dir = config_data["WRF_DATA_DIR"]
-        inflow_file = config_data["inflow_file"]
+        # run_date = datetime.now().strftime("%Y-%m-%d")
+        # run_time = datetime.now().strftime("%H:00:00")
+        # FLO-2D parameters
+        IHOURDAILY = 0  # 0-hourly interval, 1-daily interval
+        IDEPLT = 0  # Set to 0 on running with Text mode. Otherwise cell number e.g. 8672
+        IFC = 'C'  # foodplain 'F' or a channel 'C'
+        INOUTFC = 0  # 0-inflow, 1-outflow
+        KHIN = 8655  # inflow nodes
+        HYDCHAR = 'H'  # Denote line of inflow hydrograph time and discharge pairs
+        # try:
+        #     opts, args = getopt.getopt(sys.argv[1:], "hd:t:T:f:b:", [
+        #         "help", "date=", "time=", "forward=", "backward=", "wrf-rf=", "wrf-kub=", "tag="
+        #     ])
+        # except getopt.GetoptError:
+        #     sys.exit(2)
+        # for opt, arg in opts:
+        #     if opt in ("-h", "--help"):
+        #         sys.exit()
+        #     elif opt in ("-d", "--date"):
+        #         run_date = arg # 2018-05-24
+        #     elif opt in ("-t", "--time"):
+        #         run_time = arg # 16:00:00
+        #     elif opt in ("-f","--forward"):
+        #         forward = arg
+        #     elif opt in ("-b","--backward"):
+        #         backward = arg
+        #     elif opt in ("--wrf-rf"):
+        #         RF_DIR_PATH = arg
+        #     elif opt in ("--wrf-kub"):
+        #         KUB_DIR_PATH = arg
+        #     elif opt in ("-T", "--tag"):
+        #         tag = arg
+        #run_date = '2019-04-29'
+        print("WrfTrigger run_date : ", run_date)
+        print("WrfTrigger run_time : ", run_time)
+        # backward = 2
+        # forward = 3
+        startDateTime = datetime.strptime('%s %s' % (run_date, run_time), '%Y-%m-%d %H:%M:%S')
+        print("startDateTime : ", startDateTime)
+        config_path = os.path.join(os.getcwd(), 'raincelldat', 'config.json')
+        print('config_path : ', config_path)
+        with open(config_path) as json_file:
+            config_data = json.load(json_file)
+            output_dir = dir_path
+            inflow_file = config_data["inflow_file"]
 
-        CONTROL_INTERVAL = config_data["CONTROL_INTERVAL"]
-        CSV_NUM_METADATA_LINES = config_data["CSV_NUM_METADATA_LINES"]
-        DAT_WIDTH = config_data["DAT_WIDTH"]
-        OBSERVED_WL_IDS = config_data["OBSERVED_WL_IDS"]
+            CONTROL_INTERVAL = config_data["CONTROL_INTERVAL"]
+            CSV_NUM_METADATA_LINES = config_data["CSV_NUM_METADATA_LINES"]
+            DAT_WIDTH = config_data["DAT_WIDTH"]
+            OBSERVED_WL_IDS = config_data["OBSERVED_WL_IDS"]
 
-        MYSQL_HOST = config_data['db_host']
-        MYSQL_USER = config_data['db_user']
-        MYSQL_DB = config_data['db_name']
-        MYSQL_PASSWORD = config_data['db_password']
+            MYSQL_HOST = config_data['db_host']
+            MYSQL_USER = config_data['db_user']
+            MYSQL_DB = config_data['db_name']
+            MYSQL_PASSWORD = config_data['db_password']
 
-        adapter = MySQLAdapter(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, db=MYSQL_DB)
-        try:
-            hourly_inflow_file_dir = os.path.join(output_dir, run_date, run_time)
-            hourly_inflow_file = os.path.join(hourly_inflow_file_dir, inflow_file)
-            create_dir_if_not_exists(hourly_inflow_file_dir)
-            print("hourly_outflow_file : ", hourly_inflow_file)
-            if not os.path.isfile(hourly_inflow_file):
-                discharge_df = get_discharge_data(adapter, startDateTime)
-                print('discharge_df', discharge_df)
-                initial_water_levels = update_initial_water_levels(adapter, startDateTime.strftime("%Y-%m-%d %H:%M:%S"))
-                f = open(hourly_inflow_file, 'w')
-                line1 = '{0} {1:{w}{b}}\n'.format(IHOURDAILY, IDEPLT, b='d', w=DAT_WIDTH)
-                line2 = '{0} {1:{w}{b}} {2:{w}{b}}\n'.format(IFC, INOUTFC, KHIN, b='d', w=DAT_WIDTH)
-                line3 = '{0} {1:{w}{b}} {2:{w}{b}}\n'.format(HYDCHAR, 0.0, 0.0, b='.1f', w=DAT_WIDTH)
-                f.writelines([line1, line2, line3])
-                lines = [];
-                i = 1.0
-                for time, row in discharge_df.iterrows():
-                    lines.append(
-                        '{0} {1:{w}{b}} {2:{w}{b}}\n'.format(HYDCHAR, i, float(row["value"]), b='.1f', w=DAT_WIDTH))
-                    i += 1.0
-                lines.extend(initial_water_levels)
-                f.writelines(lines)
-                f.close()
-            adapter.close()
-        except Exception as ex:
-            adapter.close()
-            print("Download required files|Exception: ", str(ex))
-except Exception as e:
-    print("Exception occurred: ", str(e))
+            adapter = MySQLAdapter(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, db=MYSQL_DB)
+            try:
+                #hourly_inflow_file_dir = os.path.join(output_dir, run_date, run_time)
+                hourly_inflow_file = os.path.join(output_dir, inflow_file)
+                #create_dir_if_not_exists(hourly_inflow_file_dir)
+                print("hourly_outflow_file : ", hourly_inflow_file)
+                if not os.path.isfile(hourly_inflow_file):
+                    discharge_df = get_discharge_data(adapter, startDateTime)
+                    print('discharge_df', discharge_df)
+                    initial_water_levels = update_initial_water_levels(adapter, startDateTime.strftime("%Y-%m-%d %H:%M:%S"))
+                    f = open(hourly_inflow_file, 'w')
+                    line1 = '{0} {1:{w}{b}}\n'.format(IHOURDAILY, IDEPLT, b='d', w=DAT_WIDTH)
+                    line2 = '{0} {1:{w}{b}} {2:{w}{b}}\n'.format(IFC, INOUTFC, KHIN, b='d', w=DAT_WIDTH)
+                    line3 = '{0} {1:{w}{b}} {2:{w}{b}}\n'.format(HYDCHAR, 0.0, 0.0, b='.1f', w=DAT_WIDTH)
+                    f.writelines([line1, line2, line3])
+                    lines = [];
+                    i = 1.0
+                    for time, row in discharge_df.iterrows():
+                        lines.append(
+                            '{0} {1:{w}{b}} {2:{w}{b}}\n'.format(HYDCHAR, i, float(row["value"]), b='.1f', w=DAT_WIDTH))
+                        i += 1.0
+                    lines.extend(initial_water_levels)
+                    f.writelines(lines)
+                    f.close()
+                adapter.close()
+            except Exception as ex:
+                adapter.close()
+                print("Download required files|Exception: ", str(ex))
+    except Exception as e:
+        print("Exception occurred: ", str(e))

@@ -3,7 +3,7 @@
 # Rainfall CSV file format should follow as 
 # https://publicwiki.deltares.nl/display/FEWSDOC/CSV 
 
-import java, csv, sys, datetime, re
+import java, csv, sys, datetime, re, os
 from hec.script import MessageBox
 from hec.heclib.dss import HecDss
 from hec.heclib.util import HecTime
@@ -49,9 +49,6 @@ try :
         # ERROR: Unable to use `-d` or `-D` option with OptionParser
         parser.add_option("--date", help="Date in YYYY-MM. Default is current date.")
         parser.add_option("--time", help="Time in HH:MM:SS. Default is current time.")
-        parser.add_option("--start-date", help="Start date of timeseries which need to run the forecast in YYYY-MM-DD format. Default is same as -d(date).")
-        parser.add_option("--start-time", help="Start time of timeseries which need to run the forecast in HH:MM:SS format. Default is same as -t(date).")
-        parser.add_option("-T", "--tag", help="Tag to differential simultaneous Forecast Runs E.g. wrf1, wrf2 ...")
         parser.add_option("--hec-hms-model-dir", help="Path of HEC_HMS_MODEL_DIR directory. Otherwise using the `HEC_HMS_MODEL_DIR` from CONFIG.json")
 
         (options, args) = parser.parse_args()
@@ -61,12 +58,7 @@ try :
             date = options.date
         if options.time :
             time = options.time
-        # if options.start_date :
-        #     startDateTS = options.start_date
-        # if options.start_time :
-        #     startTimeTS = options.start_time
-        # if options.tag :
-        #     tag = options.tag
+
         if options.hec_hms_model_dir :
             HEC_HMS_MODEL_DIR = options.hec_hms_model_dir
             # Reconstruct DSS_INPUT_FILE path
@@ -85,25 +77,6 @@ try :
         print 'run_date:', run_date
         print 'run_time:', run_time
 
-        # # Default run for current day
-        # modelState = datetime.datetime.now()
-        # if date :
-        #     modelState = datetime.datetime.strptime(date, '%Y-%m-%d')
-        # date = modelState.strftime("%Y-%m-%d")
-        # if time :
-        #     modelState = datetime.datetime.strptime('%s %s' % (date, time), '%Y-%m-%d %H:%M:%S')
-        # time = modelState.strftime("%H:%M:%S")
-        #
-        # startDateTimeTS = datetime.datetime.now()
-        # if startDateTS :
-        #     startDateTimeTS = datetime.datetime.strptime(startDateTS, '%Y-%m-%d')
-        # else :
-        #     startDateTimeTS = datetime.datetime.strptime(date, '%Y-%m-%d')
-        # startDateTS = startDateTimeTS.strftime("%Y-%m-%d")
-        #
-        # if startTimeTS :
-        #     startDateTimeTS = datetime.datetime.strptime('%s %s' % (startDateTS, startTimeTS), '%Y-%m-%d %H:%M:%S')
-        # startTimeTS = startDateTimeTS.strftime("%H:%M:%S")
 
         print 'Start CSVTODSS.py on ', date, '@', time, tag, HEC_HMS_MODEL_DIR
         print ' With Custom starting', startDateTS, '@', startTimeTS

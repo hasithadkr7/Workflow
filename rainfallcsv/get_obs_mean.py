@@ -5,6 +5,21 @@ import geopandas as gpd
 from scipy.spatial import Voronoi
 from shapely.geometry import Polygon, Point
 import copy
+import os
+import pkg_resources
+
+
+def get_resource_path(resource):
+    res = pkg_resources.resource_filename(__name__, resource)
+    if os.path.exists(res):
+        return res
+    else:
+        raise UnableFindResource(resource)
+
+
+class UnableFindResource(Exception):
+    def __init__(self, res):
+        Exception.__init__(self, 'Unable to find %s' % res)
 
 
 def get_observed_kub_mean(db_adapter, obs_stations, observed_start, observed_end):

@@ -79,6 +79,7 @@ try:
     startDateTS = ''
     startTimeTS = ''
     initState = False
+    hour_mode = True
     # tag = ''
 
     try:
@@ -127,6 +128,7 @@ try:
 
     run_date = date  # 2019-05-03
     run_time = time  # 14:00:00
+    print('[run_date, run_time] : ', [run_date, run_time])
 
 
     print('Update_HECHMS startTime:', datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), ', initState:', initState)
@@ -200,17 +202,39 @@ try:
             indent = line[:line.rfind('Control:')]
 
             # TODO: Handle for Hour mode
-            saveStateDateTime = startDateTime + datetime.timedelta(minutes=STATE_INTERVAL)
-            saveStateDateTimeDSS = get_dss_date_time(saveStateDateTime)
-            startStateDateTime = startDateTime - datetime.timedelta(minutes=STATE_INTERVAL)
-            line1 = indent + 'Save State Name: State_' + startDateTime.strftime('%Y_%m_%d') + '_To_' + saveStateDateTime.strftime('%Y_%m_%d')
-            line2 = indent + 'Save State Date: ' + saveStateDateTimeDSS.date
-            line3 = indent + 'Save State Time: ' + saveStateDateTimeDSS.time
-            runFile.write(line1 + '\n'); runFile.write(line2 + '\n'); runFile.write(line3 + '\n')
+            if hour_mode:
+                run_date_time = datetime.strptime('%s %s' % (run_date, run_time), '%Y-%m-%d %H:%M:%S')
+                saveStateDateTime = startDateTime + datetime.timedelta(minutes=STATE_INTERVAL)
+                saveStateDateTimeDSS = get_dss_date_time(saveStateDateTime)
+                startStateDateTime = startDateTime - datetime.timedelta(minutes=STATE_INTERVAL)
+                line1 = indent + 'Save State Name: State_' + startDateTime.strftime(
+                    '%Y_%m_%d_%H_%M_%S') + '_To_' + saveStateDateTime.strftime('%Y_%m_%d_%H_%M_%S')
+                line2 = indent + 'Save State Date: ' + saveStateDateTimeDSS.date
+                line3 = indent + 'Save State Time: ' + saveStateDateTimeDSS.time
+                runFile.write(line1 + '\n');
+                runFile.write(line2 + '\n');
+                runFile.write(line3 + '\n')
 
-            if not initState:
-                line4 = indent + 'Start State Name: State_' + startStateDateTime.strftime('%Y_%m_%d') + '_To_' + startDateTime.strftime('%Y_%m_%d')
-                runFile.write(line4 + '\n')
+                if not initState:
+                    line4 = indent + 'Start State Name: State_' + startStateDateTime.strftime(
+                        '%Y_%m_%d_%H_%M_%S') + '_To_' + startDateTime.strftime('%Y_%m_%d_%H_%M_%S')
+                    runFile.write(line4 + '\n')
+            else:
+                saveStateDateTime = startDateTime + datetime.timedelta(minutes=STATE_INTERVAL)
+                saveStateDateTimeDSS = get_dss_date_time(saveStateDateTime)
+                startStateDateTime = startDateTime - datetime.timedelta(minutes=STATE_INTERVAL)
+                line1 = indent + 'Save State Name: State_' + startDateTime.strftime(
+                    '%Y_%m_%d_%H_%M_%S') + '_To_' + saveStateDateTime.strftime('%Y_%m_%d_%H_%M_%S')
+                line2 = indent + 'Save State Date: ' + saveStateDateTimeDSS.date
+                line3 = indent + 'Save State Time: ' + saveStateDateTimeDSS.time
+                runFile.write(line1 + '\n');
+                runFile.write(line2 + '\n');
+                runFile.write(line3 + '\n')
+
+                if not initState:
+                    line4 = indent + 'Start State Name: State_' + startStateDateTime.strftime(
+                        '%Y_%m_%d_%H_%M_%S') + '_To_' + startDateTime.strftime('%Y_%m_%d_%H_%M_%S')
+                    runFile.write(line4 + '\n')
 
         # Skip Writing these lines
         elif 'Save State At End of Run:' in line:

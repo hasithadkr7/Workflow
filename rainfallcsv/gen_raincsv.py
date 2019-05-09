@@ -10,12 +10,27 @@ from datetime import datetime, timedelta
 from google.cloud import storage
 from curwmysqladapter import MySQLAdapter
 import numpy as np
-import raincelldat.manager as res_mgr
+import pkg_resources
 from netCDF4 import Dataset
 from shapely.geometry import Point, shape
 import shapefile
 import pandas as pd
 from rainfallcsv.get_obs_mean import get_observed_kub_mean, get_observed_klb_mean
+# from .get_obs_mean import get_observed_kub_mean, get_observed_klb_mean
+# from get_obs_mean import get_observed_kub_mean, get_observed_klb_mean
+
+
+def get_resource_path(resource):
+    res = pkg_resources.resource_filename(__name__, resource)
+    if os.path.exists(res):
+        return res
+    else:
+        raise UnableFindResource(resource)
+
+
+class UnableFindResource(Exception):
+    def __init__(self, res):
+        Exception.__init__(self, 'Unable to find %s' % res)
 
 
 class CurwObservationException(Exception):
@@ -299,9 +314,9 @@ try:
         kub_basin_extent = config_data['KELANI_UPPER_BASIN_EXTENT']
         klb_basin_extent = config_data['KELANI_LOWER_BASIN_EXTENT']
 
-        klb_points = res_mgr.get_resource_path('extraction/local/kelani_basin_points_250m.txt')
-        kelani_lower_basin_shp = res_mgr.get_resource_path('extraction/shp/klb-wgs84/klb-wgs84.shp')
-        kelani_upper_basin_shp = res_mgr.get_resource_path('extraction/shp/kub-wgs84/kub-wgs84.shp')
+        klb_points = get_resource_path('extraction/local/kelani_basin_points_250m.txt')
+        kelani_lower_basin_shp = get_resource_path('extraction/shp/klb-wgs84/klb-wgs84.shp')
+        kelani_upper_basin_shp = get_resource_path('extraction/shp/kub-wgs84/kub-wgs84.shp')
 
         adapter = MySQLAdapter(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, db=MYSQL_DB)
         name_list = net_cdf_file_format.split("-")

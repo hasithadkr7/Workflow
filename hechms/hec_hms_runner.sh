@@ -35,7 +35,8 @@ if [ -z "$(find ${CONFIG_FILE} -name CONFIG.json)" ]; then
     exit 1
 fi
 
-INIT_STATE = True
+INIT_STATE = "True"
+HEC_HMS_DIR="/home/uwcc-admin/hechms_hourly/hec-hms41"
 
 current_date_time="`date +%Y-%m-%dT%H:%M:%S`";
 
