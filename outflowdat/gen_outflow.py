@@ -76,16 +76,14 @@ def create_outflow(dir_path, run_date, run_time, forward = 3, backward = 2):
         # forward = 3
         startDateTime = datetime.strptime('%s %s' % (run_date, run_time), '%Y-%m-%d %H:%M:%S')
         print("startDateTime : ", startDateTime)
-        config_path = os.path.join(os.getcwd(), 'raincelldat', 'config.json')
+        config_path = os.path.join(os.getcwd(), 'outflowdat', 'config.json')
         print('config_path : ', config_path)
         with open(config_path) as json_file:
             config_data = json.load(json_file)
             output_dir = dir_path
-            outflow_file = config_data["outflow_file"]
-            inittidal_conf_path = config_data["inittidal_conf_path"]
+            inittidal_conf_path = os.path.join(os.getcwd(), 'outflowdat', 'INITTIDAL.CONF')
 
             CONTROL_INTERVAL = config_data["CONTROL_INTERVAL"]
-            CSV_NUM_METADATA_LINES = config_data["CSV_NUM_METADATA_LINES"]
             DAT_WIDTH = config_data["DAT_WIDTH"]
             TIDAL_FORECAST_ID = config_data["TIDAL_FORECAST_ID"]
 
@@ -95,16 +93,8 @@ def create_outflow(dir_path, run_date, run_time, forward = 3, backward = 2):
             MYSQL_PASSWORD = config_data['db_password']
 
             adapter = MySQLAdapter(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, db=MYSQL_DB)
-            opts = {
-                'from': '2019-05-01 00:00:00',
-                'to': '2019-05-31 00:00:00',
-            }
-            #get_tidal_data(adapter, opts)
-
             try:
-                #hourly_outflow_file_dir = os.path.join(output_dir, run_date, run_time)
-                hourly_outflow_file = os.path.join(output_dir, outflow_file)
-                #create_dir_if_not_exists(hourly_outflow_file_dir)
+                hourly_outflow_file = os.path.join(output_dir, 'OUTFLOW.DAT')
                 print("hourly_outflow_file : ", hourly_outflow_file)
                 if not os.path.isfile(hourly_outflow_file):
                     opts = {

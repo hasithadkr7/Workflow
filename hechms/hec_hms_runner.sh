@@ -42,10 +42,6 @@ current_date_time="`date +%Y-%m-%dT%H:%M:%S`";
 
 output_dir="/home/uwcc-admin/hechms_hourly/output"
 
-daily_dir="`date '+%Y-%m-%d/%H:00:00'`"
-
-current_dir=${output_dir}/${daily_dir}
-
 timeseries_start_date="`date +%Y-%m-%d -d "2 days ago"`"
 
 HEC_HMS_MODEL_DIR="./2008_2_Events",
@@ -57,9 +53,24 @@ HEC_HMS_GAGE="./2008_2_Events/2008_2_Events.gage",
 
 forecast_date="`date '+%Y-%m-%d'`"
 forecast_time="`date '+%H:00:00'`"
+force_run=false
+
+while getopts d:t:f: option
+do
+    case "${option}"
+    in
+        d) forecast_date=${OPTARG};;
+        t) forecast_time=${OPTARG};;
+        f) force_run=$OPTARG;;
+    esac
+done
 
 echo "Run date = $forecast_date"
 echo "Run time = $forecast_time"
+
+daily_dir="${forecast_date}/${forecast_time}"
+
+current_dir=${output_dir}/${daily_dir}
 
 main() {
 #    local forecastStatus=$(alreadyForecast ${ROOT_DIR}/${STATUS_FILE} ${forecast_date})

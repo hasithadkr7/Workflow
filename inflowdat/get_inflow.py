@@ -158,7 +158,7 @@ def get_discharge_data(my_adapter, startDateTime):
     return complete_df
 
 
-def update_initial_water_levels(my_adapter, startDateTime):
+def update_initial_water_levels(OBSERVED_WL_IDS,my_adapter, startDateTime):
     initial_water_levels = []
     with my_adapter.connection.cursor() as cursor:
         for water_level_json in OBSERVED_WL_IDS:
@@ -224,15 +224,15 @@ def create_inflow(dir_path, run_date, run_time):
         # forward = 3
         startDateTime = datetime.strptime('%s %s' % (run_date, run_time), '%Y-%m-%d %H:%M:%S')
         print("startDateTime : ", startDateTime)
-        config_path = os.path.join(os.getcwd(), 'raincelldat', 'config.json')
+        config_path = os.path.join(os.getcwd(), 'inflowdat', 'config.json')
         print('config_path : ', config_path)
         with open(config_path) as json_file:
             config_data = json.load(json_file)
             output_dir = dir_path
             inflow_file = config_data["inflow_file"]
 
-            CONTROL_INTERVAL = config_data["CONTROL_INTERVAL"]
-            CSV_NUM_METADATA_LINES = config_data["CSV_NUM_METADATA_LINES"]
+            # CONTROL_INTERVAL = config_data["CONTROL_INTERVAL"]
+            # CSV_NUM_METADATA_LINES = config_data["CSV_NUM_METADATA_LINES"]
             DAT_WIDTH = config_data["DAT_WIDTH"]
             OBSERVED_WL_IDS = config_data["OBSERVED_WL_IDS"]
 
@@ -250,7 +250,7 @@ def create_inflow(dir_path, run_date, run_time):
                 if not os.path.isfile(hourly_inflow_file):
                     discharge_df = get_discharge_data(adapter, startDateTime)
                     print('discharge_df', discharge_df)
-                    initial_water_levels = update_initial_water_levels(adapter, startDateTime.strftime("%Y-%m-%d %H:%M:%S"))
+                    initial_water_levels = update_initial_water_levels(OBSERVED_WL_IDS, adapter, startDateTime.strftime("%Y-%m-%d %H:%M:%S"))
                     f = open(hourly_inflow_file, 'w')
                     line1 = '{0} {1:{w}{b}}\n'.format(IHOURDAILY, IDEPLT, b='d', w=DAT_WIDTH)
                     line2 = '{0} {1:{w}{b}} {2:{w}{b}}\n'.format(IFC, INOUTFC, KHIN, b='d', w=DAT_WIDTH)
