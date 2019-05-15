@@ -1,18 +1,15 @@
 import os
-from builtins import print
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from urllib.parse import urlparse, parse_qs
 from raincelldat.gen_raincell import create_hybrid_raincell
 from inflowdat.get_inflow import create_inflow
 from outflowdat.gen_outflow import create_outflow
-from flo2d.run_model import execute_flo2d_250m
 from os.path import join as pjoin
 from datetime import datetime
 
 
-HOST_ADDRESS = '10.138.0.4'
-#HOST_ADDRESS = '0.0.0.0'
+HOST_ADDRESS = 'localhost'
 HOST_PORT = 8088
 
 
@@ -31,7 +28,6 @@ def set_daily_dir(run_date, run_time):
 
 class StoreHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        print('Handle GET request...')
         if self.path.startswith('/create-raincell'):
             print('create-raincell')
             response = {}
@@ -104,9 +100,11 @@ class StoreHandler(BaseHTTPRequestHandler):
                 print('query_components : ', query_components)
                 [run_date] = query_components["run_date"]
                 [run_time] = query_components["run_time"]
+                [forward] = query_components["forward"]
+                [backward] = query_components["backward"]
                 print('[run_date, run_time] : ', [run_date, run_time])
                 dir_path = set_daily_dir(run_date, run_time)
-                execute_flo2d_250m(dir_path, run_date, run_time)
+                create_hybrid_raincell(dir_path, run_date, run_time, forward, backward)
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))
@@ -124,6 +122,11 @@ class StoreHandler(BaseHTTPRequestHandler):
                 print('query_components : ', query_components)
                 [run_date] = query_components["run_date"]
                 [run_time] = query_components["run_time"]
+                [forward] = query_components["forward"]
+                [backward] = query_components["backward"]
+                print('[run_date, run_time] : ', [run_date, run_time])
+                dir_path = set_daily_dir(run_date, run_time)
+                create_outflow(run_date, run_time, forward, backward)
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))

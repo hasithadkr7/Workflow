@@ -10,6 +10,8 @@ import pandas as pd
 from datetime import datetime, timedelta
 from curwmysqladapter import MySQLAdapter
 
+RUN_NAME = 'hourly_run'
+
 
 def get_forecast_timeseries(my_adapter, my_event_id, my_opts):
     existing_timeseries = my_adapter.retrieve_timeseries([my_event_id], my_opts)
@@ -44,7 +46,7 @@ def get_discharge_data(my_adapter, startDateTime):
         'unit': 'm3/s',
         'type': 'Forecast-0-d',
         'source': 'HEC-HMS',
-        'name': 'Cloud-1',
+        'name': RUN_NAME,
     }
     obs_opts = {
         'from': observed_start_time,
@@ -61,7 +63,7 @@ def get_discharge_data(my_adapter, startDateTime):
         'unit': 'm3/s',
         'type': 'Forecast-0-d',
         'source': 'HEC-HMS',
-        'name': 'Cloud-1',
+        'name': RUN_NAME,
     }
     fcst_d0_opts = {
         'from': fcst_d0_start,
@@ -78,7 +80,7 @@ def get_discharge_data(my_adapter, startDateTime):
         'unit': 'm3/s',
         'type': 'Forecast-1-d-after',
         'source': 'HEC-HMS',
-        'name': 'Cloud-1',
+        'name': RUN_NAME,
     }
     fcst_d1_opts = {
         'from': fcst_d1_start,
@@ -95,7 +97,7 @@ def get_discharge_data(my_adapter, startDateTime):
         'unit': 'm3/s',
         'type': 'Forecast-2-d-after',
         'source': 'HEC-HMS',
-        'name': 'Cloud-1',
+        'name': RUN_NAME,
     }
     fcst_d2_opts = {
         'from': fcst_d2_start,
@@ -112,7 +114,7 @@ def get_discharge_data(my_adapter, startDateTime):
         'unit': 'm3/s',
         'type': 'Forecast-3-d-after',
         'source': 'HEC-HMS',
-        'name': 'Cloud-1',
+        'name': RUN_NAME,
     }
     fcst_d3_opts = {
         'from': fcst_d3_start,
@@ -129,7 +131,7 @@ def get_discharge_data(my_adapter, startDateTime):
         'unit': 'm3/s',
         'type': 'Forecast-4-d-after',
         'source': 'HEC-HMS',
-        'name': 'Cloud-1',
+        'name': RUN_NAME,
     }
     fcst_d4_opts = {
         'from': fcst_d4_start,
@@ -146,7 +148,7 @@ def get_discharge_data(my_adapter, startDateTime):
         'unit': 'm3/s',
         'type': 'Forecast-5-d-after',
         'source': 'HEC-HMS',
-        'name': 'Cloud-1',
+        'name': RUN_NAME,
     }
     fcst_d5_opts = {
         'from': fcst_d5_start,

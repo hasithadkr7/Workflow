@@ -78,7 +78,7 @@ def save_forecast_timeseries(my_adapter, timeseries, my_model_date, my_model_tim
     #     print(ll)
 
     force_insert = my_opts.get('forceInsert', False)
-    my_model_date_time = datetime.datetime.strptime('%s %s' % (my_model_date, my_model_time), '%Y-%m-%d %H:%M:%S')
+    my_model_date_time = datetime.strptime('%s %s' % (my_model_date, my_model_time), '%Y-%m-%d %H:%M:%S')
 
     # TODO: Check whether station exist in Database
     run_name = my_opts.get('runName', RUN_NAME)
@@ -166,6 +166,7 @@ try:
                     'forceInsert': forceInsert,
                     'runName': RUN_NAME
                 }
+                print(csvList[CSV_NUM_METADATA_LINES:])
                 save_forecast_timeseries(adapter, csvList[CSV_NUM_METADATA_LINES:], run_date, run_time, opts)
             adapter.close()
         except Exception as ex:

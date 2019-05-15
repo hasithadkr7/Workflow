@@ -24,7 +24,7 @@ echo "Inside `pwd`"
 echo "Activating venv python3 virtual environment."
 source venv/bin/activate
 
-python rainfallcsv/upload_discharge.py -d ${run_date} -t ${run_time} >> upload_discharge.log 2>&1
+python3 rainfallcsv/upload_discharge.py -d ${run_date} -t ${run_time} >> upload_discharge.log 2>&1
 
 # Deactivating virtual environment
 echo "Deactivating virtual environment"
