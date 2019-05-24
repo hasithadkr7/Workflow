@@ -805,23 +805,38 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
 
                         print('point_thess_idx : ', point_thess_idx)
                         print('fcst_point_thess_idx : ', fcst_point_thess_idx)
+                        print('mike_point_names : ', mike_point_names)
                         with open(mike_input_file_path, mode='w') as output_file:
                             output_writer = csv.writer(output_file, delimiter=',')
-                            header = ['Time'].append(mike_point_names)
+                            header = ['Time']
+                            header.extend(mike_point_names)
                             output_writer.writerow(header)
                             print('range 1 : ', int(24 * 60 * duration_days[0] / res_mins) + 1)
                             print('range 2 : ', int(24 * 60 * duration_days[1] / res_mins) - 1)
                             obs_duration_end = None
                             for t in range(observed_duration):
-                                date_time = datetime.strptime(obs_duration_start, '%Y-%m-%d %H:%M:%S')+timedelta(days=t)
+                                date_time = datetime.strptime(obs_duration_start, '%Y-%m-%d %H:%M:%S')+timedelta(hours=t)
                                 obs_duration_end = date_time.strftime('%Y-%m-%d %H:%M:%S')
                                 print(date_time.strftime('%Y-%m-%d %H:%M:%S'))
-                                output_writer.writerow([date_time.strftime('%Y-%m-%d %H:%M:%S')])
+                                obs_rf_list = []
+                                for i, point in enumerate(mike_points):
+                                    rf = float(observed_precipitations[point_thess_idx[i]].values[t]) if point_thess_idx[i] is not None else 0
+                                    obs_rf_list.append('%.6f'% rf)
+                                row = [date_time.strftime('%Y-%m-%d %H:%M:%S')]
+                                row.extend(obs_rf_list)
+                                output_writer.writerow(row)
+                            print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+                            next_time_step = datetime.strptime(obs_duration_end, '%Y-%m-%d %H:%M:%S') + timedelta(hours= 1)
                             for t in range(forecast_duration):
-                                date_time = datetime.strptime(obs_duration_end, '%Y-%m-%d %H:%M:%S') + timedelta(
-                                    days=t)
+                                date_time = next_time_step + timedelta(hours=t)
                                 print(date_time.strftime('%Y-%m-%d %H:%M:%S'))
-                                output_writer.writerow([date_time.strftime('%Y-%m-%d %H:%M:%S')])
+                                fcst_rf_list = []
+                                for i, point in enumerate(mike_points):
+                                    rf = float(forecast_precipitations[fcst_point_thess_idx[i]].values[t]) if fcst_point_thess_idx[i] is not None else 0
+                                    fcst_rf_list.append('%.6f' % rf)
+                                row = [date_time.strftime('%Y-%m-%d %H:%M:%S')]
+                                row.extend(fcst_rf_list)
+                                output_writer.writerow(row)
                     else:
                         print('----------------------------------------------')
                         print('No forecast data.')
@@ -847,8 +862,8 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
 
 if __name__ == "__main__":
     dir_path = '/home/hasitha/PycharmProjects/Workflow'
-    run_date = '2019-05-22'
-    run_time = '09:00:00'
+    run_date = '2019-05-24'
+    run_time = '15:00:00'
     forward = '3'
     backward = '2'
     output_path = os.path.join(dir_path, 'output', run_date, run_time)
