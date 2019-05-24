@@ -151,6 +151,34 @@ def get_observed_precip_previous(stations, start_dt, end_dt, duration_days, adap
     return obs
 
 
+def get_forecast_precipitation_for_observed(wrf_model, run_name, forecast_stations, adapter, start_datetime, end_datetime):
+    forecast = {}
+    fcst_opts = {
+        'from': start_datetime,
+        'to': end_datetime,
+    }
+    print('fcst_opts : ', fcst_opts)
+    for s in forecast_stations:
+        station = {'station': s,
+                      'variable': 'Precipitation',
+                      'unit': 'mm',
+                      'type': 'Forecast-0-d',
+                      'name': run_name,
+                      'source': wrf_model
+                      }
+        row_ts = adapter.retrieve_timeseries(station, fcst_opts)
+
+        ts_df = pd.DataFrame(columns=['time', 'value'])
+        if len(row_ts) > 0:
+            ts = np.array(row_ts[0]['timeseries'])
+            if len(ts) > 0:
+                ts_df = pd.DataFrame(data=ts, columns=['time', 'value']).set_index(keys='time')
+        station_df = ts_df
+        if len(station_df.index) > 0:
+            forecast[s] = station_df
+    return forecast
+
+
 def get_forecast_precipitation(wrf_model, run_name, forecast_stations, adapter, run_datetime, forward_days=3):
     forecast = {}
     if forward_days == 3:
@@ -492,7 +520,6 @@ def get_voronoi_polygons(points_dict, shape_file, shape_attribute=None, output_s
     return df
 
 
-# if __name__ == "__main__":
 def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward):
     try:
         res_mins = '60'
@@ -504,7 +531,8 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward):
         kelani_basin_points_file = get_resource_path('extraction/local/kelani_basin_points_250m.txt')
         kelani_lower_basin_shp_file = get_resource_path('extraction/shp/klb-wgs84/klb-wgs84.shp')
         reference_net_cdf = get_resource_path('extraction/netcdf/wrf_wrfout_d03_2019-03-31_18_00_00_rf')
-        config_path = os.path.join(os.getcwd(), 'raincelldat', 'config.json')
+        #config_path = os.path.join(os.getcwd(), 'raincelldat', 'config.json')
+        config_path = os.path.join(os.getcwd(), 'config.json')
         with open(config_path) as json_file:
             config = json.load(json_file)
             if 'forecast_db_config' in config:
@@ -551,10 +579,6 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward):
 
                 print('[kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max] : ', [kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max])
 
-                forecast_adapter = MySQLAdapter(host=forecast_db_config['host'],
-                                                user=forecast_db_config['user'],
-                                                password=forecast_db_config['password'],
-                                                db=forecast_db_config['db'])
                 # #min_lat, min_lon, max_lat, max_lon
                 forecast_stations, station_points = get_forecast_stations_from_net_cdf(model_prefix, reference_net_cdf,
                                                                                        kel_lat_min,
@@ -563,37 +587,47 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward):
                                                                                        kel_lon_max)
                 print('forecast_stations length : ', len(forecast_stations))
 
-                forecast_precipitations = get_forecast_precipitation(forecast_source, run_name, forecast_stations,
-                                                                     forecast_adapter, obs_end.strftime('%Y-%m-%d %H:%M:%S'), forward_days=3)
-                forecast_adapter.close()
-                forecast_adapter = None
-                if bool(forecast_precipitations):
-                    observed_adapter = MySQLAdapter(host=observed_db_config['host'],
-                                                    user=observed_db_config['user'],
-                                                    password=observed_db_config['password'],
-                                                    db=observed_db_config['db'])
+                observed_adapter = MySQLAdapter(host=observed_db_config['host'],
+                                                user=observed_db_config['user'],
+                                                password=observed_db_config['password'],
+                                                db=observed_db_config['db'])
 
-                    # print('obs_stations : ', obs_stations)
-                    observed_precipitations = get_observed_precip(obs_stations,
-                                                                  obs_duration_start,
-                                                                  fcst_duration_start,
-                                                                  observed_duration,
-                                                                  observed_adapter, forecast_source='wrf0')
-                    observed_adapter.close()
-                    observed_adapter = None
-                    validated_obs_station = {}
-                    # print('obs_stations.keys() : ', obs_stations.keys())
-                    # print('observed_precipitations.keys() : ', observed_precipitations.keys())
+                # print('obs_stations : ', obs_stations)
+                observed_precipitations = get_observed_precip(obs_stations,
+                                                              obs_duration_start,
+                                                              fcst_duration_start,
+                                                              observed_duration,
+                                                              observed_adapter, forecast_source='wrf0')
+                observed_adapter.close()
+                observed_adapter = None
+                validated_obs_station = {}
+                # print('obs_stations.keys() : ', obs_stations.keys())
+                # print('observed_precipitations.keys() : ', observed_precipitations.keys())
 
-                    for station_name in obs_stations.keys():
-                        if station_name in observed_precipitations.keys():
-                            validated_obs_station[station_name] = obs_stations[station_name]
-                        else:
-                            print('station_name : ', station_name)
+                for station_name in obs_stations.keys():
+                    if station_name in observed_precipitations.keys():
+                        validated_obs_station[station_name] = obs_stations[station_name]
+                    else:
+                        print('invalid station_name : ', station_name)
 
-                    if bool(observed_precipitations):
-                        thess_poly = get_voronoi_polygons(validated_obs_station, kelani_lower_basin_shp_file, add_total_area=False)
-                        fcst_thess_poly = get_voronoi_polygons(station_points, kelani_lower_basin_shp_file, add_total_area=False)
+                # if bool(observed_precipitations):
+                if len(validated_obs_station) >= 1:
+                    thess_poly = get_voronoi_polygons(validated_obs_station, kelani_lower_basin_shp_file,
+                                                      add_total_area=False)
+                    forecast_adapter = MySQLAdapter(host=forecast_db_config['host'],
+                                                    user=forecast_db_config['user'],
+                                                    password=forecast_db_config['password'],
+                                                    db=forecast_db_config['db'])
+
+                    forecast_precipitations = get_forecast_precipitation(forecast_source, run_name, forecast_stations,
+                                                                         forecast_adapter,
+                                                                         obs_end.strftime('%Y-%m-%d %H:%M:%S'),
+                                                                         forward_days=3)
+                    forecast_adapter.close()
+                    forecast_adapter = None
+                    if bool(forecast_precipitations):
+                        fcst_thess_poly = get_voronoi_polygons(station_points, kelani_lower_basin_shp_file,
+                                                               add_total_area=False)
 
                         fcst_point_thess_idx = []
                         for point in points:
@@ -612,26 +646,80 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward):
                         print('len(fcst_point_thess_idx)', len(fcst_point_thess_idx))
 
                         with open(raincell_file_path, 'w') as output_file:
-                            output_file.write("%d %d %s %s\n" % (res_mins, total_duration, obs_duration_start, fcst_duration_end))
+                            output_file.write(
+                                "%d %d %s %s\n" % (res_mins, total_duration, obs_duration_start, fcst_duration_end))
 
                             print('range 1 : ', int(24 * 60 * duration_days[0] / res_mins) + 1)
                             print('range 2 : ', int(24 * 60 * duration_days[1] / res_mins) - 1)
 
                             for t in range(observed_duration):
                                 for i, point in enumerate(points):
-                                    rf = float(observed_precipitations[point_thess_idx[i]].values[t]) if point_thess_idx[i] is not None else 0
+                                    rf = float(observed_precipitations[point_thess_idx[i]].values[t]) if \
+                                    point_thess_idx[
+                                        i] is not None else 0
                                     output_file.write('%d %.1f\n' % (point[0], rf))
 
                             for t in range(forecast_duration):
                                 for j, point in enumerate(points):
-                                    rf = float(forecast_precipitations[fcst_point_thess_idx[j]].values[t]) if fcst_point_thess_idx[j] is not None else 0
+                                    rf = float(forecast_precipitations[fcst_point_thess_idx[j]].values[t]) if \
+                                        fcst_point_thess_idx[j] is not None else 0
                                     output_file.write('%d %.1f\n' % (point[0], rf))
                     else:
-                        print('No observed data.')
+                        print('----------------------------------------------')
+                        print('No forecast data.')
+                        print('----------------------------------------------')
                 else:
-                    print('No forecast data.')
+                    print('----------------------------------------------')
+                    print('No observed data.')
+                    print('Available station count: ', len(validated_obs_station))
+                    print('Proceed with forecast data.')
+                    print('----------------------------------------------')
+                    forecast_adapter = MySQLAdapter(host=forecast_db_config['host'],
+                                                    user=forecast_db_config['user'],
+                                                    password=forecast_db_config['password'],
+                                                    db=forecast_db_config['db'])
+
+                    forecast_precipitations = get_forecast_precipitation(forecast_source, run_name, forecast_stations,
+                                                                         forecast_adapter,
+                                                                         obs_end.strftime('%Y-%m-%d %H:%M:%S'),
+                                                                         forward_days=3)
+                    forecast_precipitations_for_observed = get_forecast_precipitation_for_observed(forecast_source, run_name,
+                                                                                                   forecast_stations, forecast_adapter,
+                                                                                                   obs_duration_start, fcst_duration_start)
+                    forecast_adapter.close()
+                    forecast_adapter = None
+                    if bool(forecast_precipitations):
+                        fcst_thess_poly = get_voronoi_polygons(station_points, kelani_lower_basin_shp_file,
+                                                               add_total_area=False)
+
+                        fcst_point_thess_idx = []
+                        for point in points:
+                            fcst_point_thess_idx.append(is_inside_geo_df(fcst_thess_poly, lon=point[1], lat=point[2]))
+                            pass
+                        print('len(points)', len(points))
+                        print('len(fcst_point_thess_idx)', len(fcst_point_thess_idx))
+
+                        with open(raincell_file_path, 'w') as output_file:
+                            output_file.write(
+                                "%d %d %s %s\n" % (res_mins, total_duration, obs_duration_start, fcst_duration_end))
+
+                            print('range 1 : ', int(24 * 60 * duration_days[0] / res_mins) + 1)
+                            print('range 2 : ', int(24 * 60 * duration_days[1] / res_mins) - 1)
+
+                            for t in range(observed_duration):
+                                for i, point in enumerate(points):
+                                    rf = float(forecast_precipitations_for_observed[fcst_point_thess_idx[i]].values[t]) if \
+                                        fcst_point_thess_idx[
+                                        i] is not None else 0
+                                    output_file.write('%d %.1f\n' % (point[0], rf))
+
+                            for t in range(forecast_duration):
+                                for j, point in enumerate(points):
+                                    rf = float(forecast_precipitations[fcst_point_thess_idx[j]].values[t]) if \
+                                        fcst_point_thess_idx[j] is not None else 0
+                                    output_file.write('%d %.1f\n' % (point[0], rf))
     except Exception as e:
-        print('Raincell generation error.')
+        print('Raincell generation error|Exception:', str(e))
         traceback.print_exc()
         try:
             if forecast_adapter is not None:
@@ -640,4 +728,18 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward):
                 observed_adapter.close()
         except Exception as ex:
             print(str(ex))
+
+
+if __name__ == "__main__":
+    dir_path = '/home/hasitha/PycharmProjects/Workflow'
+    run_date = '2019-05-24'
+    run_time = '00:00:00'
+    forward = '3'
+    backward = '2'
+    output_path = os.path.join(dir_path, 'output', run_date, run_time)
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+        create_dir_if_not_exists(output_path)
+        create_hybrid_raincell(output_path, run_date, run_time, forward, backward)
+
 

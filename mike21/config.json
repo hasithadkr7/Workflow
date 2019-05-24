@@ -1,0 +1,43 @@
+{
+  "rain_cell_file" : "RAINCELL.DAT",
+
+  "kelani_basin_points_file" : "/home/hasitha/PycharmProjects/Flo2d/configs/kelani_basin_points_250m.txt",
+
+  "kelani_lower_basin_shp_file" : "/home/hasitha/PycharmProjects/Flo2d/configs/klb-wgs84/klb-wgs84.shp",
+
+  "forecast_db_config" :
+      {
+        "host": "104.198.0.87",
+        "user": "root",
+        "password": "cfcwm07",
+        "db": "curw"
+      },
+  "observed_db_config" :
+      {
+        "host": "104.198.0.87",
+        "user": "root",
+        "password": "cfcwm07",
+        "db": "curw"
+      },
+
+  "INITIAL_PATH_PREFIX" : "results/wrf0",
+  "KEY_FILE_PATH" : "/home/hasitha/Shared/uwcc-admin.json",
+  "BUCKET_NAME" : "curwsl_nfs_1",
+  "NET_CDF_FILE" : "wrfout_d03-18:00:00_rf",
+  "FLO2D_MODEl" : "150m",
+  "NET_CDF_PATH" : "/mnt/disks/curwsl_nfs_1/results/wrf0_",
+  "WRF_DATA_DIR" : "/home/hasitha/PycharmProjects/Workflow/output/",
+
+  "klb_obs_stationssss" : {"Kottawa North Dharmapala School": [79.95818, 6.865576, "Leecom", "wrf_79.957123_6.859688"],
+                    "IBATTARA2": [79.919, 6.908, "CUrW IoT", "wrf_79.902664_6.913757"],
+                    "Malabe": [79.95738, 6.90396, "A&T Labs", "wrf_79.957123_6.913757"],
+                    "Kotikawatta": [80.802551, 6.890585, "Leecom", "wrf_80.802551_6.890585"],
+                    "Mulleriyawa": [79.941176, 6.923571, "A&T Labs", "wrf_79.929893_6.913757"],
+                    "Orugodawatta": [79.87887, 6.943741, "CUrW IoT", "wrf_79.87887_6.943741"]},
+
+  "klb_obs_stations" : {"Kottawa North Dharmapala School": [79.95818, 6.865576, "Leecom", "wrf_79.957123_6.859688"],
+                    "IBATTARA2": [79.919, 6.908, "CUrW IoT", "wrf_79.902664_6.913757"],
+                    "Kotikawatta": [80.802551, 6.890585, "Leecom", "wrf_80.802551_6.890585"],
+                    "Kohuwala": [79.885825, 6.860887, "A&T Labs", "wrf_79.885825_6.860887"],
+                    "Mulleriyawa": [79.941176, 6.923571, "A&T Labs", "wrf_79.929893_6.913757"]}
+}

@@ -3,7 +3,7 @@ from datetime import timedelta, datetime
 import airflow
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
-
+from curw.workflow.airflow.extensions.operators.curw_flo2d_sensor import Flo2dCompletionSensor
 
 prod_dag_name = 'hechms_workflow'
 queue = 'default'
@@ -61,6 +61,7 @@ upload_discharge = BashOperator(
     dag=dag,
     pool=dag_pool,
 )
+
 
 
 create_rainfall >> run_hechms >> upload_discharge

@@ -6,7 +6,8 @@ from urllib.parse import urlparse, parse_qs
 from raincelldat.gen_raincell import create_hybrid_raincell
 from inflowdat.get_inflow import create_inflow
 from outflowdat.gen_outflow import create_outflow
-from flo2d.run_model import execute_flo2d_250m
+from flo2d.run_model import execute_flo2d_250m, flo2d_model_completed
+from waterlevel.upload_waterlevel import upload_waterlevels_curw
 from os.path import join as pjoin
 from datetime import datetime
 
@@ -33,6 +34,7 @@ class StoreHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         print('Handle GET request...')
         if self.path.startswith('/create-raincell'):
+            os.chdir(r"D:\flo2d_hourly")
             print('create-raincell')
             response = {}
             try:
@@ -55,6 +57,7 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.wfile.write(str.encode(reply))
 
         if self.path.startswith('/create-inflow'):
+            os.chdir(r"D:\flo2d_hourly")
             print('create-inflow')
             response = {}
             try:
@@ -75,6 +78,7 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.wfile.write(str.encode(reply))
 
         if self.path.startswith('/create-outflow'):
+            os.chdir(r"D:\flo2d_hourly")
             print('create-outflow')
             response = {}
             try:
@@ -97,6 +101,7 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.wfile.write(str.encode(reply))
 
         if self.path.startswith('/run-flo2d'):
+            os.chdir(r"D:\flo2d_hourly")
             print('run-flo2d')
             response = {}
             try:
@@ -116,7 +121,31 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(str.encode(reply))
 
+        if self.path.startswith('/flo2d-completed'):
+            os.chdir(r"D:\flo2d_hourly")
+            print('flo2d-completed')
+            response = {}
+            try:
+                query_components = parse_qs(urlparse(self.path).query)
+                print('query_components : ', query_components)
+                [run_date] = query_components["run_date"]
+                [run_time] = query_components["run_time"]
+                dir_path = set_daily_dir(run_date, run_time)
+                try:
+                    flo2d_model_completed(dir_path, run_date, run_time)
+                except Exception as ex:
+                    print('flo2d_model_completed|Exception : ', str(ex))
+                response = {'response': 'success'}
+            except Exception as e:
+                print(str(e))
+            reply = json.dumps(response)
+            self.send_response(200)
+            self.send_header('Content-type', 'text/json')
+            self.end_headers()
+            self.wfile.write(str.encode(reply))
+
         if self.path.startswith('/extract-data'):
+            os.chdir(r"D:\flo2d_hourly")
             print('extract-data')
             response = {}
             try:
@@ -124,6 +153,8 @@ class StoreHandler(BaseHTTPRequestHandler):
                 print('query_components : ', query_components)
                 [run_date] = query_components["run_date"]
                 [run_time] = query_components["run_time"]
+                dir_path = set_daily_dir(run_date, run_time)
+                upload_waterlevels_curw(dir_path, run_date, run_time)
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))
