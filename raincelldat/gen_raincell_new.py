@@ -4,7 +4,6 @@ import numpy as np
 import os
 import copy
 import pkg_resources
-from numpy.lib.recfunctions import append_fields
 from shapely.geometry import Polygon, Point
 from scipy.spatial import Voronoi
 from netCDF4 import Dataset
@@ -13,8 +12,6 @@ import geopandas as gpd
 from datetime import datetime, timedelta
 from curwmysqladapter import MySQLAdapter
 import csv
-
-KELANI_LOWER_BASIN_EXTENT = [79.8389, 6.77083, 80.1584, 7.04713]
 
 
 def get_resource_path(resource):
@@ -523,148 +520,7 @@ def get_voronoi_polygons(points_dict, shape_file, shape_attribute=None, output_s
     return df
 
 
-def extract_variables(nc_f, var_list, lat_min, lat_max, lon_min, lon_max, lat_var='XLAT', lon_var='XLONG',
-                      time_var='Times'):
-    """
-    extract variables from a netcdf file
-    :param nc_f:
-    :param var_list: comma separated string for variables / list of strings
-    :param lat_min:
-    :param lat_max:
-    :param lon_min:
-    :param lon_max:
-    :param lat_var:
-    :param lon_var:
-    :param time_var:
-    :return:
-    variables dict {var_key --> var[time, lat, lon], xlat --> [lat], xlong --> [lon], times --> [time]}
-    """
-    if not os.path.exists(nc_f):
-        raise IOError('File %s not found' % nc_f)
-
-    nc_fid = Dataset(nc_f, 'r')
-
-    times = np.array([''.join([y.decode() for y in x]) for x in nc_fid.variables[time_var][:]])
-    lats = nc_fid.variables[lat_var][0, :, 0]
-    lons = nc_fid.variables[lon_var][0, 0, :]
-
-    lat_inds = np.where((lats >= lat_min) & (lats <= lat_max))
-    lon_inds = np.where((lons >= lon_min) & (lons <= lon_max))
-
-    vars_dict = {}
-    if isinstance(var_list, str):
-        var_list = var_list.replace(',', ' ').split()
-    # var_list = var_list.replace(',', ' ').split() if isinstance(var_list, str) else var_list
-    for var in var_list:
-        vars_dict[var] = nc_fid.variables[var][:, lat_inds[0], lon_inds[0]]
-
-    nc_fid.close()
-
-    vars_dict[time_var] = times
-    vars_dict[lat_var] = lats[lat_inds[0]]
-    vars_dict[lon_var] = lons[lon_inds[0]]
-
-    # todo: implement this archiving procedure
-    # if output is not None:
-    #     logging.info('%s will be archied to %s' % (nc_f, output))
-    #     ncks_extract_variables(nc_f, var_str, output)
-
-    return vars_dict
-
-
-def datetime_utc_to_lk(timestamp_utc, shift_mins=0):
-    return timestamp_utc + timedelta(hours=5, minutes=30 + shift_mins)
-
-
-def extract_points_array_rf_series(nc_f, points_array, boundaries=None, rf_var_list=None, lat_var='XLAT', lon_var='XLONG',
-                                   time_var='Times'):
-    """
-    :param boundaries: list [lat_min, lat_max, lon_min, lon_max]
-    :param nc_f:
-    :param points_array: multi dim array (np structured array)  with a row [name, lon, lat]
-    :param rf_var_list:
-    :param lat_var:
-    :param lon_var:
-    :param time_var:
-    :return: np structured array with [(time, name1, name2, .... )]
-    """
-
-    if rf_var_list is None:
-        rf_var_list = ['RAINC', 'RAINNC']
-
-    if boundaries is None:
-        lat_min = np.min(points_array[points_array.dtype.names[2]])
-        lat_max = np.max(points_array[points_array.dtype.names[2]])
-        lon_min = np.min(points_array[points_array.dtype.names[1]])
-        lon_max = np.max(points_array[points_array.dtype.names[1]])
-    else:
-        lat_min, lat_max, lon_min, lon_max = boundaries
-
-    variables = extract_variables(nc_f, rf_var_list, lat_min, lat_max, lon_min, lon_max, lat_var, lon_var, time_var)
-
-    prcp = variables[rf_var_list[0]]
-    for i in range(1, len(rf_var_list)):
-        prcp = prcp + variables[rf_var_list[i]]
-
-    diff = get_two_element_average(prcp, return_diff=True)
-
-    result = np.array([datetime_utc_to_lk(datetime.strptime(t, '%Y-%m-%d_%H:%M:%S'), shift_mins=30).strftime(
-        '%Y-%m-%d %H:%M:%S').encode('utf-8') for t in variables[time_var][:-1]], dtype=np.dtype([(time_var, 'U19')]))
-
-    for p in points_array:
-        lat_start_idx = np.argmin(abs(variables['XLAT'] - p[2]))
-        lon_start_idx = np.argmin(abs(variables['XLONG'] - p[1]))
-        result = append_fields(result, p[0].decode(), np.round(diff[:, lat_start_idx, lon_start_idx], 6), usemask=False)
-
-    return result
-
-
-def extract_metro_col_rf_for_mike21(nc_f, output_dir, prev_rf_files=None, points_file=None):
-    if not prev_rf_files:
-        prev_rf_files = []
-
-    if not points_file:
-        points_file = get_resource_path('extraction/local/metro_col_sub_catch_centroids.txt')
-    points = np.genfromtxt(points_file, delimiter=',', names=True, dtype=None)
-
-    point_prcp = extract_points_array_rf_series(nc_f, points)
-
-    t0 = datetime.strptime(point_prcp['Times'][0], '%Y-%m-%d %H:%M:%S')
-    t1 = datetime.strptime(point_prcp['Times'][1], '%Y-%m-%d %H:%M:%S')
-
-    res_min = int((t1 - t0).total_seconds() / 60)
-    lines_per_day = int(24 * 60 / res_min)
-    prev_days = len(prev_rf_files)
-
-    output = None
-    for i in range(prev_days):
-        if output is not None:
-            output = np.append(output,extract_points_array_rf_series(prev_rf_files[prev_days - 1 - i], points)[:lines_per_day],axis=0)
-        else:
-            output = extract_points_array_rf_series(prev_rf_files[prev_days - 1 - i], points)[:lines_per_day]
-
-    output = np.append(output, point_prcp, axis=0)
-
-    fmt = '%s'
-    for _ in range(len(output[0]) - 1):
-        fmt = fmt + ',%g'
-    header = ','.join(output.dtype.names)
-
-    create_dir_if_not_exists(output_dir)
-    np.savetxt(os.path.join(output_dir, 'met_col_rf_mike21.txt'), output, fmt=fmt, delimiter=',', header=header,
-               comments='', encoding='utf-8')
-
-
-def get_centroid_names(point_file_path):
-    name_list = []
-    with open(point_file_path) as csvfile:
-        readCSV = csv.reader(csvfile, delimiter=',')
-        for row in readCSV:
-            name_list.append(row[0])
-    return name_list[1:]
-
-
-def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
+def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward):
     try:
         res_mins = '60'
         model_prefix = 'wrf'
@@ -672,7 +528,6 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
         run_name = 'Cloud-1'
         forecast_adapter = None
         observed_adapter = None
-        kelani_basin_mike_points_file = get_resource_path('extraction/local/metro_col_sub_catch_centroids.txt')
         kelani_basin_points_file = get_resource_path('extraction/local/kelani_basin_points_250m.txt')
         kelani_lower_basin_shp_file = get_resource_path('extraction/shp/klb-wgs84/klb-wgs84.shp')
         reference_net_cdf = get_resource_path('extraction/netcdf/wrf_wrfout_d03_2019-03-31_18_00_00_rf')
@@ -713,9 +568,8 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
             print('forecast_duration : ', forecast_duration)
             print('total_duration : ', total_duration)
 
-            mike_input_file_path = os.path.join(dir_path, 'mike_input.txt')
-            print('mike_input_file_path : ', mike_input_file_path)
-            if not os.path.isfile(mike_input_file_path):
+            raincell_file_path = os.path.join(dir_path, 'RAINCELL.DAT')
+            if not os.path.isfile(raincell_file_path):
                 points = np.genfromtxt(kelani_basin_points_file, delimiter=',')
 
                 kel_lon_min = np.min(points, 0)[1]
@@ -723,17 +577,7 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
                 kel_lon_max = np.max(points, 0)[1]
                 kel_lat_max = np.max(points, 0)[2]
 
-                mike_points = np.genfromtxt(kelani_basin_mike_points_file, delimiter=',')
-                #print('mike_points : ', mike_points)
-
-                mike_point_names = get_centroid_names(kelani_basin_mike_points_file)
-                print('mike_point_names[0] : ', mike_point_names[0])
-                print('mike_point_names[1] : ', mike_point_names[1])
-                print('mike_point_names[2] : ', mike_point_names[2])
-                print('mike_point_names[-1] : ', mike_point_names[-1])
-
-                print('[kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max] : ',
-                      [kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max])
+                print('[kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max] : ', [kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max])
 
                 # #min_lat, min_lon, max_lat, max_lon
                 forecast_stations, station_points = get_forecast_stations_from_net_cdf(model_prefix, reference_net_cdf,
@@ -742,9 +586,7 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
                                                                                        kel_lat_max,
                                                                                        kel_lon_max)
                 print('forecast_stations length : ', len(forecast_stations))
-                file_header = ','.join(mike_point_names)
-                print('file_header : ', file_header)
-                #"""
+
                 observed_adapter = MySQLAdapter(host=observed_db_config['host'],
                                                 user=observed_db_config['user'],
                                                 password=observed_db_config['password'],
@@ -788,55 +630,40 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
                                                                add_total_area=False)
 
                         fcst_point_thess_idx = []
-                        for point in mike_points:
+                        for point in points:
                             fcst_point_thess_idx.append(is_inside_geo_df(fcst_thess_poly, lon=point[1], lat=point[2]))
                             pass
                         # print('fcst_point_thess_idx : ', fcst_point_thess_idx)
 
                         # create_dir_if_not_exists(dir_path)
                         point_thess_idx = []
-                        for point in mike_points:
+                        for point in points:
                             point_thess_idx.append(is_inside_geo_df(thess_poly, lon=point[1], lat=point[2]))
                             pass
 
-                        print('len(mike_points)', len(mike_points))
+                        print('len(points)', len(points))
                         print('len(point_thess_idx)', len(point_thess_idx))
                         print('len(fcst_point_thess_idx)', len(fcst_point_thess_idx))
 
-                        print('point_thess_idx : ', point_thess_idx)
-                        print('fcst_point_thess_idx : ', fcst_point_thess_idx)
-                        print('mike_point_names : ', mike_point_names)
-                        with open(mike_input_file_path, mode='w') as output_file:
-                            output_writer = csv.writer(output_file, delimiter=',')
-                            header = ['Times']
-                            header.extend(mike_point_names)
-                            output_writer.writerow(header)
+                        with open(raincell_file_path, 'w') as output_file:
+                            output_file.write(
+                                "%d %d %s %s\n" % (res_mins, total_duration, obs_duration_start, fcst_duration_end))
+
                             print('range 1 : ', int(24 * 60 * duration_days[0] / res_mins) + 1)
                             print('range 2 : ', int(24 * 60 * duration_days[1] / res_mins) - 1)
-                            obs_duration_end = None
+
                             for t in range(observed_duration):
-                                date_time = datetime.strptime(obs_duration_start, '%Y-%m-%d %H:%M:%S')+timedelta(hours=t)
-                                obs_duration_end = date_time.strftime('%Y-%m-%d %H:%M:%S')
-                                print(date_time.strftime('%Y-%m-%d %H:%M:%S'))
-                                obs_rf_list = []
-                                for i, point in enumerate(mike_points):
-                                    rf = float(observed_precipitations[point_thess_idx[i]].values[t]) if point_thess_idx[i] is not None else 0
-                                    obs_rf_list.append('%.6f'% rf)
-                                row = [date_time.strftime('%Y-%m-%d %H:%M:%S')]
-                                row.extend(obs_rf_list)
-                                output_writer.writerow(row)
-                            print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-                            next_time_step = datetime.strptime(obs_duration_end, '%Y-%m-%d %H:%M:%S') + timedelta(hours= 1)
+                                for i, point in enumerate(points):
+                                    rf = float(observed_precipitations[point_thess_idx[i]].values[t]) if \
+                                    point_thess_idx[
+                                        i] is not None else 0
+                                    output_file.write('%d %.1f\n' % (point[0], rf))
+
                             for t in range(forecast_duration):
-                                date_time = next_time_step + timedelta(hours=t)
-                                print(date_time.strftime('%Y-%m-%d %H:%M:%S'))
-                                fcst_rf_list = []
-                                for i, point in enumerate(mike_points):
-                                    rf = float(forecast_precipitations[fcst_point_thess_idx[i]].values[t]) if fcst_point_thess_idx[i] is not None else 0
-                                    fcst_rf_list.append('%.6f' % rf)
-                                row = [date_time.strftime('%Y-%m-%d %H:%M:%S')]
-                                row.extend(fcst_rf_list)
-                                output_writer.writerow(row)
+                                for j, point in enumerate(points):
+                                    rf = float(forecast_precipitations[fcst_point_thess_idx[j]].values[t]) if \
+                                        fcst_point_thess_idx[j] is not None else 0
+                                    output_file.write('%d %.1f\n' % (point[0], rf))
                     else:
                         print('----------------------------------------------')
                         print('No forecast data.')
@@ -847,7 +674,50 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
                     print('Available station count: ', len(validated_obs_station))
                     print('Proceed with forecast data.')
                     print('----------------------------------------------')
-               # """
+                    forecast_adapter = MySQLAdapter(host=forecast_db_config['host'],
+                                                    user=forecast_db_config['user'],
+                                                    password=forecast_db_config['password'],
+                                                    db=forecast_db_config['db'])
+
+                    forecast_precipitations = get_forecast_precipitation(forecast_source, run_name, forecast_stations,
+                                                                         forecast_adapter,
+                                                                         obs_end.strftime('%Y-%m-%d %H:%M:%S'),
+                                                                         forward_days=3)
+                    forecast_precipitations_for_observed = get_forecast_precipitation_for_observed(forecast_source, run_name,
+                                                                                                   forecast_stations, forecast_adapter,
+                                                                                                   obs_duration_start, fcst_duration_start)
+                    forecast_adapter.close()
+                    forecast_adapter = None
+                    if bool(forecast_precipitations):
+                        fcst_thess_poly = get_voronoi_polygons(station_points, kelani_lower_basin_shp_file,
+                                                               add_total_area=False)
+
+                        fcst_point_thess_idx = []
+                        for point in points:
+                            fcst_point_thess_idx.append(is_inside_geo_df(fcst_thess_poly, lon=point[1], lat=point[2]))
+                            pass
+                        print('len(points)', len(points))
+                        print('len(fcst_point_thess_idx)', len(fcst_point_thess_idx))
+
+                        with open(raincell_file_path, 'w') as output_file:
+                            output_file.write(
+                                "%d %d %s %s\n" % (res_mins, total_duration, obs_duration_start, fcst_duration_end))
+
+                            print('range 1 : ', int(24 * 60 * duration_days[0] / res_mins) + 1)
+                            print('range 2 : ', int(24 * 60 * duration_days[1] / res_mins) - 1)
+
+                            for t in range(observed_duration):
+                                for i, point in enumerate(points):
+                                    rf = float(forecast_precipitations_for_observed[fcst_point_thess_idx[i]].values[t]) if \
+                                        fcst_point_thess_idx[
+                                        i] is not None else 0
+                                    output_file.write('%d %.1f\n' % (point[0], rf))
+
+                            for t in range(forecast_duration):
+                                for j, point in enumerate(points):
+                                    rf = float(forecast_precipitations[fcst_point_thess_idx[j]].values[t]) if \
+                                        fcst_point_thess_idx[j] is not None else 0
+                                    output_file.write('%d %.1f\n' % (point[0], rf))
     except Exception as e:
         print('Raincell generation error|Exception:', str(e))
         traceback.print_exc()
@@ -862,14 +732,14 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
 
 if __name__ == "__main__":
     dir_path = '/home/hasitha/PycharmProjects/Workflow'
-    run_date = '2019-05-27'
-    run_time = '11:00:00'
+    run_date = '2019-05-24'
+    run_time = '00:00:00'
     forward = '3'
     backward = '2'
     output_path = os.path.join(dir_path, 'output', run_date, run_time)
     if not os.path.exists(output_path):
         os.makedirs(output_path)
         create_dir_if_not_exists(output_path)
-    create_hybrid_mike_input(output_path, run_date, run_time, forward, backward)
+        create_hybrid_raincell(output_path, run_date, run_time, forward, backward)
 
 

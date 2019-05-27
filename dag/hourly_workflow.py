@@ -3,7 +3,8 @@ import airflow
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.http_operator import SimpleHttpOperator
-from curw.workflow.airflow.extensions.operators.curw_flo2d_sensor import Flo2dCompletionSensor
+from curw_flo2d_sensor import Flo2dCompletionSensor
+
 
 prod_dag_name = 'curw_hourly_workflow'
 queue = 'default'

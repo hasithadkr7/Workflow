@@ -6,9 +6,8 @@ import copy
 from curwmysqladapter import MySQLAdapter
 from datetime import datetime, timedelta
 
-SERIES_LENGTH = 0
-MISSING_VALUE = -999
 COMMON_DATE_TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+UTC_OFFSET = '+00:00:00'
 
 
 def isfloat(value):
@@ -122,75 +121,75 @@ def save_forecast_timeseries(my_adapter, my_timeseries, my_model_date, my_model_
     print('save_forecast_timeseries|extracted_timeseries: ', extracted_timeseries)
 
     # Check whether existing station
-    # force_insert = my_opts.get('forceInsert', False)
-    # station = my_opts.get('station', '')
-    # source = my_opts.get('source', 'FLO2D')
-    # is_station_exists = my_adapter.get_station({'name': station})
-    # if is_station_exists is None:
-    #     print('WARNING: Station %s does not exists. Continue with others.' % station)
-    #     return
-    # # TODO: Create if station does not exists.
-    #
-    # run_name = my_opts.get('run_name', 'Cloud-1')
-    # less_char_index = run_name.find('<')
-    # greater_char_index = run_name.find('>')
-    # if -1 < less_char_index > -1 < greater_char_index:
-    #     start_str = run_name[:less_char_index]
-    #     date_format_str = run_name[less_char_index + 1:greater_char_index]
-    #     end_str = run_name[greater_char_index + 1:]
-    #     try:
-    #         date_str = date_time.strftime(date_format_str)
-    #         run_name = start_str + date_str + end_str
-    #     except ValueError:
-    #         raise ValueError("Incorrect data format " + date_format_str)
-    #
-    # types = [
-    #     'Forecast-0-d',
-    #     'Forecast-1-d-after',
-    #     'Forecast-2-d-after',
-    #     'Forecast-3-d-after',
-    #     'Forecast-4-d-after',
-    #     'Forecast-5-d-after',
-    #     'Forecast-6-d-after',
-    #     'Forecast-7-d-after',
-    #     'Forecast-8-d-after',
-    #     'Forecast-9-d-after',
-    #     'Forecast-10-d-after',
-    #     'Forecast-11-d-after',
-    #     'Forecast-12-d-after',
-    #     'Forecast-13-d-after',
-    #     'Forecast-14-d-after'
-    # ]
-    # meta_data = {
-    #     'station': station,
-    #     'variable': 'WaterLevel',
-    #     'unit': 'm',
-    #     'type': types[0],
-    #     'source': source,
-    #     'name': run_name
-    # }
-    # for i in range(0, min(len(types), len(extracted_timeseries))):
-    #     meta_data_copy = copy.deepcopy(meta_data)
-    #     meta_data_copy['type'] = types[i]
-    #     event_id = my_adapter.get_event_id(meta_data_copy)
-    #     if event_id is None:
-    #         event_id = my_adapter.create_event_id(meta_data_copy)
-    #         print('HASH SHA256 created: ', event_id)
-    #     else:
-    #         print('HASH SHA256 exists: ', event_id)
-    #         if not force_insert:
-    #             print('Timeseries already exists. User --force to update the existing.\n')
-    #             continue
-    #
-    #     row_count = my_adapter.insert_timeseries(event_id, extracted_timeseries[i], force_insert)
-    #     print('%s rows inserted.\n' % row_count)
+    force_insert = my_opts.get('forceInsert', False)
+    station = my_opts.get('station', '')
+    source = my_opts.get('source', 'FLO2D')
+    is_station_exists = my_adapter.get_station({'name': station})
+    if is_station_exists is None:
+        print('WARNING: Station %s does not exists. Continue with others.' % station)
+        return
+    # TODO: Create if station does not exists.
+
+    run_name = my_opts.get('run_name', 'Cloud-1')
+    less_char_index = run_name.find('<')
+    greater_char_index = run_name.find('>')
+    if -1 < less_char_index > -1 < greater_char_index:
+        start_str = run_name[:less_char_index]
+        date_format_str = run_name[less_char_index + 1:greater_char_index]
+        end_str = run_name[greater_char_index + 1:]
+        try:
+            date_str = date_time.strftime(date_format_str)
+            run_name = start_str + date_str + end_str
+        except ValueError:
+            raise ValueError("Incorrect data format " + date_format_str)
+
+    types = [
+        'Forecast-0-d',
+        'Forecast-1-d-after',
+        'Forecast-2-d-after',
+        'Forecast-3-d-after',
+        'Forecast-4-d-after',
+        'Forecast-5-d-after',
+        'Forecast-6-d-after',
+        'Forecast-7-d-after',
+        'Forecast-8-d-after',
+        'Forecast-9-d-after',
+        'Forecast-10-d-after',
+        'Forecast-11-d-after',
+        'Forecast-12-d-after',
+        'Forecast-13-d-after',
+        'Forecast-14-d-after'
+    ]
+    meta_data = {
+        'station': station,
+        'variable': 'WaterLevel',
+        'unit': 'm',
+        'type': types[0],
+        'source': source,
+        'name': run_name
+    }
+    for i in range(0, min(len(types), len(extracted_timeseries))):
+        meta_data_copy = copy.deepcopy(meta_data)
+        meta_data_copy['type'] = types[i]
+        event_id = my_adapter.get_event_id(meta_data_copy)
+        if event_id is None:
+            event_id = my_adapter.create_event_id(meta_data_copy)
+            print('HASH SHA256 created: ', event_id)
+        else:
+            print('HASH SHA256 exists: ', event_id)
+            if not force_insert:
+                print('Timeseries already exists. User --force to update the existing.\n')
+                continue
+
+        row_count = my_adapter.insert_timeseries(event_id, extracted_timeseries[i], force_insert)
+        print('%s rows inserted.\n' % row_count)
 
 
 def getUTCOffset(utcOffset, default=False):
     """
     Get timedelta instance of given UTC offset string.
     E.g. Given UTC offset string '+05:30' will return
-    datetime.timedelta(hours=5, minutes=30))
+    timedelta(hours=5, minutes=30))
 
     :param string utcOffset: UTC offset in format of [+/1][HH]:[MM]
     :param boolean default: If True then return 00:00 time offset on invalid format.
@@ -203,44 +202,49 @@ def getUTCOffset(utcOffset, default=False):
     else:
         if default:
             print("UTC_OFFSET :", utcOffset, " not in correct format. Using +00:00")
-            return datetime.timedelta()
+            return timedelta()
         else:
             return False
 
     if utcOffset[0] == "-":  # If timestamp in negtive zone, add it to current time
         offset_str = utcOffset[1:].split(':')
-        return datetime.timedelta(hours=int(offset_str[0]), minutes=int(offset_str[1]))
+        return timedelta(hours=int(offset_str[0]), minutes=int(offset_str[1]))
     if utcOffset[0] == "+":  # If timestamp in positive zone, deduct it to current time
         offset_str = utcOffset[1:].split(':')
-        return datetime.timedelta(hours=-1 * int(offset_str[0]), minutes=-1 * int(offset_str[1]))
+        return timedelta(hours=-1 * int(offset_str[0]), minutes=-1 * int(offset_str[1]))
 
 
 def upload_waterlevels_curw(dir_path, run_date, run_time):
+    SERIES_LENGTH = 0
+    MISSING_VALUE = -999
+
     try:
-        config_path = os.path.join(os.getcwd(), 'inflowdat', 'config.json')
+        config_path = os.path.join(os.getcwd(), 'waterlevel', 'config.json')
         print('config_path : ', config_path)
+        utc_offset = ''
         with open(config_path) as json_file:
             config_data = json.load(json_file)
             output_dir = dir_path
-            utc_offset = ''
             HYCHAN_OUT_FILE = config_data['hychan_out_file']
             TIMDEP_FILE = config_data['timdep_out_file']
             FLO2D_MODEL = config_data['flo2d_model']
             RUN_NAME = config_data['run_name']
             hychan_out_file_path = os.path.join(dir_path, HYCHAN_OUT_FILE)
             timdep_file_path = os.path.join(dir_path, TIMDEP_FILE)
+            print('hychan_out_file_path : ', hychan_out_file_path)
+            print('timdep_file_path : ', timdep_file_path)
             forceInsert = True
             MYSQL_HOST = config_data['db_host']
             MYSQL_USER = config_data['db_user']
             MYSQL_DB = config_data['db_name']
             MYSQL_PASSWORD = config_data['db_password']
-
-            if 'UTC_OFFSET' in config_data and len(
-                    config_data['UTC_OFFSET']):  # Use FLO2D Config file data, if available
-                UTC_OFFSET = config_data['UTC_OFFSET']
-            if utc_offset:
-                UTC_OFFSET = utc_offset
-            utcOffset = getUTCOffset(UTC_OFFSET, default=True)
+            # if 'UTC_OFFSET' in config_data and len(
+            #         config_data['UTC_OFFSET']):  # Use FLO2D Config file data, if available
+            #     UTC_OFFSET = config_data['UTC_OFFSET']
+            # if utc_offset:
+            #     UTC_OFFSET = config_data
+            utcOffset = getUTCOffset('', default=True)
+            utcOffset = getUTCOffset('', default=True)
             adapter = MySQLAdapter(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, db=MYSQL_DB)
 
             flo2d_source = adapter.get_source(name=FLO2D_MODEL)
