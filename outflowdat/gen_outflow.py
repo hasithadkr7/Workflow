@@ -38,7 +38,7 @@ def get_tidal_data(db_adapter,  my_opts):
     if len(ts) > 0:
         ts_df = pd.DataFrame(data=ts, columns=['time', 'value']).set_index(keys='time')
         print(ts_df)
-        ts_df.to_csv('May_tidal_data.csv')
+        ts_df.to_csv('june_tidal_data.csv')
 
 
 def create_outflow(dir_path, run_date, run_time, forward = 3, backward = 2):
@@ -133,3 +133,33 @@ def create_outflow(dir_path, run_date, run_time, forward = 3, backward = 2):
                 print("Download required files|Exception: ", str(ex))
     except Exception as e:
         print("Exception occurred: ", str(e))
+
+
+if __name__ == "__main__":
+    dir_path = '/home/hasitha/PycharmProjects/Workflow'
+    run_date = '2019-05-01'
+    run_time = '14:00:00'
+    startDateTime = datetime.strptime('%s %s' % (run_date, run_time), '%Y-%m-%d %H:%M:%S')
+    output_path = os.path.join(dir_path, 'output', run_date, run_time)
+    config_path = os.path.join(os.getcwd(), 'config.json')
+    print('config_path : ', config_path)
+    with open(config_path) as json_file:
+        config_data = json.load(json_file)
+        output_dir = dir_path
+        inittidal_conf_path = os.path.join(os.getcwd(),'INITTIDAL.CONF')
+
+        CONTROL_INTERVAL = config_data["CONTROL_INTERVAL"]
+        DAT_WIDTH = config_data["DAT_WIDTH"]
+        TIDAL_FORECAST_ID = config_data["TIDAL_FORECAST_ID"]
+
+        MYSQL_HOST = config_data['db_host']
+        MYSQL_USER = config_data['db_user']
+        MYSQL_DB = config_data['db_name']
+        MYSQL_PASSWORD = config_data['db_password']
+        opts = {
+            'from': '2019-06-00 00:00:00',
+            'to': '2019-06-30 00:00:00',
+        }
+        adapter = MySQLAdapter(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, db=MYSQL_DB)
+        get_tidal_data(adapter, opts)
+

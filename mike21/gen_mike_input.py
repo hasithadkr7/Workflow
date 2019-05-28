@@ -624,7 +624,7 @@ def extract_metro_col_rf_for_mike21(nc_f, output_dir, prev_rf_files=None, points
         prev_rf_files = []
 
     if not points_file:
-        points_file = get_resource_path('extraction/local/metro_col_sub_catch_centroids.txt')
+        points_file = get_resource_path('extraction/local/metro_col_sub_catch_centroids.csv')
     points = np.genfromtxt(points_file, delimiter=',', names=True, dtype=None)
 
     point_prcp = extract_points_array_rf_series(nc_f, points)
@@ -660,7 +660,7 @@ def get_centroid_names(point_file_path):
     with open(point_file_path) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
         for row in readCSV:
-            name_list.append(row[0])
+            name_list.append(row[0].strip())
     return name_list[1:]
 
 
@@ -672,7 +672,7 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
         run_name = 'Cloud-1'
         forecast_adapter = None
         observed_adapter = None
-        kelani_basin_mike_points_file = get_resource_path('extraction/local/metro_col_sub_catch_centroids.txt')
+        kelani_basin_mike_points_file = get_resource_path('extraction/local/metro_col_sub_catch_centroids.csv')
         kelani_basin_points_file = get_resource_path('extraction/local/kelani_basin_points_250m.txt')
         kelani_lower_basin_shp_file = get_resource_path('extraction/shp/klb-wgs84/klb-wgs84.shp')
         reference_net_cdf = get_resource_path('extraction/netcdf/wrf_wrfout_d03_2019-03-31_18_00_00_rf')
@@ -723,10 +723,24 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
                 kel_lon_max = np.max(points, 0)[1]
                 kel_lat_max = np.max(points, 0)[2]
 
-                mike_points = np.genfromtxt(kelani_basin_mike_points_file, delimiter=',')
-                #print('mike_points : ', mike_points)
+                mike_points = np.genfromtxt(kelani_basin_mike_points_file, delimiter=',', names=True, dtype=None)
+                print('mike_points : ', mike_points)
+                print('mike_points : ', mike_points[0][0].decode())
+                print('mike_points : ', mike_points[1][0].decode())
+                print('mike_points : ', mike_points[2][0].decode())
 
-                mike_point_names = get_centroid_names(kelani_basin_mike_points_file)
+                def _get_points_names(mike_points):
+                    mike_point_names = []
+                    for p in mike_points:
+                        mike_point_names.append(p[0].decode())
+                    return mike_point_names
+
+                #mike_point_names = get_centroid_names(kelani_basin_mike_points_file)
+                mike_point_names = _get_points_names(mike_points)
+
+
+                print('mike_point_names : ', mike_point_names)
+
                 print('mike_point_names[0] : ', mike_point_names[0])
                 print('mike_point_names[1] : ', mike_point_names[1])
                 print('mike_point_names[2] : ', mike_point_names[2])
@@ -734,7 +748,7 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
 
                 print('[kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max] : ',
                       [kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max])
-
+                #"""
                 # #min_lat, min_lon, max_lat, max_lon
                 forecast_stations, station_points = get_forecast_stations_from_net_cdf(model_prefix, reference_net_cdf,
                                                                                        kel_lat_min,
@@ -744,7 +758,6 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
                 print('forecast_stations length : ', len(forecast_stations))
                 file_header = ','.join(mike_point_names)
                 print('file_header : ', file_header)
-                #"""
                 observed_adapter = MySQLAdapter(host=observed_db_config['host'],
                                                 user=observed_db_config['user'],
                                                 password=observed_db_config['password'],
@@ -807,7 +820,7 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
                         print('fcst_point_thess_idx : ', fcst_point_thess_idx)
                         print('mike_point_names : ', mike_point_names)
                         with open(mike_input_file_path, mode='w') as output_file:
-                            output_writer = csv.writer(output_file, delimiter=',')
+                            output_writer = csv.writer(output_file, delimiter=',', dialect='excel')
                             header = ['Times']
                             header.extend(mike_point_names)
                             output_writer.writerow(header)
@@ -862,8 +875,8 @@ def create_hybrid_mike_input(dir_path, run_date, run_time, forward, backward):
 
 if __name__ == "__main__":
     dir_path = '/home/hasitha/PycharmProjects/Workflow'
-    run_date = '2019-05-27'
-    run_time = '11:00:00'
+    run_date = '2019-05-28'
+    run_time = '14:00:00'
     forward = '3'
     backward = '2'
     output_path = os.path.join(dir_path, 'output', run_date, run_time)
