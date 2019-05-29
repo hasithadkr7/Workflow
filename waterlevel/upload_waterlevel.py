@@ -2,7 +2,6 @@ import json
 import os
 import re
 
-import copy
 from curwmysqladapter import MySQLAdapter
 from datetime import datetime, timedelta
 
@@ -96,7 +95,7 @@ def extractForecastTimeseriesInDays(timeseries):
 
 
 def save_forecast_timeseries(my_adapter, my_timeseries, my_model_date, my_model_time, my_opts):
-    print('EXTRACTFLO2DWATERLEVEL:: save_forecast_timeseries >>', my_opts)
+    #print('EXTRACTFLO2DWATERLEVEL:: save_forecast_timeseries >>', my_opts)
 
     # Convert date time with offset
     date_time = datetime.strptime('%s %s' % (my_model_date, my_model_time), COMMON_DATE_TIME_FORMAT)
@@ -118,7 +117,7 @@ def save_forecast_timeseries(my_adapter, my_timeseries, my_model_date, my_model_
         forecast_timeseries = extractForecastTimeseries(my_timeseries, my_model_date, my_model_time, by_day=True)
 
     extracted_timeseries = extractForecastTimeseriesInDays(forecast_timeseries)
-    print('save_forecast_timeseries|extracted_timeseries: ', extracted_timeseries)
+    #print('save_forecast_timeseries|extracted_timeseries: ', extracted_timeseries)
 
     # Check whether existing station
     force_insert = my_opts.get('forceInsert', False)
@@ -168,21 +167,22 @@ def save_forecast_timeseries(my_adapter, my_timeseries, my_model_date, my_model_
         'source': source,
         'name': run_name
     }
-    for i in range(0, min(len(types), len(extracted_timeseries))):
-        meta_data_copy = copy.deepcopy(meta_data)
-        meta_data_copy['type'] = types[i]
-        event_id = my_adapter.get_event_id(meta_data_copy)
-        if event_id is None:
-            event_id = my_adapter.create_event_id(meta_data_copy)
-            print('HASH SHA256 created: ', event_id)
-        else:
-            print('HASH SHA256 exists: ', event_id)
-            if not force_insert:
-                print('Timeseries already exists. User --force to update the existing.\n')
-                continue
-
-        row_count = my_adapter.insert_timeseries(event_id, extracted_timeseries[i], force_insert)
-        print('%s rows inserted.\n' % row_count)
+    print('extracted_timeseries : ', extracted_timeseries)
+    # for i in range(0, min(len(types), len(extracted_timeseries))):
+    #     meta_data_copy = copy.deepcopy(meta_data)
+    #     meta_data_copy['type'] = types[i]
+    #     event_id = my_adapter.get_event_id(meta_data_copy)
+    #     if event_id is None:
+    #         event_id = my_adapter.create_event_id(meta_data_copy)
+    #         print('HASH SHA256 created: ', event_id)
+    #     else:
+    #         print('HASH SHA256 exists: ', event_id)
+    #         if not force_insert:
+    #             print('Timeseries already exists. User --force to update the existing.\n')
+    #             continue
+    #
+    #     row_count = my_adapter.insert_timeseries(event_id, extracted_timeseries[i], force_insert)
+    #     print('%s rows inserted.\n' % row_count)
 
 
 def getUTCOffset(utcOffset, default=False):
@@ -219,8 +219,9 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
     MISSING_VALUE = -999
 
     try:
-        config_path = os.path.join(os.getcwd(), 'waterlevel', 'config.json')
-        print('config_path : ', config_path)
+        # config_path = os.path.join(os.getcwd(), 'waterlevel', 'config.json') # production code
+        config_path = os.path.join(os.getcwd(), 'config.json')
+        #print('config_path : ', config_path)
         utc_offset = ''
         with open(config_path) as json_file:
             config_data = json.load(json_file)
@@ -243,8 +244,8 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
             #     UTC_OFFSET = config_data['UTC_OFFSET']
             # if utc_offset:
             #     UTC_OFFSET = config_data
-            utcOffset = getUTCOffset('', default=True)
-            utcOffset = getUTCOffset('', default=True)
+            UTC_OFFSET = '+00:00:00'
+            utcOffset = getUTCOffset(UTC_OFFSET, default=True)
             adapter = MySQLAdapter(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, db=MYSQL_DB)
 
             flo2d_source = adapter.get_source(name=FLO2D_MODEL)
@@ -315,6 +316,7 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                                         isSeriesComplete = True
 
                             if isSeriesComplete:
+                                print('[run_date, run_time] : ', [run_date, run_time])
                                 baseTime = datetime.strptime('%s %s' % (run_date, run_time), '%Y-%m-%d %H:%M:%S')
                                 timeseries = []
                                 elementNo = waterLevelLines[0].split()[5]
@@ -404,4 +406,41 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
     except Exception as e:
         print('config reading exception:', str(e))
 
+
+if __name__ == "__main__":
+    # dir_path = '/home/hasitha/PycharmProjects/Workflow'
+    dir_path = '/home/hasitha/PycharmProjects/Workflow/waterlevel/input'
+    run_date = '2019-05-28'
+    run_time = '08:00:00'
+    backward = '2'
+    forward = '3'
+    duration_days = (int(backward), int(forward))
+    ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[1])
+    ts_start_date = ts_start_date.strftime('%Y-%m-%d')
+    ts_start_time = '00:00:00'
+    startDateTime = datetime.strptime('%s %s' % (run_date, run_time), '%Y-%m-%d %H:%M:%S')
+    output_path = os.path.join(dir_path, 'output', run_date, run_time)
+    config_path = os.path.join(os.getcwd(), 'config.json')
+    print('config_path : ', config_path)
+    print('[ts_start_date, ts_start_time] : ', [ts_start_date, ts_start_time])
+    upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
+    # with open(config_path) as json_file:
+    #     config_data = json.load(json_file)
+    #     output_dir = dir_path
+    #     inittidal_conf_path = os.path.join(os.getcwd(),'INITTIDAL.CONF')
+    #
+    #     CONTROL_INTERVAL = config_data["CONTROL_INTERVAL"]
+    #     DAT_WIDTH = config_data["DAT_WIDTH"]
+    #     TIDAL_FORECAST_ID = config_data["TIDAL_FORECAST_ID"]
+    #
+    #     MYSQL_HOST = config_data['db_host']
+    #     MYSQL_USER = config_data['db_user']
+    #     MYSQL_DB = config_data['db_name']
+    #     MYSQL_PASSWORD = config_data['db_password']
+    #     opts = {
+    #         'from': '2019-06-00 00:00:00',
+    #         'to': '2019-06-30 00:00:00',
+    #     }
+    #     adapter = MySQLAdapter(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, db=MYSQL_DB)
+    #     upload_waterlevels_curw(dir_path, run_date, run_time)
 

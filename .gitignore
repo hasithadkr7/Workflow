@@ -4,3 +4,4 @@ venv/
 inflowdat/__pycache__/
 outflowdat/May_tidal_data.csv
 outflowdat/__pycache__/
+waterlevel/input/

@@ -9,8 +9,7 @@ from outflowdat.gen_outflow import create_outflow
 from flo2d.run_model import execute_flo2d_250m, flo2d_model_completed
 from waterlevel.upload_waterlevel import upload_waterlevels_curw
 from os.path import join as pjoin
-from datetime import datetime
-
+from datetime import datetime, timedelta
 
 HOST_ADDRESS = '10.138.0.4'
 #HOST_ADDRESS = '0.0.0.0'
@@ -154,7 +153,13 @@ class StoreHandler(BaseHTTPRequestHandler):
                 [run_date] = query_components["run_date"]
                 [run_time] = query_components["run_time"]
                 dir_path = set_daily_dir(run_date, run_time)
-                upload_waterlevels_curw(dir_path, run_date, run_time)
+                backward = '2'
+                forward = '3'
+                duration_days = (int(backward), int(forward))
+                ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[1])
+                ts_start_date = ts_start_date.strftime('%Y-%m-%d')
+                ts_start_time = '00:00:00'
+                upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))
