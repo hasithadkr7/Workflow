@@ -66,7 +66,13 @@ class StoreHandler(BaseHTTPRequestHandler):
                 [run_time] = query_components["run_time"]
                 print('[run_date, run_time] : ', [run_date, run_time])
                 dir_path = set_daily_dir(run_date, run_time)
-                create_inflow(dir_path, run_date, run_time)
+                backward = '2'
+                forward = '3'
+                duration_days = (int(backward), int(forward))
+                ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
+                ts_start_date = ts_start_date.strftime('%Y-%m-%d')
+                ts_start_time = '00:00:00'
+                create_inflow(dir_path, ts_start_date, ts_start_time)
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))
@@ -88,8 +94,12 @@ class StoreHandler(BaseHTTPRequestHandler):
                 [forward] = query_components["forward"]
                 [backward] = query_components["backward"]
                 print('[run_date, run_time] : ', [run_date, run_time])
+                duration_days = (int(backward), int(forward))
+                ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
+                ts_start_date = ts_start_date.strftime('%Y-%m-%d')
+                ts_start_time = '00:00:00'
                 dir_path = set_daily_dir(run_date, run_time)
-                create_outflow(dir_path, run_date, run_time, forward, backward)
+                create_outflow(dir_path, ts_start_date, ts_start_time, forward, backward)
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))
@@ -156,10 +166,11 @@ class StoreHandler(BaseHTTPRequestHandler):
                 backward = '2'
                 forward = '3'
                 duration_days = (int(backward), int(forward))
-                ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[1])
+                ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
                 ts_start_date = ts_start_date.strftime('%Y-%m-%d')
                 ts_start_time = '00:00:00'
-                upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
+                #upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
+                upload_waterlevels_curw(dir_path, run_date, ts_start_time)
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))

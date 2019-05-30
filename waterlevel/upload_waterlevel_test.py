@@ -95,7 +95,7 @@ def extractForecastTimeseriesInDays(timeseries):
     return new_timeseries
 
 
-def save_forecast_timeseries(my_adapter, my_timeseries, my_model_date, my_model_time, my_opts):
+def save_forecast_timeseries(my_timeseries, my_model_date, my_model_time, my_opts):
     #print('EXTRACTFLO2DWATERLEVEL:: save_forecast_timeseries >>', my_opts)
 
     # Convert date time with offset
@@ -124,11 +124,6 @@ def save_forecast_timeseries(my_adapter, my_timeseries, my_model_date, my_model_
     force_insert = my_opts.get('forceInsert', False)
     station = my_opts.get('station', '')
     source = my_opts.get('source', 'FLO2D')
-    is_station_exists = my_adapter.get_station({'name': station})
-    if is_station_exists is None:
-        print('WARNING: Station %s does not exists. Continue with others.' % station)
-        return
-    # TODO: Create if station does not exists.
 
     run_name = my_opts.get('run_name', 'Cloud-1')
     less_char_index = run_name.find('<')
@@ -238,22 +233,36 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
             print('timdep_file_path : ', timdep_file_path)
             print('FLO2D_MODEL : ', FLO2D_MODEL)
             forceInsert = True
-            MYSQL_HOST = config_data['db_host']
-            MYSQL_USER = config_data['db_user']
-            MYSQL_DB = config_data['db_name']
-            MYSQL_PASSWORD = config_data['db_password']
-            # if 'UTC_OFFSET' in config_data and len(
-            #         config_data['UTC_OFFSET']):  # Use FLO2D Config file data, if available
-            #     UTC_OFFSET = config_data['UTC_OFFSET']
-            # if utc_offset:
-            #     UTC_OFFSET = config_data
             UTC_OFFSET = '+00:00:00'
             utcOffset = getUTCOffset(UTC_OFFSET, default=True)
-            adapter = MySQLAdapter(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, db=MYSQL_DB)
 
-            flo2d_source = adapter.get_source(name=FLO2D_MODEL)
+            flo2d_source = {
+                                "CHANNEL_CELL_MAP": {
+                                    "179": "Wellawatta",
+                                    "221": "Dehiwala",
+                                    "592": "Torington",
+                                    "616": "N'Street-Canal",
+                                    "618": "N'Street-River",
+                                    "684": "Dematagoda-Canal",
+                                    "814": "Heen Ela",
+                                    "1062": "Kolonnawa-Canal",
+                                    "991": "kittampahuwa-Out",
+                                    "1161": "Kittampahuwa-River",
+                                    "1515": "Parliament Lake Bridge-Kotte Canal",
+                                    "2158": "Parliament Lake-Out",
+                                    "2396": "Salalihini-River",
+                                    "2496": "Salalihini-Canal",
+                                    "3580": "Madiwela-Out",
+                                    "3673": "Ambathale"
+                                },
+                                "FLOOD_PLAIN_CELL_MAP": {
+                                    "2265": "Parliament Lake",
+                                    "3559": "Madiwela-US"
+                                }
+                            }
             try:
-                flo2d_source = json.loads(flo2d_source.get('parameters', "{}"))
+                #flo2d_source = json.loads(flo2d_source.get('parameters', "{}"))
+
                 CHANNEL_CELL_MAP = {}
                 if 'CHANNEL_CELL_MAP' in flo2d_source:
                     CHANNEL_CELL_MAP = flo2d_source['CHANNEL_CELL_MAP']
@@ -264,7 +273,7 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                 FLOOD_ELEMENT_NUMBERS = FLOOD_PLAIN_CELL_MAP.keys()
                 # Calculate the size of time series
                 bufsize = 65536
-
+                print('flo2d_source : ', flo2d_source)
                 with open(hychan_out_file_path) as infile:
                     isWaterLevelLines = False
                     isCounting = False
@@ -351,7 +360,7 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                                 print('>>>>>', opts)
                                 if utcOffset != timedelta():
                                     opts['utcOffset'] = utcOffset
-                                save_forecast_timeseries(adapter, timeseries, run_date, run_time, opts)
+                                save_forecast_timeseries(timeseries, run_date, run_time, opts)
 
                                 isWaterLevelLines = False
                                 isSeriesComplete = False
@@ -403,11 +412,12 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                         }
                         if utcOffset != timedelta():
                             opts['utcOffset'] = utcOffset
-
-                        if FLOOD_PLAIN_CELL_MAP[elementNo] == 'Nagalagam Street River':
-                            save_forecast_timeseries(adapter, waterLevelSeriesDict[elementNo], run_date, run_time, opts)
-                            print('Extracted Cell No', elementNo, FLOOD_PLAIN_CELL_MAP[elementNo])
-                            exit(0)
+                        #"616": "Nagalagam Street", "618": "Nagalagam Street River"
+                        if elementNo == 616 or elementNo == '616' or FLOOD_PLAIN_CELL_MAP[elementNo] == 'Nagalagam Street' :
+                            file_path = os.path.join(dir_path, 'Nagalagam_Street_ts.txt')
+                            with open(file_path, 'w') as f:
+                                for item in waterLevelSeriesDict[elementNo]:
+                                    f.write("%s\n" % item)
             except Exception as ex:
                 print('source data loading exception:', str(ex))
     except Exception as e:
@@ -431,23 +441,4 @@ if __name__ == "__main__":
     print('config_path : ', config_path)
     print('[ts_start_date, ts_start_time] : ', [ts_start_date, ts_start_time])
     upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
-    # with open(config_path) as json_file:
-    #     config_data = json.load(json_file)
-    #     output_dir = dir_path
-    #     inittidal_conf_path = os.path.join(os.getcwd(),'INITTIDAL.CONF')
-    #
-    #     CONTROL_INTERVAL = config_data["CONTROL_INTERVAL"]
-    #     DAT_WIDTH = config_data["DAT_WIDTH"]
-    #     TIDAL_FORECAST_ID = config_data["TIDAL_FORECAST_ID"]
-    #
-    #     MYSQL_HOST = config_data['db_host']
-    #     MYSQL_USER = config_data['db_user']
-    #     MYSQL_DB = config_data['db_name']
-    #     MYSQL_PASSWORD = config_data['db_password']
-    #     opts = {
-    #         'from': '2019-06-00 00:00:00',
-    #         'to': '2019-06-30 00:00:00',
-    #     }
-    #     adapter = MySQLAdapter(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, db=MYSQL_DB)
-    #     upload_waterlevels_curw(dir_path, run_date, run_time)
 
