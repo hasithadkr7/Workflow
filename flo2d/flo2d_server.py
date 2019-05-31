@@ -170,7 +170,7 @@ class StoreHandler(BaseHTTPRequestHandler):
                 ts_start_date = ts_start_date.strftime('%Y-%m-%d')
                 ts_start_time = '00:00:00'
                 #upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
-                upload_waterlevels_curw(dir_path, run_date, ts_start_time)
+                upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time, run_date, '00:00:00')
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))

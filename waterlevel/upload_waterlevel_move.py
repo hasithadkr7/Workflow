@@ -218,7 +218,7 @@ def getUTCOffset(utcOffset, default=False):
         return timedelta(hours=-1 * int(offset_str[0]), minutes=-1 * int(offset_str[1]))
 
 
-def upload_waterlevels_curw(dir_path, run_date, run_time):
+def upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time, run_date, run_time):
     SERIES_LENGTH = 0
     MISSING_VALUE = -999
 
@@ -319,7 +319,7 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                                         isSeriesComplete = True
 
                             if isSeriesComplete:
-                                baseTime = datetime.strptime('%s %s' % (run_date, run_time), '%Y-%m-%d %H:%M:%S')
+                                baseTime = datetime.strptime('%s %s' % (ts_start_date, ts_start_time), '%Y-%m-%d %H:%M:%S')
                                 timeseries = []
                                 elementNo = waterLevelLines[0].split()[5]
                                 #print('Extracted Cell No', elementNo, CHANNEL_CELL_MAP[elementNo])
@@ -350,16 +350,16 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                                 if utcOffset != timedelta():
                                     opts['utcOffset'] = utcOffset
 
-                                folder_path_ts = os.path.join(dir_path, 'time_series')
-                                if not os.path.exists(folder_path_ts):
-                                    try:
-                                        os.makedirs(folder_path_ts)
-                                    except OSError as e:
-                                        print(str(e))
-                                file_path = os.path.join(folder_path_ts, 'time_series_' + elementNo + '.txt')
-                                with open(file_path, 'w') as f:
-                                    for item in timeseries:
-                                        f.write("%s\n" % item)
+                                # folder_path_ts = os.path.join(dir_path, 'time_series')
+                                # if not os.path.exists(folder_path_ts):
+                                #     try:
+                                #         os.makedirs(folder_path_ts)
+                                #     except OSError as e:
+                                #         print(str(e))
+                                # file_path = os.path.join(folder_path_ts, 'time_series_' + elementNo + '.txt')
+                                # with open(file_path, 'w') as f:
+                                #     for item in timeseries:
+                                #         f.write("%s\n" % item)
                                 save_forecast_timeseries(adapter, timeseries, run_date, run_time, opts)
 
                                 isWaterLevelLines = False
@@ -385,7 +385,7 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                                     # Get Time stamp Ref:http://stackoverflow.com/a/13685221/1461060
                                     #print(waterLevelLines[0].split())
                                     ModelTime = float(waterLevelLines[0].split()[0])
-                                    baseTime = datetime.strptime('%s %s' % (run_date, run_time),
+                                    baseTime = datetime.strptime('%s %s' % (ts_start_date, ts_start_time),
                                                                  '%Y-%m-%d %H:%M:%S')
                                     currentStepTime = baseTime + timedelta(hours=ModelTime)
                                     dateAndTime = currentStepTime.strftime("%Y-%m-%d %H:%M:%S")
@@ -412,16 +412,16 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                         }
                         if utcOffset != timedelta():
                             opts['utcOffset'] = utcOffset
-                        folder_path_ts = os.path.join(dir_path, 'time_series')
-                        if not os.path.exists(folder_path_ts):
-                            try:
-                                os.makedirs(folder_path_ts)
-                            except OSError as e:
-                                print(str(e))
-                        file_path = os.path.join(folder_path_ts, 'time_series_'+elementNo+'.txt')
-                        with open(file_path, 'w') as f:
-                            for item in waterLevelSeriesDict[elementNo]:
-                                f.write("%s\n" % item)
+                        # folder_path_ts = os.path.join(dir_path, 'time_series')
+                        # if not os.path.exists(folder_path_ts):
+                        #     try:
+                        #         os.makedirs(folder_path_ts)
+                        #     except OSError as e:
+                        #         print(str(e))
+                        # file_path = os.path.join(folder_path_ts, 'time_series_'+elementNo+'.txt')
+                        # with open(file_path, 'w') as f:
+                        #     for item in waterLevelSeriesDict[elementNo]:
+                        #         f.write("%s\n" % item)
                         save_forecast_timeseries(adapter, waterLevelSeriesDict[elementNo], run_date, run_time, opts)
                         #print('Extracted Cell No', elementNo, FLOOD_PLAIN_CELL_MAP[elementNo])
             except Exception as ex:

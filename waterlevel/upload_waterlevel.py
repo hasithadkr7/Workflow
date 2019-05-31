@@ -47,7 +47,7 @@ def extractForecastTimeseries(timeseries, extract_date, extract_time, by_day=Fal
     date: 2017-09-01 and time: 14:00:00 will extract a timeseries which contains
     values that timestamp onwards
     """
-    print('LibForecastTimeseries:: extractForecastTimeseries')
+    ##print('LibForecastTimeseries:: extractForecastTimeseries')
     if by_day:
         extract_date_time = datetime.strptime(extract_date, '%Y-%m-%d')
     else:
@@ -96,7 +96,7 @@ def extractForecastTimeseriesInDays(timeseries):
 
 
 def save_forecast_timeseries(my_adapter, my_timeseries, my_model_date, my_model_time, my_opts):
-    #print('EXTRACTFLO2DWATERLEVEL:: save_forecast_timeseries >>', my_opts)
+    print('EXTRACTFLO2DWATERLEVEL:: save_forecast_timeseries >>', my_opts)
 
     # Convert date time with offset
     date_time = datetime.strptime('%s %s' % (my_model_date, my_model_time), COMMON_DATE_TIME_FORMAT)
@@ -108,7 +108,7 @@ def save_forecast_timeseries(my_adapter, my_timeseries, my_model_date, my_model_
     # If there is an offset, shift by offset before proceed
     forecast_timeseries = []
     if 'utcOffset' in my_opts:
-        print('Shit by utcOffset:', my_opts['utcOffset'].resolution)
+        #print('Shit by utcOffset:', my_opts['utcOffset'].resolution)
         for item in my_timeseries:
             forecast_timeseries.append(
                 [datetime.strptime(item[0], COMMON_DATE_TIME_FORMAT) + my_opts['utcOffset'], item[1]])
@@ -117,16 +117,18 @@ def save_forecast_timeseries(my_adapter, my_timeseries, my_model_date, my_model_
     else:
         forecast_timeseries = extractForecastTimeseries(my_timeseries, my_model_date, my_model_time, by_day=True)
 
+
     extracted_timeseries = extractForecastTimeseriesInDays(forecast_timeseries)
-    #print('save_forecast_timeseries|extracted_timeseries: ', extracted_timeseries)
+    #print('save_forecast_timeseries|extracted_timeseries start: ', extracted_timeseries[0])
 
     # Check whether existing station
-    force_insert = my_opts.get('forceInsert', False)
+    force_insert = my_opts.get('forceInsert', True)
     station = my_opts.get('station', '')
     source = my_opts.get('source', 'FLO2D')
     is_station_exists = my_adapter.get_station({'name': station})
+
     if is_station_exists is None:
-        print('WARNING: Station %s does not exists. Continue with others.' % station)
+        #print('WARNING: Station %s does not exists. Continue with others.' % station)
         return
     # TODO: Create if station does not exists.
 
@@ -168,23 +170,23 @@ def save_forecast_timeseries(my_adapter, my_timeseries, my_model_date, my_model_
         'source': source,
         'name': run_name
     }
-    print('extracted_timeseries : ', extracted_timeseries)
+
     for i in range(0, min(len(types), len(extracted_timeseries))):
-        # meta_data_copy = copy.deepcopy(meta_data)
-        # meta_data_copy['type'] = types[i]
-        # event_id = my_adapter.get_event_id(meta_data_copy)
-        # if event_id is None:
-        #     event_id = my_adapter.create_event_id(meta_data_copy)
-        #     print('HASH SHA256 created: ', event_id)
-        # else:
-        #     print('HASH SHA256 exists: ', event_id)
-        #     if not force_insert:
-        #         print('Timeseries already exists. User --force to update the existing.\n')
-        #         continue
-        #
-        # row_count = my_adapter.insert_timeseries(event_id, extracted_timeseries[i], force_insert)
-        # print('%s rows inserted.\n' % row_count)
-        print('extracted_timeseries : ', extracted_timeseries[i])
+        meta_data_copy = copy.deepcopy(meta_data)
+        meta_data_copy['type'] = types[i]
+        event_id = my_adapter.get_event_id(meta_data_copy)
+        if event_id is None:
+            event_id = my_adapter.create_event_id(meta_data_copy)
+            #print('HASH SHA256 created: ', event_id)
+        else:
+            #print('HASH SHA256 exists: ', event_id)
+            if not force_insert:
+                #print('Timeseries already exists. User --force to update the existing.\n')
+                continue
+
+        row_count = my_adapter.insert_timeseries(event_id, extracted_timeseries[i], force_insert)
+        print('extracted_timeseries['+str(i)+'] : ', extracted_timeseries[i])
+        print('%s rows inserted.\n' % row_count)
 
 
 def getUTCOffset(utcOffset, default=False):
@@ -203,7 +205,7 @@ def getUTCOffset(utcOffset, default=False):
         utcOffset = match.group()
     else:
         if default:
-            print("UTC_OFFSET :", utcOffset, " not in correct format. Using +00:00")
+            #print("UTC_OFFSET :", utcOffset, " not in correct format. Using +00:00")
             return timedelta()
         else:
             return False
@@ -216,13 +218,12 @@ def getUTCOffset(utcOffset, default=False):
         return timedelta(hours=-1 * int(offset_str[0]), minutes=-1 * int(offset_str[1]))
 
 
-def upload_waterlevels_curw(dir_path, run_date, run_time):
+def upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time, run_date, run_time):
     SERIES_LENGTH = 0
     MISSING_VALUE = -999
 
     try:
-        # config_path = os.path.join(os.getcwd(), 'waterlevel', 'config.json') # production code
-        config_path = os.path.join(os.getcwd(), 'config.json')
+        config_path = os.path.join(os.getcwd(), 'waterlevel', 'config.json')
         #print('config_path : ', config_path)
         utc_offset = ''
         with open(config_path) as json_file:
@@ -234,9 +235,8 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
             RUN_NAME = config_data['run_name']
             hychan_out_file_path = os.path.join(dir_path, HYCHAN_OUT_FILE)
             timdep_file_path = os.path.join(dir_path, TIMDEP_FILE)
-            print('hychan_out_file_path : ', hychan_out_file_path)
-            print('timdep_file_path : ', timdep_file_path)
-            print('FLO2D_MODEL : ', FLO2D_MODEL)
+            #print('hychan_out_file_path : ', hychan_out_file_path)
+            #print('timdep_file_path : ', timdep_file_path)
             forceInsert = True
             MYSQL_HOST = config_data['db_host']
             MYSQL_USER = config_data['db_user']
@@ -247,8 +247,8 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
             #     UTC_OFFSET = config_data['UTC_OFFSET']
             # if utc_offset:
             #     UTC_OFFSET = config_data
-            UTC_OFFSET = '+00:00:00'
-            utcOffset = getUTCOffset(UTC_OFFSET, default=True)
+            utcOffset = getUTCOffset('', default=True)
+            utcOffset = getUTCOffset('', default=True)
             adapter = MySQLAdapter(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, db=MYSQL_DB)
 
             flo2d_source = adapter.get_source(name=FLO2D_MODEL)
@@ -264,7 +264,6 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                 FLOOD_ELEMENT_NUMBERS = FLOOD_PLAIN_CELL_MAP.keys()
                 # Calculate the size of time series
                 bufsize = 65536
-
                 with open(hychan_out_file_path) as infile:
                     isWaterLevelLines = False
                     isCounting = False
@@ -285,7 +284,7 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                                     SERIES_LENGTH = countSeriesSize
                                     break
 
-                print('Series Length is :', SERIES_LENGTH)
+                #print('Series Length is :', SERIES_LENGTH)
                 bufsize = 65536
                 #################################################################
                 # Extract Channel Water Level elevations from HYCHAN.OUT file   #
@@ -320,11 +319,10 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                                         isSeriesComplete = True
 
                             if isSeriesComplete:
-                                print('[run_date, run_time] : ', [run_date, run_time])
-                                baseTime = datetime.strptime('%s %s' % (run_date, run_time), '%Y-%m-%d %H:%M:%S')
+                                baseTime = datetime.strptime('%s %s' % (ts_start_date, ts_start_time), '%Y-%m-%d %H:%M:%S')
                                 timeseries = []
                                 elementNo = waterLevelLines[0].split()[5]
-                                print('Extracted Cell No', elementNo, CHANNEL_CELL_MAP[elementNo])
+                                #print('Extracted Cell No', elementNo, CHANNEL_CELL_MAP[elementNo])
                                 for ts in waterLevelLines[1:]:
                                     v = ts.split()
                                     if len(v) < 1:
@@ -348,9 +346,20 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                                     'station': CHANNEL_CELL_MAP[elementNo],
                                     'run_name': RUN_NAME
                                 }
-                                print('>>>>>', opts)
+                                #print('>>>>>', opts)
                                 if utcOffset != timedelta():
                                     opts['utcOffset'] = utcOffset
+
+                                # folder_path_ts = os.path.join(dir_path, 'time_series')
+                                # if not os.path.exists(folder_path_ts):
+                                #     try:
+                                #         os.makedirs(folder_path_ts)
+                                #     except OSError as e:
+                                #         print(str(e))
+                                # file_path = os.path.join(folder_path_ts, 'time_series_' + elementNo + '.txt')
+                                # with open(file_path, 'w') as f:
+                                #     for item in timeseries:
+                                #         f.write("%s\n" % item)
                                 save_forecast_timeseries(adapter, timeseries, run_date, run_time, opts)
 
                                 isWaterLevelLines = False
@@ -374,9 +383,9 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                                 if len(waterLevelLines) > 0:
                                     waterLevels = get_water_level_of_channels(waterLevelLines, FLOOD_ELEMENT_NUMBERS)
                                     # Get Time stamp Ref:http://stackoverflow.com/a/13685221/1461060
-                                    print(waterLevelLines[0].split())
+                                    #print(waterLevelLines[0].split())
                                     ModelTime = float(waterLevelLines[0].split()[0])
-                                    baseTime = datetime.strptime('%s %s' % (run_date, run_time),
+                                    baseTime = datetime.strptime('%s %s' % (ts_start_date, ts_start_time),
                                                                  '%Y-%m-%d %H:%M:%S')
                                     currentStepTime = baseTime + timedelta(hours=ModelTime)
                                     dateAndTime = currentStepTime.strftime("%Y-%m-%d %H:%M:%S")
@@ -391,7 +400,7 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
 
                                     isWaterLevelLines = False
                                     # for l in waterLevelLines :
-                                    # print(l)
+                                    # #print(l)
                                     waterLevelLines = []
                             waterLevelLines.append(line)
                     for elementNo in FLOOD_ELEMENT_NUMBERS:
@@ -403,51 +412,21 @@ def upload_waterlevels_curw(dir_path, run_date, run_time):
                         }
                         if utcOffset != timedelta():
                             opts['utcOffset'] = utcOffset
-
-                        if FLOOD_PLAIN_CELL_MAP[elementNo] == 'Nagalagam Street River':
-                            save_forecast_timeseries(adapter, waterLevelSeriesDict[elementNo], run_date, run_time, opts)
-                            print('Extracted Cell No', elementNo, FLOOD_PLAIN_CELL_MAP[elementNo])
-                            exit(0)
+                        # folder_path_ts = os.path.join(dir_path, 'time_series')
+                        # if not os.path.exists(folder_path_ts):
+                        #     try:
+                        #         os.makedirs(folder_path_ts)
+                        #     except OSError as e:
+                        #         print(str(e))
+                        # file_path = os.path.join(folder_path_ts, 'time_series_'+elementNo+'.txt')
+                        # with open(file_path, 'w') as f:
+                        #     for item in waterLevelSeriesDict[elementNo]:
+                        #         f.write("%s\n" % item)
+                        save_forecast_timeseries(adapter, waterLevelSeriesDict[elementNo], run_date, run_time, opts)
+                        #print('Extracted Cell No', elementNo, FLOOD_PLAIN_CELL_MAP[elementNo])
             except Exception as ex:
                 print('source data loading exception:', str(ex))
     except Exception as e:
         print('config reading exception:', str(e))
 
-
-if __name__ == "__main__":
-    # dir_path = '/home/hasitha/PycharmProjects/Workflow'
-    dir_path = '/home/hasitha/PycharmProjects/Workflow/waterlevel/input'
-    run_date = '2019-05-28'
-    run_time = '08:00:00'
-    backward = '2'
-    forward = '3'
-    duration_days = (int(backward), int(forward))
-    ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[1])
-    ts_start_date = ts_start_date.strftime('%Y-%m-%d')
-    ts_start_time = '00:00:00'
-    startDateTime = datetime.strptime('%s %s' % (run_date, run_time), '%Y-%m-%d %H:%M:%S')
-    output_path = os.path.join(dir_path, 'output', run_date, run_time)
-    config_path = os.path.join(os.getcwd(), 'config.json')
-    print('config_path : ', config_path)
-    print('[ts_start_date, ts_start_time] : ', [ts_start_date, ts_start_time])
-    upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
-    # with open(config_path) as json_file:
-    #     config_data = json.load(json_file)
-    #     output_dir = dir_path
-    #     inittidal_conf_path = os.path.join(os.getcwd(),'INITTIDAL.CONF')
-    #
-    #     CONTROL_INTERVAL = config_data["CONTROL_INTERVAL"]
-    #     DAT_WIDTH = config_data["DAT_WIDTH"]
-    #     TIDAL_FORECAST_ID = config_data["TIDAL_FORECAST_ID"]
-    #
-    #     MYSQL_HOST = config_data['db_host']
-    #     MYSQL_USER = config_data['db_user']
-    #     MYSQL_DB = config_data['db_name']
-    #     MYSQL_PASSWORD = config_data['db_password']
-    #     opts = {
-    #         'from': '2019-06-00 00:00:00',
-    #         'to': '2019-06-30 00:00:00',
-    #     }
-    #     adapter = MySQLAdapter(host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, db=MYSQL_DB)
-    #     upload_waterlevels_curw(dir_path, run_date, run_time)
 
