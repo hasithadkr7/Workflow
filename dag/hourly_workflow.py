@@ -16,6 +16,7 @@ default_args = {
     'owner': 'curwsl admin',
     'depends_on_past': False,
     'start_date': datetime.strptime('2019-05-15 07:00:00', '%Y-%m-%d %H:%M:%S'),
+    'start_date': airflow.utils.dates.days_ago(1),
     'email': ['admin@curwsl.com'],
     'email_on_failure': False,
     'email_on_retry': False,
