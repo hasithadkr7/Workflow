@@ -20,6 +20,14 @@
         "db": "curw"
       },
 
+  "curw_sim_db_config" :
+      {
+        "host": "104.198.0.87",
+        "user": "root",
+        "password": "cfcwm07",
+        "db": "curw"
+      },
+
   "INITIAL_PATH_PREFIX" : "results/wrf0",
   "KEY_FILE_PATH" : "/home/hasitha/Shared/uwcc-admin.json",
   "BUCKET_NAME" : "curwsl_nfs_1",

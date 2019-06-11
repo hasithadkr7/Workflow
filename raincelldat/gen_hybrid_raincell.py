@@ -533,7 +533,7 @@ def get_voronoi_polygons(points_dict, shape_file, shape_attribute=None, output_s
     return df
 
 
-def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_mins = '60', model_prefix ='wrf', forecast_source ='wrf0', run_name ='hourly_run'):
+def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_mins = '60', model_prefix ='wrf', forecast_source ='wrf0', run_name ='Cloud-1'):
     try:
         forecast_adapter = None
         observed_adapter = None
@@ -689,7 +689,7 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_
 
 # if __name__ == "__main__":
 #     run_date = '2019-06-07'
-#     run_time = '17:00:00'
+#     run_time = '18:00:00'
 #     dir_path = os.path.join('/home/hasitha/PycharmProjects/Workflow/output', run_date, run_time)
 #     create_dir_if_not_exists(dir_path)
 #     forward = 3
