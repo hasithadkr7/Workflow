@@ -114,11 +114,13 @@ def get_observed_precip(stations, start_dt, end_dt, observed_duration, adapter, 
                 elif (observed_duration - row_count) < 3:  #Percentage of data missing should be less than 10%.
                     #last_available_date = ts_sum.index.values.tolist()[-1]
                     #obs[s] = pd.concat([ts_sum, extended_ts])
+                    print('generate_missing_ts|s:', s)
+                    print('generate_missing_ts|row_count : ', row_count)
                     obs[s] = generate_missing_ts(end_dt, start_dt, ts_sum)
                 else:
                     print('Invalid station : ', s)
                     print('row_count:', row_count)
-                print('station : {}| first ts:{}| last ts: {}'.format(s, obs[s].index[0], obs[s].index[-1]))
+                #print('station : {}| first ts:{}| last ts: {}'.format(s, obs[s].index[0], obs[s].index[-1]))
     print('get_observed_precip|success')
     return obs
 
@@ -560,8 +562,8 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_
             print([obs_start, obs_end, forecast_end])
 
             fcst_duration_start = obs_end.strftime('%Y-%m-%d %H:%M:%S')
-            fcst_duration_end = (datetime.strptime(fcst_duration_start, '%Y-%m-%d %H:%M:%S') + timedelta(days=3)).strftime('%Y-%m-%d 00:00:00')
-            obs_duration_start = (datetime.strptime(fcst_duration_start, '%Y-%m-%d %H:%M:%S') - timedelta(days=2)).strftime('%Y-%m-%d 00:00:00')
+            fcst_duration_end = (datetime.strptime(fcst_duration_start, '%Y-%m-%d %H:%M:%S') + timedelta(days=forward)).strftime('%Y-%m-%d 00:00:00')
+            obs_duration_start = (datetime.strptime(fcst_duration_start, '%Y-%m-%d %H:%M:%S') - timedelta(days=backward)).strftime('%Y-%m-%d 00:00:00')
 
             print('obs_duration_start : ', obs_duration_start)
             print('fcst_duration_start : ', fcst_duration_start)
@@ -656,7 +658,7 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_
                             print('range 1 : ', int(24 * 60 * duration_days[0] / res_mins) + 1)
                             print('range 2 : ', int(24 * 60 * duration_days[1] / res_mins) - 1)
 
-                            for t in range(observed_duration):
+                            for t in range(observed_duration-1):
                                 for i, point in enumerate(points):
                                     #print('point_thess_idx[{}]:{}'.format(i, point_thess_idx[i]))
                                     rf = float(observed_precipitations[point_thess_idx[i]].values[t]) if point_thess_idx[i] is not None else 0
@@ -687,18 +689,18 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_
             print(str(ex))
 
 
-# if __name__ == "__main__":
-#     run_date = '2019-06-07'
-#     run_time = '18:00:00'
-#     dir_path = os.path.join('/home/hasitha/PycharmProjects/Workflow/output', run_date, run_time)
-#     create_dir_if_not_exists(dir_path)
-#     forward = 3
-#     backward = 2
-#     res_mins = 60
-#     model_prefix = 'wrf'
-#     forecast_source = 'wrf0'
-#     run_name = 'Cloud-1'
-#     create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_mins, model_prefix, forecast_source, run_name)
+if __name__ == "__main__":
+    run_date = '2019-06-12'
+    run_time = '16:00:00'
+    dir_path = os.path.join('/home/hasitha/PycharmProjects/Workflow/output', run_date, run_time)
+    create_dir_if_not_exists(dir_path)
+    forward = 3
+    backward = 9
+    res_mins = 60
+    model_prefix = 'wrf'
+    forecast_source = 'wrf0'
+    run_name = 'Cloud-1'
+    create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_mins, model_prefix, forecast_source, run_name)
     # last_available = '2019-06-07 10:00'
     # observed_end = '2019-06-07 17:00:00'
     # generate_missing_ts(last_available, observed_end)
