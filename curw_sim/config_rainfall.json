@@ -1,0 +1,115 @@
+{
+  "rain_fall_file"  : "/home/hasitha/PycharmProjects/Workflow/rainfallcsv/DailyRain-{}.csv",
+  "fcst_db_configs" :
+      {
+        "host": "192.168.56.102",
+        "user": "sim_user",
+        "password": "sim_pass",
+        "db": "curw_sim"
+      },
+
+  "curw_db_config" :
+      {
+        "host": "104.198.0.87",
+        "user": "root",
+        "password": "cfcwm07",
+        "db": "curw"
+      },
+
+  "sim_db_config" :
+      {
+        "host": "35.230.102.148",
+        "user": "sim_user",
+        "password": "sim_pass",
+        "db": "curw_sim"
+      },
+
+  "KUB_OBS_ID"      : "b0e008522be904bcf71e290b3b0096b33c3e24d9b623dcbe7e58e7d1cc82d0db",
+  "KELANI_UPPER_BASIN_EXTENT" : [79.994117, 6.754167, 80.773182, 7.229167],
+  "KELANI_LOWER_BASIN_EXTENT" : [79.8389, 6.77083, 80.1584, 7.04713],
+
+  "INITIAL_PATH_PREFIX" : "results/wrf0",
+  "KEY_FILE_PATH" : "/home/hasitha/Shared/uwcc-admin.json",
+  "BUCKET_NAME" : "curwsl_nfs_1",
+  "NET_CDF_FILE" : "wrfout_d03-18:00:00_rf",
+  "FLO2D_MODEl" : "150m",
+  "NET_CDF_PATH" : "/mnt/disks/curwsl_nfs_1/results/wrf0_",
+  "WRF_DATA_DIR" : "/home/uwcc-admin/hechms_hourly/output",
+
+  
+  "klb_obs_stations" : {
+      "Kottawa North Dharmapala School": {"lon_lat": [79.95818, 6.865576],
+                        "run_name": "Leecom",
+                        "variable": "Precipitation",
+                        "unit": "mm",
+                        "event_type": "Observed",
+                        "source": "WeatherStation",
+                        "fcst_id" : "1104174"},
+      "IBATTARA2": {"lon_lat": [79.919, 6.908],
+                  "run_name": "CUrW IoT",
+                  "variable": "Precipitation",
+                  "unit": "mm",
+                  "event_type": "Observed",
+                  "source": "WeatherStation",
+                  "fcst_id" : "1104371"},
+      "Malabe": {"lon_lat": [79.95738, 6.90396],
+                "run_name": "A&T Labs",
+                "variable": "Precipitation",
+                "unit": "mm",
+                "event_type": "Observed",
+                "source": "WeatherStation",
+                "fcst_id" : ""},
+      "Kotikawatta": {"lon_lat": [80.802551, 6.890585],
+             "run_name": "Leecom",
+             "variable": "Precipitation",
+             "unit": "mm",
+             "event_type": "Observed",
+             "source": "WeatherStation",
+             "fcst_id" : "1104469"},
+      "Mulleriyawa": {"lon_lat": [79.941176, 6.923571],
+             "run_name": "A&T Labs",
+             "variable": "Precipitation",
+             "unit": "mm",
+             "event_type": "Observed",
+             "source": "WeatherStation",
+             "fcst_id" : "1104371"}
+  },
+
+  "kub_obs_stations" : {
+      "Mahapallegama": {"lon_lat": [80.2586, 7.16984],
+                        "run_name": "A&T Labs",
+                        "variable": "Precipitation",
+                        "unit": "mm",
+                        "event_type": "Observed",
+                        "source": "WeatherStation",
+                        "fcst_id" : "1105274"},
+      "Hingurana": {"lon_lat": [80.40782, 6.90449],
+                  "run_name": "CUrW IoT",
+                  "variable": "Precipitation",
+                  "unit": "mm",
+                  "event_type": "Observed",
+                  "source": "WeatherStation",
+                  "fcst_id" : "1104389"},
+      "Dickoya": {"lon_lat": [80.60312, 6.8722],
+                "run_name": "A&T Labs",
+                "variable": "Precipitation",
+                "unit": "mm",
+                "event_type": "Observed",
+                "source": "WeatherStation",
+                "fcst_id" : ""},
+      "Waga": {"lon_lat": [80.60312, 6.90678],
+             "run_name": "A&T Labs",
+             "variable": "Precipitation",
+             "unit": "mm",
+             "event_type": "Observed",
+             "source": "WeatherStation",
+             "fcst_id" : ""},
+      "Urumewella": {"lon_lat": [80.348785, 7.079348],
+             "run_name": "A&T Labs",
+             "variable": "Precipitation",
+             "unit": "mm",
+             "event_type": "Observed",
+             "source": "WeatherStation",
+             "fcst_id" : ""}
+  }
+}

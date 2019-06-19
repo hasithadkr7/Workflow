@@ -24,7 +24,7 @@ try :
         NUM_METADATA_LINES = 3;
         HEC_HMS_MODEL_DIR = './2008_2_Events'
         DSS_INPUT_FILE = './2008_2_Events/2008_2_Events_force.dss'
-        RAIN_CSV_FILE = 'DailyRain.csv'
+        RAIN_CSV_FILE = 'DailyRainObs.csv'
         OUTPUT_DIR = './OUTPUT'
 
         if 'HEC_HMS_MODEL_DIR' in CONFIG :

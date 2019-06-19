@@ -329,7 +329,7 @@ try:
             if os.path.isfile(net_cdf_file_path):
                 hourly_csv_file_dir = os.path.join(wrf_data_dir, run_date, run_time)
                 create_dir_if_not_exists(hourly_csv_file_dir)
-                raincsv_file_path = os.path.join(hourly_csv_file_dir, 'DailyRain.csv')
+                raincsv_file_path = os.path.join(hourly_csv_file_dir, 'DailyRainObs.csv')
                 if not os.path.isfile(raincsv_file_path):
                     rain_dict = {}
                     get_kub_forecasted_data(net_cdf_file_path, kelani_upper_basin_shp, kub_basin_extent, "kub_mean", rain_dict)

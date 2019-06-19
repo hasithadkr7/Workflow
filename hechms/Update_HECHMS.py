@@ -53,7 +53,7 @@ try:
     HEC_HMS_CONTROL = './2008_2_Events/Control_1.control'
     HEC_HMS_RUN = './2008_2_Events/2008_2_Events.run'
     HEC_HMS_GAGE = './2008_2_Events/2008_2_Events.gage'
-    RAIN_CSV_FILE = 'DailyRain.csv'
+    RAIN_CSV_FILE = 'DailyRainObs.csv'
     TIME_INTERVAL = 60  # In minutes
     OUTPUT_DIR = './output'
     STATE_INTERVAL = 1 * 24 * 60  # In minutes (1 day)

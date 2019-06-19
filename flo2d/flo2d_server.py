@@ -4,6 +4,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from urllib.parse import urlparse, parse_qs
 from raincelldat.gen_raincell import create_hybrid_raincell
+from curw_sim.gen_raincell_curw_sim import create_sim_hybrid_raincell
 from inflowdat.get_inflow import create_inflow
 from outflowdat.gen_outflow import create_outflow
 from flo2d.run_model import execute_flo2d_250m, flo2d_model_completed
@@ -46,6 +47,31 @@ class StoreHandler(BaseHTTPRequestHandler):
                 print('[run_date, run_time] : ', [run_date, run_time])
                 dir_path = set_daily_dir(run_date, run_time)
                 create_hybrid_raincell(dir_path, run_date, run_time, forward, backward)
+                response = {'response': 'success'}
+            except Exception as e:
+                print(str(e))
+            reply = json.dumps(response)
+            self.send_response(200)
+            self.send_header('Content-type', 'text/json')
+            self.end_headers()
+            self.wfile.write(str.encode(reply))
+
+        if self.path.startswith('/create-sim-raincell'):
+            os.chdir(r"D:\flo2d_hourly")
+            print('create-raincell')
+            response = {}
+            try:
+                query_components = parse_qs(urlparse(self.path).query)
+                print('query_components : ', query_components)
+                [run_date] = query_components["run_date"]
+                [run_time] = query_components["run_time"]
+                [forward] = query_components["forward"]
+                [backward] = query_components["backward"]
+                print('[run_date, run_time] : ', [run_date, run_time])
+                dir_path = set_daily_dir(run_date, run_time)
+                create_sim_hybrid_raincell(dir_path, run_date, run_time, forward, backward,
+                                           res_mins=5, flo2d_model='flo2d_250',
+                                           calc_method='MME')
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))

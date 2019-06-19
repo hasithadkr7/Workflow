@@ -108,7 +108,7 @@ def get_observed_precip(stations, start_dt, end_dt, observed_duration, adapter, 
                 (row_count, column_count) = ts_sum.shape
                 print('row_count : ', row_count)
                 print('column_count : ', column_count)
-                if row_count >= observed_duration:
+                if row_count >= observed_duration-5:
                     obs[s] = ts_sum
                 #elif ((observed_duration - row_count)*100)/observed_duration < 10.00:  #Percentage of data missing should be less than 10%.
                 elif (observed_duration - row_count) < 3:  #Percentage of data missing should be less than 10%.
@@ -537,7 +537,6 @@ def get_voronoi_polygons(points_dict, shape_file, shape_attribute=None, output_s
 
 def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_mins = '60', model_prefix ='wrf', forecast_source ='wrf0', run_name ='Cloud-1'):
     try:
-        forecast_adapter = None
         observed_adapter = None
         kelani_basin_points_file = get_resource_path('extraction/local/kelani_basin_points_250m.txt')
         kelani_lower_basin_shp_file = get_resource_path('extraction/shp/klb-wgs84/klb-wgs84.shp')
@@ -562,20 +561,14 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_
             print([obs_start, obs_end, forecast_end])
 
             fcst_duration_start = obs_end.strftime('%Y-%m-%d %H:%M:%S')
-            fcst_duration_end = (datetime.strptime(fcst_duration_start, '%Y-%m-%d %H:%M:%S') + timedelta(days=forward)).strftime('%Y-%m-%d 00:00:00')
             obs_duration_start = (datetime.strptime(fcst_duration_start, '%Y-%m-%d %H:%M:%S') - timedelta(days=backward)).strftime('%Y-%m-%d 00:00:00')
 
             print('obs_duration_start : ', obs_duration_start)
             print('fcst_duration_start : ', fcst_duration_start)
-            print('fcst_duration_end : ', fcst_duration_end)
 
             observed_duration = int((datetime.strptime(fcst_duration_start, '%Y-%m-%d %H:%M:%S') - datetime.strptime(obs_duration_start, '%Y-%m-%d %H:%M:%S')).total_seconds() / (60 * res_mins))
-            forecast_duration = int((datetime.strptime(fcst_duration_end, '%Y-%m-%d %H:%M:%S') - datetime.strptime(fcst_duration_start, '%Y-%m-%d %H:%M:%S')).total_seconds() / (60 * res_mins))
-            total_duration = int((datetime.strptime(fcst_duration_end, '%Y-%m-%d %H:%M:%S') - datetime.strptime(obs_duration_start, '%Y-%m-%d %H:%M:%S')).total_seconds() / (60 * res_mins))
 
             print('observed_duration : ', observed_duration)
-            print('forecast_duration : ', forecast_duration)
-            print('total_duration : ', total_duration)
 
             raincell_file_path = os.path.join(dir_path, 'RAINCELL.DAT')
             if not os.path.isfile(raincell_file_path):
@@ -587,19 +580,6 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_
                 kel_lat_max = np.max(points, 0)[2]
 
                 print('[kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max] : ', [kel_lon_min, kel_lat_min, kel_lon_max, kel_lat_max])
-
-                forecast_adapter = MySQLAdapter(host=forecast_db_config['host'],
-                                                user=forecast_db_config['user'],
-                                                password=forecast_db_config['password'],
-                                                db=forecast_db_config['db'])
-                # #min_lat, min_lon, max_lat, max_lon
-                forecast_stations, station_points = get_forecast_stations_from_net_cdf(model_prefix, reference_net_cdf,
-                                                                                       kel_lat_min,
-                                                                                       kel_lon_min,
-                                                                                       kel_lat_max,
-                                                                                       kel_lon_max)
-                print('forecast_stations length : ', len(forecast_stations))
-
                 observed_adapter = MySQLAdapter(host=observed_db_config['host'],
                                                 user=observed_db_config['user'],
                                                 password=observed_db_config['password'],
@@ -625,53 +605,31 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_
                 print('validated_obs_station : ', validated_obs_station)
                 
                 if len(validated_obs_station) >= 3 and bool(observed_precipitations):
+                # if bool(observed_precipitations):
                     thess_poly = get_voronoi_polygons(validated_obs_station, kelani_lower_basin_shp_file,
                                                       add_total_area=False)
                     print('thess_poly : ', thess_poly)
-                    fcst_thess_poly = get_voronoi_polygons(station_points, kelani_lower_basin_shp_file,
-                                                           add_total_area=False)
-                    forecast_precipitations = get_forecast_precipitation(forecast_source, run_name, forecast_stations,
-                                                                         forecast_adapter,
-                                                                         obs_end.strftime('%Y-%m-%d %H:%M:%S'),
-                                                                         forward_days=3)
-                    print('forecast_precipitations : ', forecast_precipitations)
-                    forecast_adapter.close()
-                    forecast_adapter = None
-                    if bool(forecast_precipitations):
-                        fcst_point_thess_idx = []
-                        for point in points:
-                            fcst_point_thess_idx.append(is_inside_geo_df(fcst_thess_poly, lon=point[1], lat=point[2]))
-                            pass
-                        point_thess_idx = []
-                        for point in points:
-                            point_thess_idx.append(is_inside_geo_df(thess_poly, lon=point[1], lat=point[2]))
-                            pass
+                    point_thess_idx = []
+                    for point in points:
+                        point_thess_idx.append(is_inside_geo_df(thess_poly, lon=point[1], lat=point[2]))
+                        pass
 
-                        print('len(points)', len(points))
-                        print('len(point_thess_idx)', len(point_thess_idx))
-                        print('point_thess_idx', point_thess_idx)
+                    print('len(points)', len(points))
+                    print('len(point_thess_idx)', len(point_thess_idx))
+                    print('point_thess_idx', point_thess_idx)
 
-                        with open(raincell_file_path, 'w') as output_file:
-                            output_file.write(
-                                "%d %d %s %s\n" % (res_mins, total_duration, obs_duration_start, fcst_duration_end))
+                    with open(raincell_file_path, 'w') as output_file:
+                        output_file.write(
+                            "%d %d %s %s\n" % (res_mins, observed_duration, obs_duration_start, fcst_duration_start))
 
-                            print('range 1 : ', int(24 * 60 * duration_days[0] / res_mins) + 1)
-                            print('range 2 : ', int(24 * 60 * duration_days[1] / res_mins) - 1)
+                        print('range 1 : ', int(24 * 60 * duration_days[0] / res_mins) + 1)
+                        print('range 2 : ', int(24 * 60 * duration_days[1] / res_mins) - 1)
 
-                            for t in range(observed_duration-1):
-                                for i, point in enumerate(points):
-                                    #print('point_thess_idx[{}]:{}'.format(i, point_thess_idx[i]))
-                                    rf = float(observed_precipitations[point_thess_idx[i]].values[t]) if point_thess_idx[i] is not None else 0
-                                    output_file.write('%d %.1f\n' % (point[0], rf))
-
-                            for t in range(forecast_duration):
-                                for j, point in enumerate(points):
-                                    rf = float(forecast_precipitations[fcst_point_thess_idx[j]].values[t]) if fcst_point_thess_idx[j] is not None else 0
-                                    output_file.write('%d %.1f\n' % (point[0], rf))
-                    else:
-                        print('----------------------------------------------')
-                        print('No forecast data.')
-                        print('----------------------------------------------')
+                        for t in range(observed_duration - 5):
+                            for i, point in enumerate(points):
+                                rf = float(observed_precipitations[point_thess_idx[i]].values[t]) if point_thess_idx[
+                                                                                                         i] is not None else 0
+                                output_file.write('%d %.1f\n' % (point[0], rf))
                 else:
                     print('----------------------------------------------')
                     print('No observed data.')
@@ -681,8 +639,6 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_
         print('Raincell generation error.')
         traceback.print_exc()
         try:
-            if forecast_adapter is not None:
-                forecast_adapter.close()
             if observed_adapter is not None:
                 observed_adapter.close()
         except Exception as ex:
@@ -690,19 +646,17 @@ def create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_
 
 
 if __name__ == "__main__":
-    run_date = '2019-06-07'
-    run_time = '16:00:00'
+    run_date = '2019-06-14'
+    run_time = '00:00:00'
     dir_path = os.path.join('/home/hasitha/PycharmProjects/Workflow/output', run_date, run_time)
     create_dir_if_not_exists(dir_path)
     forward = 3
-    backward = 2
+    backward = 11
     res_mins = 60
     model_prefix = 'wrf'
-    forecast_source = 'wrf_v3_A'
-    run_name = 'evening_18hrs'
-    create_hybrid_raincell(dir_path, run_date, run_time, forward, backward,
-                           res_mins = res_mins, model_prefix = model_prefix,
-                           forecast_source = forecast_source, run_name = run_name)
+    forecast_source = 'wrf0'
+    run_name = 'Cloud-1'
+    create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_mins, model_prefix, forecast_source, run_name)
     # last_available = '2019-06-07 10:00'
     # observed_end = '2019-06-07 17:00:00'
     # generate_missing_ts(last_available, observed_end)
