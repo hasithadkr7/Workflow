@@ -59,7 +59,7 @@ class CurwSimAdapter:
             results = cursor.fetchall()
             if len(results) > 0:
                 #return pd.DataFrame(data=results, columns=['time', 'value']).set_index(keys='time')
-                return pd.DataFrame(data=results, columns=['time', 'value'])
+                return pd.DataFrame(data=results, columns=['time', 'value']).set_index(keys='time')
             else:
                 return None
         except Exception as e:

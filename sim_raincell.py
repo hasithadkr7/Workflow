@@ -2,7 +2,7 @@ import json
 import logging
 import os
 import traceback
-import numpy as np
+
 import pkg_resources
 import pymysql
 
@@ -180,14 +180,27 @@ def create_sim_hybrid_raincells(dir_path, run_date, run_time, forward, backward,
 
 def write_to_file(file_name, data):
     with open(file_name, 'w') as f:
-        f.write(data)
+        for _list in data:
+            for i in range(len(_list) - 1):
+                # f.seek(0)
+                f.write(str(_list[i]) + ' ')
+            f.write(str(_list[len(_list) - 1]))
+            f.write('\n')
+        f.close()
 
 
 def append_to_file(file_name, data):
-    np.savetxt(open(file_name, 'a'), data, fmt="%s")
+    with open(file_name, 'a+') as f:
+        for _list in data:
+            for i in range(len(_list) - 1):
+                # f.seek(0)
+                f.write(str(_list[i]) + ' ')
+            f.write(str(_list[len(_list) - 1]))
+            f.write('\n')
+        f.close()
 
 
-def prepare_flo2d_250_MME_raincell_5_min_step(start_time, end_time, raincell_file_path):
+def prepare_flo2d_250_MME_raincell_5_min_step(start_time, end_time, output_file):
     # Connect to the database
     connection = pymysql.connect(host='35.230.102.148',
             user='root',
@@ -196,25 +209,31 @@ def prepare_flo2d_250_MME_raincell_5_min_step(start_time, end_time, raincell_fil
             cursorclass=pymysql.cursors.DictCursor)
 
     print("Connected to database")
+
     end_time = datetime.strptime(end_time, DATE_TIME_FORMAT)
     start_time = datetime.strptime(start_time, DATE_TIME_FORMAT)
 
     length = int(((end_time-start_time).total_seconds()/60)/5)
-    write_to_file(raincell_file_path,
-            '{} {} {} {}\n'.format(5, length, start_time.strftime(DATE_TIME_FORMAT), end_time.strftime(DATE_TIME_FORMAT)))
+    START = True
     try:
+        # Extract raincells
         timestamp = start_time
         while timestamp < end_time:
-            raincell = []
             timestamp = timestamp + timedelta(minutes=5)
+            raincell = []
+
             # Extract raincell from db
             with connection.cursor() as cursor1:
                 cursor1.callproc('flo2d_250_MME_5_min_raincell', (timestamp,))
-                cursor1.nextset()
                 results = cursor1.fetchall()
                 for result in results:
-                    raincell.append('{} {}'.format(result.get('cell_id'), '%.1f' % result.get('value')))
-            append_to_file(raincell_file_path, raincell)
+                    raincell.append([result.get('cell_id'), '%.1f' % (result.get('value'))])
+            if START:
+                raincell.insert(0, ["{} {} {} {}".format(5, length, start_time, end_time)])
+                write_to_file(output_file, raincell)
+                START=False
+            else:
+                append_to_file(output_file, raincell)
             print(timestamp)
     except Exception as ex:
         traceback.print_exc()
@@ -232,17 +251,15 @@ def create_sim_hybrid_raincell(dir_path, run_date, run_time, forward, backward,
         prepare_flo2d_250_MME_raincell_5_min_step(timeseries_start, timeseries_end, raincell_file_path)
 
 
+if __name__ == "__main__":
+    run_date = '2019-06-13'
+    run_time = '17:00:00'
+    dir_path = os.path.join('/home/hasitha/PycharmProjects/Workflow/output', run_date, run_time)
+    create_dir_if_not_exists(dir_path)
+    forward = 3
+    backward = 2
+    res_minutes = 5
+    required_flo2d_model = 'flo2d_250'
+    required_calc_method = 'MME'
+    create_sim_hybrid_raincells(dir_path, run_date, run_time, forward, backward, res_mins=res_minutes, flo2d_model=required_flo2d_model, calc_method=required_calc_method)
 
-
-# if __name__ == "__main__":
-#     run_date = '2019-06-13'
-#     run_time = '17:00:00'
-#     dir_path = os.path.join('/home/hasitha/PycharmProjects/Workflow/output', run_date, run_time)
-#     create_dir_if_not_exists(dir_path)
-#     forward = 3
-#     backward = 2
-#     res_minutes = 5
-#     required_flo2d_model = 'flo2d_250'
-#     required_calc_method = 'MME'
-#     create_hybrid_raincell(dir_path, run_date, run_time, forward, backward, res_mins=res_minutes, flo2d_model=required_flo2d_model, calc_method=required_calc_method)
-#
