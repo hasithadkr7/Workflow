@@ -38,7 +38,7 @@ def format_timeseries(adapter, event_meta, opts):
 
 def get_discharge_data(my_adapter, startDateTime):
     observed_end_time = startDateTime.strftime('%Y-%m-%d %H:%M:%S')
-    observed_start_time = (datetime.strptime(startDateTime.strftime('%Y-%m-%d 00:00:00'), '%Y-%m-%d %H:%M:%S') - timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S')
+    observed_start_time = (datetime.strptime(startDateTime.strftime('%Y-%m-%d 00:00:00'), '%Y-%m-%d %H:%M:%S') - datetime(days=2)).strftime('%Y-%m-%d %H:%M:%S')
     print('[observed_start_time, observed_end_time]', [observed_start_time, observed_end_time])
     observed_meta = {
         'station': 'Hanwella',

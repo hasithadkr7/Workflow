@@ -1,19 +1,19 @@
-from datetime import timedelta, datetime
-
+from datetime import datetime, timedelta
 import airflow
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
-from curw.workflow.airflow.extensions.operators.curw_flo2d_sensor import Flo2dCompletionSensor
 
-prod_dag_name = 'hechms_workflow'
+
+prod_dag_name = 'hec-hms-dag'
 queue = 'default'
+schedule_interval = '10 * * * *'
 dag_pool = 'curw_prod_runs'
 
 
 default_args = {
     'owner': 'curwsl admin',
     'depends_on_past': False,
-    'start_date': airflow.utils.dates.days_ago(1),
+    'start_date': airflow.utils.dates.days_ago(0, hour=6),
     'email': ['admin@curwsl.com'],
     'email_on_failure': False,
     'email_on_retry': False,
@@ -27,19 +27,21 @@ default_args = {
 dag = DAG(
     prod_dag_name,
     default_args=default_args,
-    description='Curw hechms run DAG')
+    description='Run HecHms DAG',
+    schedule_interval=schedule_interval)
+
 
 create_rainfall_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostKeyChecking no\" uwcc-admin@10.138.0.3 " \
                     "\'bash -c \"/home/uwcc-admin/hechms_hourly/gen_rainfall_csv.sh " \
-                    "-d {{ execution_date.strftime(\"%Y-%m-%d\") }} -t {{ execution_date.strftime(\"%H:%M:%S\") }} \" \'"
+                    "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
 
 run_hechms_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostKeyChecking no\" uwcc-admin@10.138.0.3 " \
                     "\'bash -c \"/home/uwcc-admin/hechms_hourly/hec_hms_runner.sh " \
-                    "-d {{ execution_date.strftime(\"%Y-%m-%d\") }} -t {{ execution_date.strftime(\"%H:%M:%S\") }} \" \'"
+                    "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
 
 upload_discharge_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostKeyChecking no\" uwcc-admin@10.138.0.3 " \
                     "\'bash -c \"/home/uwcc-admin/hechms_hourly/upload_discharge_data.sh " \
-                    "-d {{ execution_date.strftime(\"%Y-%m-%d\") }} -t {{ execution_date.strftime(\"%H:%M:%S\") }} \" \'"
+                    "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
 
 create_rainfall = BashOperator(
     task_id='create_rainfall',
@@ -61,8 +63,6 @@ upload_discharge = BashOperator(
     dag=dag,
     pool=dag_pool,
 )
-
-
 
 create_rainfall >> run_hechms >> upload_discharge
 

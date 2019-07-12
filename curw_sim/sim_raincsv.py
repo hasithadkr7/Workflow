@@ -55,6 +55,7 @@ Usage: ./CSVTODAT.py [-d YYYY-MM-DD] [-t HH:MM:SS] [-h]
 """
     print(usage_text)
 
+
 def _voronoi_finite_polygons_2d(vor, radius=None):
     """
     Reconstruct infinite voronoi regions in a 2D diagram to finite
@@ -184,6 +185,7 @@ def get_voronoi_polygons(points_dict, shape_file, shape_attribute=None, output_s
 
     return df
 
+
 class KUBObservationMean:
     def __init__(self):
         self.shape_file = get_resource_path('extraction/shp/kub-wgs84/kub-wgs84.shp')
@@ -207,7 +209,8 @@ class KUBObservationMean:
         station_fractions = {}
         if len(station_list) < 3:
             for station in station_list:
-                station_fractions[station] = np.round(self.percentage_factor / len(station_list), precision_decimal_points)
+                station_fractions[station] = np.round(self.percentage_factor / len(station_list),
+                                                      precision_decimal_points)
             return station_fractions
 
         station_fractions = {}
@@ -250,7 +253,7 @@ class KUBObservationMean:
         for key in timerseries_dict.keys():
             stations[key] = timerseries_dict[key]['lon_lat']
             # Resample given set of timeseries.
-            #tms = timerseries_dict[key]['timeseries'].astype('float').resample(normalizing_factor).sum()
+            # tms = timerseries_dict[key]['timeseries'].astype('float').resample(normalizing_factor).sum()
             tms = timerseries_dict[key]['timeseries'].astype('float')
             # Rename coulmn_name 'value' to its own staion_name.
             tms = tms.rename(axis='columns', mapper={'value': key})
@@ -263,7 +266,7 @@ class KUBObservationMean:
         else:
             matrix = timerseries_list[0].join(other=timerseries_list[1:len(timerseries_list)], how='outer')
         print('3')
-        
+
         # Note:
         # After joining resampling+sum does not work properly. Gives NaN and sum that is not correct.
         # Therefore resamplig+sum is done for each timeseries. If this issue could be solved,
@@ -289,9 +292,16 @@ class KUBObservationMean:
         weights = pd.DataFrame.from_dict(data=station_fractions, orient='index', dtype='float')
         print('9')
         weights = weights.divide(self.percentage_factor, axis='columns')
+        print('weights.shape : ', weights.shape)
+        print('matrix.shape : ', matrix.shape)
+        print('weights : ', weights)
+        print('matrix : ', matrix)
+        print('type(matrix) : ', type(matrix))
+        print('weights[0] : ', weights[0])
+        print('type(weights[0]) : ', type(weights[0]))
         print('10')
-        #kub_mean = (matrix * weights[0]).sum(axis='columns')
-        #kub_mean = matrix.mul(weights[0], axis=0).sum(axis='columns')
+        # kub_mean = (matrix * weights[0]).sum(axis='columns')
+        # kub_mean = matrix.mul(weights[0], axis=0).sum(axis='columns')
         kub_mean = matrix.dot(weights).sum(axis='columns')
         print('11')
         kub_mean_timeseries = kub_mean.to_frame(name='value')
@@ -303,6 +313,7 @@ class KLBObservationMean:
     def __init__(self):
         self.shape_file = get_resource_path('extraction/shp/klb-wgs84/klb-wgs84.shp')
         self.percentage_factor = 100
+
     def calc_station_fraction(self, stations, precision_decimal_points=3):
         """
         Given station lat lon points must reside inside the KUB shape, otherwise could give incorrect results.
@@ -321,7 +332,8 @@ class KLBObservationMean:
         station_fractions = {}
         if len(station_list) < 3:
             for station in station_list:
-                station_fractions[station] = np.round(self.percentage_factor / len(station_list), precision_decimal_points)
+                station_fractions[station] = np.round(self.percentage_factor / len(station_list),
+                                                      precision_decimal_points)
             return station_fractions
 
         station_fractions = {}
@@ -363,7 +375,7 @@ class KLBObservationMean:
         for key in timerseries_dict.keys():
             stations[key] = timerseries_dict[key]['lon_lat']
             # Resample given set of timeseries.
-            #tms = timerseries_dict[key]['timeseries'].astype('float').resample(normalizing_factor).sum()
+            # tms = timerseries_dict[key]['timeseries'].astype('float').resample(normalizing_factor).sum()
             tms = timerseries_dict[key]['timeseries'].astype('float')
             # Rename coulmn_name 'value' to its own staion_name.
             tms = tms.rename(axis='columns', mapper={'value': key})
@@ -372,10 +384,14 @@ class KLBObservationMean:
         if len(timerseries_list) <= 0:
             raise ValueError('Empty timeseries_dict given.')
         elif len(timerseries_list) == 1:
+            print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
             matrix = timerseries_list[0]
         else:
+            print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+            print('len(timerseries_list): ', len(timerseries_list))
+            print('timerseries_list[0]: ', timerseries_list[0])
+            print('timerseries_list[1]: ', timerseries_list[1])
             matrix = timerseries_list[0].join(other=timerseries_list[1:len(timerseries_list)], how='outer')
-
 
         # Note:
         # After joining resampling+sum does not work properly. Gives NaN and sum that is not correct.
@@ -400,7 +416,7 @@ class KLBObservationMean:
         weights = pd.DataFrame.from_dict(data=station_fractions, orient='index', dtype='float')
         weights = weights.divide(self.percentage_factor, axis='columns')
 
-        #klb_mean = (matrix * weights[0]).sum(axis='columns')
+        # klb_mean = (matrix * weights[0]).sum(axis='columns')
         klb_mean = matrix.dot(weights).sum(axis='columns')
         klb_mean_timeseries = klb_mean.to_frame(name='value')
         return klb_mean_timeseries
@@ -452,6 +468,7 @@ def get_klb_mean(db_adapter, stations, ts_start, ts_end):
         print('get_klb_mean|Exception : ', str(e))
         return pd.DataFrame(columns=['time', 'value'])
 
+
 try:
     run_date = datetime.now().strftime("%Y-%m-%d")
     # run_date ='2019-06-17'
@@ -473,12 +490,12 @@ try:
             usage()
             sys.exit()
         elif opt in ("-d", "--date"):
-            run_date = arg # 2018-05-24
+            run_date = arg  # 2018-05-24
         elif opt in ("-t", "--time"):
-            run_time = arg # 16:00:00
-        elif opt in ("-f","--forward"):
+            run_time = arg  # 16:00:00
+        elif opt in ("-f", "--forward"):
             forward = arg
-        elif opt in ("-b","--backward"):
+        elif opt in ("-b", "--backward"):
             backward = arg
         elif opt in ("--wrf-rf"):
             RF_DIR_PATH = arg
@@ -515,11 +532,14 @@ try:
         if not os.path.isfile(raincsv_file_path):
             # mysql_user, mysql_password, mysql_host, mysql_db
             print('sim_db_config : ', sim_db_config)
-            sim_adapter = CurwSimAdapter(sim_db_config['user'], sim_db_config['password'], sim_db_config['host'], sim_db_config['db'])
+            sim_adapter = CurwSimAdapter(sim_db_config['user'], sim_db_config['password'], sim_db_config['host'],
+                                         sim_db_config['db'])
             forecast_duration = int((ts_end_datetime - ts_start_datetime).total_seconds() / (60 * time_step))
-            #sim_adapter.get_station_timeseries('2019-06-16 00:00:00', '2019-06-19 23:30:00', 'Kotikawatta', 'Leecom')
-            klb_ts = get_klb_mean(sim_adapter, klb_stations, ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'), ts_end_datetime.strftime('%Y-%m-%d %H:%M:%S'))
-            kub_ts = get_kub_mean(sim_adapter, kub_stations, ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'), ts_end_datetime.strftime('%Y-%m-%d %H:%M:%S'))
+            # sim_adapter.get_station_timeseries('2019-06-16 00:00:00', '2019-06-19 23:30:00', 'Kotikawatta', 'Leecom')
+            klb_ts = get_klb_mean(sim_adapter, klb_stations, ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'),
+                                  ts_end_datetime.strftime('%Y-%m-%d %H:%M:%S'))
+            kub_ts = get_kub_mean(sim_adapter, kub_stations, ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'),
+                                  ts_end_datetime.strftime('%Y-%m-%d %H:%M:%S'))
             print('klb_ts: ', klb_ts)
             print('kub_ts: ', kub_ts)
             sim_adapter.close_connection()
@@ -536,3 +556,4 @@ try:
                 mean_df.to_csv(f, header=False)
 except Exception as e:
     print('rainfall csv file generation error: {}'.format(str(e)))
+

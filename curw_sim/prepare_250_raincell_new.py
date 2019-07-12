@@ -44,7 +44,6 @@ def prepare_flo2d_250_MME_raincell_5_min_step(start_time, end_time):
                 results = cursor1.fetchall()
                 for result in results:
                     raincell.append('{} {}'.format(result.get('cell_id'), '%.1f' % result.get('value')))
-
             raincell.append('')
             append_to_file('RAINCELL.DAT', raincell)
             print(timestamp)

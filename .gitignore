@@ -11,6 +11,10 @@ raincelldat/curw_credentials/curw_server-ca.pem
 raincelldat/curw_credentials.zip
 logs/__pycache__/
 curw_sim/__pycache__/
-rainfallcsv/__pycache__/
 logs/workflow.log
-
+rainfallcsv/__pycache__/
+curw_sim.zip
+hechms_extract.zip
+inflowdat.zip
+logs/
+outputs/

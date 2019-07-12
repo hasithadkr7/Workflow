@@ -1,17 +1,19 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 import airflow
 from airflow import DAG
-from airflow.operators.http_operator import SimpleHttpOperator
+from airflow.operators.bash_operator import BashOperator
 
-prod_dag_name = 'flo2d_250m_workflow'
+
+prod_dag_name = 'flo2d-250m-dag'
 queue = 'default'
+schedule_interval = '20 * * * *'
 dag_pool = 'curw_prod_runs'
 
 
 default_args = {
     'owner': 'curwsl admin',
     'depends_on_past': False,
-    'start_date': airflow.utils.dates.days_ago(1),
+    'start_date': airflow.utils.dates.days_ago(0, hour=6),
     'email': ['admin@curwsl.com'],
     'email_on_failure': False,
     'email_on_retry': False,
@@ -25,46 +27,56 @@ default_args = {
 dag = DAG(
     prod_dag_name,
     default_args=default_args,
-    description='Curw flo2d 250m run DAG')
+    description='Run Flo2d 250m DAG',
+    schedule_interval=schedule_interval)
 
-#-----------Flo2d Tasks---------------
-#curl -X GET "http://10.138.0.4:8088/create-outflow?run_date=2019-05-15&run_time=09:00:00&forward=3&backward=2"
 
-create_raincell = SimpleHttpOperator(
+create_raincell_cmd = 'curl -X GET "http://10.138.0.4:8088/create-sim-raincell?run_date={{ macros.ds_add(ds, -1) }}&run_time={{ execution_date.strftime(\"%H:00:00\") }}&forward=3&backward=2"'
+
+create_inflow_cmd = 'curl -X GET "http://10.138.0.4:8088/create-inflow?run_date={{ macros.ds_add(ds, -1) }}&run_time={{ execution_date.strftime(\"%H:00:00\") }}"'
+
+create_outflow_cmd = 'curl -X GET "http://10.138.0.4:8088/create-outflow?run_date={{ macros.ds_add(ds, -1) }}&run_time={{ execution_date.strftime(\"%H:00:00\") }}&forward=3&backward=2"'
+
+run_flo2d_250m_cmd = 'curl -X GET "http://10.138.0.4:8088/run-flo2d?run_date={{ macros.ds_add(ds, -1) }}&run_time={{ execution_date.strftime(\"%H:00:00\") }}"'
+
+extract_water_level_cmd = 'curl -X GET "http://10.138.0.4:8088/extract-data?run_date={{ macros.ds_add(ds, -1) }}&run_time={{ execution_date.strftime(\"%H:00:00\") }}"'
+
+
+create_raincell = BashOperator(
     task_id='create_raincell',
-    method='GET',
-    endpoint='10.138.0.4:8088/create-outflow',
-    data={"run_date":"{{ execution_date.strftime(\"%Y-%m-%d\") }}", "run_time":"{{ execution_date.strftime(\"%H:%M:%S\") }}", "forward": 3, "backward": 2},
-    headers={},
+    bash_command=create_raincell_cmd,
     dag=dag,
+    pool=dag_pool,
 )
 
-create_inflow = SimpleHttpOperator(
+create_inflow = BashOperator(
     task_id='create_inflow',
-    method='GET',
-    endpoint='10.138.0.4:8088/create-inflow',
-    data={"run_date":"{{ execution_date.strftime(\"%Y-%m-%d\") }}", "run_time":"{{ execution_date.strftime(\"%H:%M:%S\") }}"},
-    headers={},
+    bash_command=create_inflow_cmd,
     dag=dag,
+    pool=dag_pool,
 )
 
-create_outflow = SimpleHttpOperator(
+create_outflow = BashOperator(
     task_id='create_outflow',
-    method='GET',
-    endpoint='10.138.0.4:8088/create-raincell',
-    data={"run_date":"{{ execution_date.strftime(\"%Y-%m-%d\") }}", "run_time":"{{ execution_date.strftime(\"%H:%M:%S\") }}", "forward": 3, "backward": 2},
-    headers={},
+    bash_command=create_outflow_cmd,
     dag=dag,
+    pool=dag_pool,
 )
 
-run_flo2d_250m = SimpleHttpOperator(
+run_flo2d_250m = BashOperator(
     task_id='run_flo2d_250m',
-    method='GET',
-    endpoint='10.138.0.4:8088/run-flo2d',
-    data={"run_date":"{{ execution_date.strftime(\"%Y-%m-%d\") }}", "run_time":"{{ execution_date.strftime(\"%H:%M:%S\") }}"},
-    headers={},
+    bash_command=run_flo2d_250m_cmd,
     dag=dag,
+    pool=dag_pool,
 )
 
-create_raincell >> create_inflow >> create_outflow >> run_flo2d_250m
+extract_water_level = BashOperator(
+    task_id='extract_water_level',
+    bash_command=extract_water_level_cmd,
+    dag=dag,
+    pool=dag_pool,
+)
+
+
+create_raincell >> create_inflow >> create_outflow >> run_flo2d_250m  >> extract_water_level
 

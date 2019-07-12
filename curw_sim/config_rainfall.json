@@ -34,7 +34,7 @@
   "NET_CDF_FILE" : "wrfout_d03-18:00:00_rf",
   "FLO2D_MODEl" : "150m",
   "NET_CDF_PATH" : "/mnt/disks/curwsl_nfs_1/results/wrf0_",
-  "WRF_DATA_DIR" : "/home/uwcc-admin/hechms_hourly/output",
+  "WRF_DATA_DIR" : "/home/hasitha/PycharmProjects/Workflow/output",
 
   
   "klb_obs_stations" : {

@@ -13,7 +13,7 @@ import logging
 from curw_sim.get_obs_mean import get_observed_kub_mean, get_observed_klb_mean
 
 LOG_FORMAT = '[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s'
-logging.basicConfig(filename='/home/uwcc-admin/hechms_hourly/Workflow/curw_sim/sim_rainfall.log',
+logging.basicConfig(filename='/home/hasitha/PycharmProjects/Workflow/logs/sim_rainfall.log',
                         level=logging.DEBUG,
                         format=LOG_FORMAT)
 log = logging.getLogger()
@@ -65,7 +65,7 @@ def datetime_utc_to_lk(timestamp_utc, shift_mins=0):
 try:
     run_date = datetime.now().strftime("%Y-%m-%d")
     run_time = datetime.now().strftime("%H:00:00")
-    backward = 3
+    backward = 5
     forward = 3
     tag = ''
     try:
