@@ -1,1 +1,993 @@
-INFO 2019-06-11 12:53:30,603 - create_hybrid_raincell|/home/hasitha/PycharmProjects/Workflow/output/2019-06-07/17:00:00,2019-06-07,17:00:00,3,2
+[2019-06-16 21:00:27,525] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-16 21:03:28,569] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-16 21:05:29,577] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-16 21:05:29,578] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mahapallegama" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:05:29,912] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85', 'A&T Labs', 'WeatherStation', 'Mahapallegama', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:05:29,913] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mahapallegama', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85'}]
+[2019-06-16 21:05:29,914] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 00:00:00" 
+[2019-06-16 21:05:30,553] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Hingurana" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-16 21:05:30,833] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016', 'CUrW IoT', 'WeatherStation', 'Hingurana', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:05:30,833] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Hingurana', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016'}]
+[2019-06-16 21:05:30,834] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 00:00:00" 
+[2019-06-16 21:05:31,122] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Dickoya" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:05:31,447] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828', 'A&T Labs', 'WeatherStation', 'Dickoya', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:05:31,448] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Dickoya', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828'}]
+[2019-06-16 21:05:31,448] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 00:00:00" 
+[2019-06-16 21:05:31,791] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Waga" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:05:32,062] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c', 'A&T Labs', 'WeatherStation', 'Waga', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:05:32,062] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Waga', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c'}]
+[2019-06-16 21:05:32,063] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 00:00:00" 
+[2019-06-16 21:05:32,433] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7f4fc24a8550>
+[2019-06-16 21:05:32,433] {env.py:225} DEBUG - Starting outermost env
+[2019-06-16 21:05:32,433] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-16 21:05:32,433] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7f4fa58215f8> created
+[2019-06-16 21:05:32,433] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-16 21:05:32,434] {env.py:280} DEBUG - All drivers registered.
+[2019-06-16 21:05:32,434] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-16 21:05:32,434] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-16 21:05:32,435] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7f4fa58215f8>.
+[2019-06-16 21:05:32,435] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7f4fa58215f8> with options {}
+[2019-06-16 21:05:32,435] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7f4fc24a8550>
+[2019-06-16 21:05:32,604] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-16 21:05:32,605] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-16 21:05:32,606] {collection.py:256} DEBUG - Index: 0
+[2019-06-16 21:05:32,645] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-16 21:05:32,646] {collection.py:447} DEBUG - Stopped session
+[2019-06-16 21:05:32,646] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7f4fc24a8550>
+[2019-06-16 21:05:32,646] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7f4fa58215f8> options
+[2019-06-16 21:05:32,646] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7f4fa58215f8>.
+[2019-06-16 21:05:32,647] {env.py:316} DEBUG - Error handler popped.
+[2019-06-16 21:05:32,647] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7f4fa58215f8>.
+[2019-06-16 21:05:32,647] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-16 21:05:32,647] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7f4fc24a8550>
+[2019-06-16 21:05:32,751] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kottawa North Dharmapala School" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-16 21:05:33,085] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c', 'Leecom', 'WeatherStation', 'Kottawa North Dharmapala School', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:05:33,085] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kottawa North Dharmapala School', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': 'aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c'}]
+[2019-06-16 21:05:33,086] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 00:00:00" 
+[2019-06-16 21:05:33,431] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="IBATTARA2" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-16 21:05:33,699] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd', 'CUrW IoT', 'WeatherStation', 'IBATTARA2', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:05:33,700] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'IBATTARA2', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd'}]
+[2019-06-16 21:05:33,700] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 00:00:00" 
+[2019-06-16 21:05:34,040] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Malabe" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:05:34,314] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a', 'A&T Labs', 'WeatherStation', 'Malabe', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:05:34,314] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Malabe', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a'}]
+[2019-06-16 21:05:34,315] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 00:00:00" 
+[2019-06-16 21:05:34,621] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kotikawatta" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-16 21:05:34,930] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8', 'Leecom', 'WeatherStation', 'Kotikawatta', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:05:34,931] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kotikawatta', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': '1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8'}]
+[2019-06-16 21:05:34,931] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 00:00:00" 
+[2019-06-16 21:05:35,272] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mulleriyawa" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:05:35,543] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01', 'A&T Labs', 'WeatherStation', 'Mulleriyawa', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:05:35,543] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mulleriyawa', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01'}]
+[2019-06-16 21:05:35,544] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 00:00:00" 
+[2019-06-16 21:05:35,886] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7f4fa5821400>
+[2019-06-16 21:05:35,886] {env.py:225} DEBUG - Starting outermost env
+[2019-06-16 21:05:35,886] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-16 21:05:35,886] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7f4fa57eb550> created
+[2019-06-16 21:05:35,886] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-16 21:05:35,887] {env.py:280} DEBUG - All drivers registered.
+[2019-06-16 21:05:35,887] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-16 21:05:35,887] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-16 21:05:35,888] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7f4fa57eb550>.
+[2019-06-16 21:05:35,888] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7f4fa57eb550> with options {}
+[2019-06-16 21:05:35,888] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7f4fa5821400>
+[2019-06-16 21:05:35,922] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-16 21:05:35,922] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-16 21:05:35,923] {collection.py:256} DEBUG - Index: 0
+[2019-06-16 21:05:35,930] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-16 21:05:35,930] {collection.py:447} DEBUG - Stopped session
+[2019-06-16 21:05:35,931] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7f4fa5821400>
+[2019-06-16 21:05:35,931] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7f4fa57eb550> options
+[2019-06-16 21:05:35,931] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7f4fa57eb550>.
+[2019-06-16 21:05:35,931] {env.py:316} DEBUG - Error handler popped.
+[2019-06-16 21:05:35,931] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7f4fa57eb550>.
+[2019-06-16 21:05:35,931] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-16 21:05:35,932] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7f4fa5821400>
+[2019-06-16 21:08:15,498] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-16 21:08:15,499] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mahapallegama" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:08:15,800] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85', 'A&T Labs', 'WeatherStation', 'Mahapallegama', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:08:15,801] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mahapallegama', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85'}]
+[2019-06-16 21:08:15,802] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:08:16,459] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Hingurana" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-16 21:08:16,721] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016', 'CUrW IoT', 'WeatherStation', 'Hingurana', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:08:16,722] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Hingurana', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016'}]
+[2019-06-16 21:08:16,722] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:08:17,070] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Dickoya" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:08:17,336] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828', 'A&T Labs', 'WeatherStation', 'Dickoya', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:08:17,336] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Dickoya', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828'}]
+[2019-06-16 21:08:17,336] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:08:17,688] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Waga" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:08:17,950] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c', 'A&T Labs', 'WeatherStation', 'Waga', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:08:17,950] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Waga', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c'}]
+[2019-06-16 21:08:17,951] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:08:18,249] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7f1813e044a8>
+[2019-06-16 21:08:18,249] {env.py:225} DEBUG - Starting outermost env
+[2019-06-16 21:08:18,249] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-16 21:08:18,249] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7f17f7192518> created
+[2019-06-16 21:08:18,249] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-16 21:08:18,250] {env.py:280} DEBUG - All drivers registered.
+[2019-06-16 21:08:18,250] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-16 21:08:18,250] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-16 21:08:18,250] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7f17f7192518>.
+[2019-06-16 21:08:18,251] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7f17f7192518> with options {}
+[2019-06-16 21:08:18,251] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7f1813e044a8>
+[2019-06-16 21:08:18,257] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-16 21:08:18,257] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-16 21:08:18,257] {collection.py:256} DEBUG - Index: 0
+[2019-06-16 21:08:18,259] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-16 21:08:18,259] {collection.py:447} DEBUG - Stopped session
+[2019-06-16 21:08:18,259] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7f1813e044a8>
+[2019-06-16 21:08:18,259] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7f17f7192518> options
+[2019-06-16 21:08:18,259] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7f17f7192518>.
+[2019-06-16 21:08:18,259] {env.py:316} DEBUG - Error handler popped.
+[2019-06-16 21:08:18,260] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7f17f7192518>.
+[2019-06-16 21:08:18,260] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-16 21:08:18,260] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7f1813e044a8>
+[2019-06-16 21:08:18,273] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kottawa North Dharmapala School" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-16 21:08:18,564] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c', 'Leecom', 'WeatherStation', 'Kottawa North Dharmapala School', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:08:18,565] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kottawa North Dharmapala School', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': 'aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c'}]
+[2019-06-16 21:08:18,565] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:08:18,917] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="IBATTARA2" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-16 21:08:19,283] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd', 'CUrW IoT', 'WeatherStation', 'IBATTARA2', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:08:19,284] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'IBATTARA2', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd'}]
+[2019-06-16 21:08:19,284] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:08:19,629] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Malabe" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:08:19,895] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a', 'A&T Labs', 'WeatherStation', 'Malabe', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:08:19,896] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Malabe', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a'}]
+[2019-06-16 21:08:19,896] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:08:20,202] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kotikawatta" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-16 21:08:20,509] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8', 'Leecom', 'WeatherStation', 'Kotikawatta', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:08:20,510] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kotikawatta', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': '1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8'}]
+[2019-06-16 21:08:20,510] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:08:20,859] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mulleriyawa" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:08:21,124] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01', 'A&T Labs', 'WeatherStation', 'Mulleriyawa', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:08:21,125] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mulleriyawa', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01'}]
+[2019-06-16 21:08:21,125] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01" AND `time`>="2019-06-14 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:08:21,466] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7f17f71927b8>
+[2019-06-16 21:08:21,466] {env.py:225} DEBUG - Starting outermost env
+[2019-06-16 21:08:21,467] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-16 21:08:21,467] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7f17f715c240> created
+[2019-06-16 21:08:21,467] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-16 21:08:21,468] {env.py:280} DEBUG - All drivers registered.
+[2019-06-16 21:08:21,468] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-16 21:08:21,468] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-16 21:08:21,468] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7f17f715c240>.
+[2019-06-16 21:08:21,468] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7f17f715c240> with options {}
+[2019-06-16 21:08:21,468] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7f17f71927b8>
+[2019-06-16 21:08:21,469] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-16 21:08:21,469] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-16 21:08:21,469] {collection.py:256} DEBUG - Index: 0
+[2019-06-16 21:08:21,472] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-16 21:08:21,472] {collection.py:447} DEBUG - Stopped session
+[2019-06-16 21:08:21,472] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7f17f71927b8>
+[2019-06-16 21:08:21,472] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7f17f715c240> options
+[2019-06-16 21:08:21,472] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7f17f715c240>.
+[2019-06-16 21:08:21,473] {env.py:316} DEBUG - Error handler popped.
+[2019-06-16 21:08:21,473] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7f17f715c240>.
+[2019-06-16 21:08:21,473] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-16 21:08:21,473] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7f17f71927b8>
+[2019-06-16 21:20:23,218] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-16 21:20:23,220] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mahapallegama" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:20:23,472] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85', 'A&T Labs', 'WeatherStation', 'Mahapallegama', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:20:23,473] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mahapallegama', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85'}]
+[2019-06-16 21:20:23,474] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85" AND `time`>="2019-05-30 00:00:00" AND `time`<="2019-06-01 21:00:00" 
+[2019-06-16 21:20:24,114] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Hingurana" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-16 21:20:24,369] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016', 'CUrW IoT', 'WeatherStation', 'Hingurana', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:20:24,370] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Hingurana', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016'}]
+[2019-06-16 21:20:24,370] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016" AND `time`>="2019-05-30 00:00:00" AND `time`<="2019-06-01 21:00:00" 
+[2019-06-16 21:20:24,719] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Dickoya" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:20:24,981] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828', 'A&T Labs', 'WeatherStation', 'Dickoya', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:20:24,981] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Dickoya', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828'}]
+[2019-06-16 21:20:24,982] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828" AND `time`>="2019-05-30 00:00:00" AND `time`<="2019-06-01 21:00:00" 
+[2019-06-16 21:20:25,238] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Waga" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:20:25,491] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c', 'A&T Labs', 'WeatherStation', 'Waga', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:20:25,491] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Waga', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c'}]
+[2019-06-16 21:20:25,491] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c" AND `time`>="2019-05-30 00:00:00" AND `time`<="2019-06-01 21:00:00" 
+[2019-06-16 21:20:25,783] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kottawa North Dharmapala School" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-16 21:20:26,031] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c', 'Leecom', 'WeatherStation', 'Kottawa North Dharmapala School', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:20:26,031] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kottawa North Dharmapala School', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': 'aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c'}]
+[2019-06-16 21:20:26,031] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c" AND `time`>="2019-05-30 00:00:00" AND `time`<="2019-06-01 21:00:00" 
+[2019-06-16 21:20:26,501] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="IBATTARA2" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-16 21:20:26,749] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd', 'CUrW IoT', 'WeatherStation', 'IBATTARA2', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:20:26,749] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'IBATTARA2', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd'}]
+[2019-06-16 21:20:26,749] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd" AND `time`>="2019-05-30 00:00:00" AND `time`<="2019-06-01 21:00:00" 
+[2019-06-16 21:20:27,043] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Malabe" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:20:27,302] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a', 'A&T Labs', 'WeatherStation', 'Malabe', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:20:27,303] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Malabe', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a'}]
+[2019-06-16 21:20:27,303] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a" AND `time`>="2019-05-30 00:00:00" AND `time`<="2019-06-01 21:00:00" 
+[2019-06-16 21:20:27,550] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kotikawatta" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-16 21:20:27,801] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8', 'Leecom', 'WeatherStation', 'Kotikawatta', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:20:27,801] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kotikawatta', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': '1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8'}]
+[2019-06-16 21:20:27,802] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8" AND `time`>="2019-05-30 00:00:00" AND `time`<="2019-06-01 21:00:00" 
+[2019-06-16 21:20:28,178] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mulleriyawa" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:20:28,429] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01', 'A&T Labs', 'WeatherStation', 'Mulleriyawa', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:20:28,429] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mulleriyawa', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01'}]
+[2019-06-16 21:20:28,430] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01" AND `time`>="2019-05-30 00:00:00" AND `time`<="2019-06-01 21:00:00" 
+[2019-06-16 21:20:28,712] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7fcab255fd30>
+[2019-06-16 21:20:28,713] {env.py:225} DEBUG - Starting outermost env
+[2019-06-16 21:20:28,713] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-16 21:20:28,713] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7fcab255fcc0> created
+[2019-06-16 21:20:28,713] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-16 21:20:28,714] {env.py:280} DEBUG - All drivers registered.
+[2019-06-16 21:20:28,714] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-16 21:20:28,714] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-16 21:20:28,715] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7fcab255fcc0>.
+[2019-06-16 21:20:28,715] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7fcab255fcc0> with options {}
+[2019-06-16 21:20:28,715] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7fcab255fd30>
+[2019-06-16 21:20:28,722] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-16 21:20:28,722] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-16 21:20:28,722] {collection.py:256} DEBUG - Index: 0
+[2019-06-16 21:20:28,725] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-16 21:20:28,725] {collection.py:447} DEBUG - Stopped session
+[2019-06-16 21:20:28,725] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7fcab255fd30>
+[2019-06-16 21:20:28,725] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7fcab255fcc0> options
+[2019-06-16 21:20:28,725] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7fcab255fcc0>.
+[2019-06-16 21:20:28,725] {env.py:316} DEBUG - Error handler popped.
+[2019-06-16 21:20:28,725] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7fcab255fcc0>.
+[2019-06-16 21:20:28,725] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-16 21:20:28,726] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7fcab255fd30>
+[2019-06-16 21:21:56,019] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-16 21:21:56,020] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mahapallegama" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:21:56,271] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85', 'A&T Labs', 'WeatherStation', 'Mahapallegama', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:21:56,272] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mahapallegama', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85'}]
+[2019-06-16 21:21:56,273] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:21:57,044] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Hingurana" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-16 21:21:57,321] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016', 'CUrW IoT', 'WeatherStation', 'Hingurana', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:21:57,322] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Hingurana', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016'}]
+[2019-06-16 21:21:57,322] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:21:57,625] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Dickoya" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:21:57,871] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828', 'A&T Labs', 'WeatherStation', 'Dickoya', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:21:57,871] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Dickoya', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828'}]
+[2019-06-16 21:21:57,872] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:21:58,389] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Waga" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:21:58,649] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c', 'A&T Labs', 'WeatherStation', 'Waga', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:21:58,649] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Waga', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c'}]
+[2019-06-16 21:21:58,650] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:21:58,936] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7f0f5363d438>
+[2019-06-16 21:21:58,936] {env.py:225} DEBUG - Starting outermost env
+[2019-06-16 21:21:58,936] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-16 21:21:58,936] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7f0f36986518> created
+[2019-06-16 21:21:58,937] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-16 21:21:58,937] {env.py:280} DEBUG - All drivers registered.
+[2019-06-16 21:21:58,937] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-16 21:21:58,937] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-16 21:21:58,938] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7f0f36986518>.
+[2019-06-16 21:21:58,938] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7f0f36986518> with options {}
+[2019-06-16 21:21:58,938] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7f0f5363d438>
+[2019-06-16 21:21:58,943] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-16 21:21:58,944] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-16 21:21:58,944] {collection.py:256} DEBUG - Index: 0
+[2019-06-16 21:21:58,946] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-16 21:21:58,946] {collection.py:447} DEBUG - Stopped session
+[2019-06-16 21:21:58,946] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7f0f5363d438>
+[2019-06-16 21:21:58,946] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7f0f36986518> options
+[2019-06-16 21:21:58,946] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7f0f36986518>.
+[2019-06-16 21:21:58,946] {env.py:316} DEBUG - Error handler popped.
+[2019-06-16 21:21:58,946] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7f0f36986518>.
+[2019-06-16 21:21:58,946] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-16 21:21:58,946] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7f0f5363d438>
+[2019-06-16 21:21:58,959] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kottawa North Dharmapala School" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-16 21:21:59,211] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c', 'Leecom', 'WeatherStation', 'Kottawa North Dharmapala School', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:21:59,211] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kottawa North Dharmapala School', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': 'aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c'}]
+[2019-06-16 21:21:59,212] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:21:59,740] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="IBATTARA2" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-16 21:21:59,991] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd', 'CUrW IoT', 'WeatherStation', 'IBATTARA2', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:21:59,991] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'IBATTARA2', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd'}]
+[2019-06-16 21:21:59,992] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:22:00,518] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Malabe" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:22:00,771] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a', 'A&T Labs', 'WeatherStation', 'Malabe', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:22:00,772] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Malabe', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a'}]
+[2019-06-16 21:22:00,772] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:22:01,019] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kotikawatta" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-16 21:22:01,271] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8', 'Leecom', 'WeatherStation', 'Kotikawatta', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:22:01,271] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kotikawatta', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': '1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8'}]
+[2019-06-16 21:22:01,272] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:22:01,796] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mulleriyawa" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:22:02,051] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01', 'A&T Labs', 'WeatherStation', 'Mulleriyawa', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:22:02,051] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mulleriyawa', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01'}]
+[2019-06-16 21:22:02,052] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:22:02,336] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7f0f36a4a400>
+[2019-06-16 21:22:02,336] {env.py:225} DEBUG - Starting outermost env
+[2019-06-16 21:22:02,336] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-16 21:22:02,336] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7f0f36986630> created
+[2019-06-16 21:22:02,336] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-16 21:22:02,337] {env.py:280} DEBUG - All drivers registered.
+[2019-06-16 21:22:02,337] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-16 21:22:02,337] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-16 21:22:02,338] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7f0f36986630>.
+[2019-06-16 21:22:02,338] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7f0f36986630> with options {}
+[2019-06-16 21:22:02,338] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7f0f36a4a400>
+[2019-06-16 21:22:02,338] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-16 21:22:02,338] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-16 21:22:02,339] {collection.py:256} DEBUG - Index: 0
+[2019-06-16 21:22:02,341] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-16 21:22:02,342] {collection.py:447} DEBUG - Stopped session
+[2019-06-16 21:22:02,342] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7f0f36a4a400>
+[2019-06-16 21:22:02,342] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7f0f36986630> options
+[2019-06-16 21:22:02,342] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7f0f36986630>.
+[2019-06-16 21:22:02,342] {env.py:316} DEBUG - Error handler popped.
+[2019-06-16 21:22:02,342] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7f0f36986630>.
+[2019-06-16 21:22:02,342] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-16 21:22:02,342] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7f0f36a4a400>
+[2019-06-16 21:27:19,885] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-16 21:27:19,886] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mahapallegama" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:27:20,138] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85', 'A&T Labs', 'WeatherStation', 'Mahapallegama', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:27:20,139] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mahapallegama', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85'}]
+[2019-06-16 21:27:20,141] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:27:20,917] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Hingurana" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-16 21:27:21,167] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016', 'CUrW IoT', 'WeatherStation', 'Hingurana', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:27:21,167] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Hingurana', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016'}]
+[2019-06-16 21:27:21,168] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:27:21,476] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Dickoya" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:27:21,718] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828', 'A&T Labs', 'WeatherStation', 'Dickoya', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:27:21,718] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Dickoya', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828'}]
+[2019-06-16 21:27:21,719] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:27:22,243] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Waga" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:27:22,498] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c', 'A&T Labs', 'WeatherStation', 'Waga', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:27:22,498] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Waga', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c'}]
+[2019-06-16 21:27:22,499] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:27:22,785] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7fd1aae33d68>
+[2019-06-16 21:27:22,786] {env.py:225} DEBUG - Starting outermost env
+[2019-06-16 21:27:22,786] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-16 21:27:22,786] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7fd1aad88a58> created
+[2019-06-16 21:27:22,786] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-16 21:27:22,787] {env.py:280} DEBUG - All drivers registered.
+[2019-06-16 21:27:22,787] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-16 21:27:22,787] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-16 21:27:22,787] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7fd1aad88a58>.
+[2019-06-16 21:27:22,787] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7fd1aad88a58> with options {}
+[2019-06-16 21:27:22,787] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7fd1aae33d68>
+[2019-06-16 21:27:22,794] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-16 21:27:22,794] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-16 21:27:22,794] {collection.py:256} DEBUG - Index: 0
+[2019-06-16 21:27:22,796] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-16 21:27:22,796] {collection.py:447} DEBUG - Stopped session
+[2019-06-16 21:27:22,796] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7fd1aae33d68>
+[2019-06-16 21:27:22,796] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7fd1aad88a58> options
+[2019-06-16 21:27:22,796] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7fd1aad88a58>.
+[2019-06-16 21:27:22,796] {env.py:316} DEBUG - Error handler popped.
+[2019-06-16 21:27:22,796] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7fd1aad88a58>.
+[2019-06-16 21:27:22,797] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-16 21:27:22,797] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7fd1aae33d68>
+[2019-06-16 21:27:22,809] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kottawa North Dharmapala School" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-16 21:27:23,067] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c', 'Leecom', 'WeatherStation', 'Kottawa North Dharmapala School', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:27:23,068] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kottawa North Dharmapala School', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': 'aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c'}]
+[2019-06-16 21:27:23,068] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:27:23,602] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="IBATTARA2" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-16 21:27:23,863] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd', 'CUrW IoT', 'WeatherStation', 'IBATTARA2', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:27:23,863] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'IBATTARA2', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd'}]
+[2019-06-16 21:27:23,863] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:27:24,415] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Malabe" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:27:24,657] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a', 'A&T Labs', 'WeatherStation', 'Malabe', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:27:24,657] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Malabe', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a'}]
+[2019-06-16 21:27:24,658] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:27:24,904] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kotikawatta" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-16 21:27:25,157] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8', 'Leecom', 'WeatherStation', 'Kotikawatta', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:27:25,157] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kotikawatta', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': '1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8'}]
+[2019-06-16 21:27:25,157] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:27:25,697] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mulleriyawa" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-16 21:27:25,947] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01', 'A&T Labs', 'WeatherStation', 'Mulleriyawa', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-16 21:27:25,948] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mulleriyawa', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01'}]
+[2019-06-16 21:27:25,948] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-16 21:00:00" 
+[2019-06-16 21:27:26,233] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7fd1aae33438>
+[2019-06-16 21:27:26,233] {env.py:225} DEBUG - Starting outermost env
+[2019-06-16 21:27:26,233] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-16 21:27:26,233] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7fd1aad88940> created
+[2019-06-16 21:27:26,233] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-16 21:27:26,234] {env.py:280} DEBUG - All drivers registered.
+[2019-06-16 21:27:26,234] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-16 21:27:26,234] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-16 21:27:26,235] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7fd1aad88940>.
+[2019-06-16 21:27:26,235] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7fd1aad88940> with options {}
+[2019-06-16 21:27:26,235] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7fd1aae33438>
+[2019-06-16 21:27:26,236] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-16 21:27:26,236] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-16 21:27:26,236] {collection.py:256} DEBUG - Index: 0
+[2019-06-16 21:27:26,238] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-16 21:27:26,239] {collection.py:447} DEBUG - Stopped session
+[2019-06-16 21:27:26,239] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7fd1aae33438>
+[2019-06-16 21:27:26,239] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7fd1aad88940> options
+[2019-06-16 21:27:26,239] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7fd1aad88940>.
+[2019-06-16 21:27:26,239] {env.py:316} DEBUG - Error handler popped.
+[2019-06-16 21:27:26,239] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7fd1aad88940>.
+[2019-06-16 21:27:26,239] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-16 21:27:26,239] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7fd1aae33438>
+[2019-06-17 10:29:10,225] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-17 10:29:20,335] {gen_sim_raincsv.py:161} ERROR - rainfall csv file generation error: (2003, "Can't connect to MySQL server on '192.168.56.102' (timed out)")
+[2019-06-17 10:31:02,757] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-17 10:31:02,758] {gen_sim_raincsv.py:161} ERROR - rainfall csv file generation error: get_observed_kub_mean() missing 2 required positional arguments: 'fcst_start' and 'fcst_end'
+[2019-06-17 10:31:45,769] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-17 10:31:45,770] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mahapallegama" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:31:46,009] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85', 'A&T Labs', 'WeatherStation', 'Mahapallegama', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:31:46,010] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mahapallegama', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85'}]
+[2019-06-17 10:31:46,010] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85" AND `time`>="2019-06-11 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:31:46,875] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Hingurana" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-17 10:31:47,110] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016', 'CUrW IoT', 'WeatherStation', 'Hingurana', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:31:47,110] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Hingurana', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016'}]
+[2019-06-17 10:31:47,110] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016" AND `time`>="2019-06-11 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:31:47,396] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Dickoya" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:31:47,629] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828', 'A&T Labs', 'WeatherStation', 'Dickoya', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:31:47,630] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Dickoya', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828'}]
+[2019-06-17 10:31:47,630] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828" AND `time`>="2019-06-11 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:31:47,910] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Waga" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:31:48,158] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c', 'A&T Labs', 'WeatherStation', 'Waga', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:31:48,159] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Waga', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c'}]
+[2019-06-17 10:31:48,159] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c" AND `time`>="2019-06-11 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:31:48,519] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7f4eb131ccf8>
+[2019-06-17 10:31:48,519] {env.py:225} DEBUG - Starting outermost env
+[2019-06-17 10:31:48,519] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-17 10:31:48,519] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7f4e89c305f8> created
+[2019-06-17 10:31:48,520] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-17 10:31:48,520] {env.py:280} DEBUG - All drivers registered.
+[2019-06-17 10:31:48,520] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-17 10:31:48,521] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-17 10:31:48,521] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7f4e89c305f8>.
+[2019-06-17 10:31:48,521] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7f4e89c305f8> with options {}
+[2019-06-17 10:31:48,521] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7f4eb131ccf8>
+[2019-06-17 10:31:48,692] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-17 10:31:48,693] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-17 10:31:48,693] {collection.py:256} DEBUG - Index: 0
+[2019-06-17 10:31:48,723] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-17 10:31:48,724] {collection.py:447} DEBUG - Stopped session
+[2019-06-17 10:31:48,724] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7f4eb131ccf8>
+[2019-06-17 10:31:48,724] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7f4e89c305f8> options
+[2019-06-17 10:31:48,724] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7f4e89c305f8>.
+[2019-06-17 10:31:48,724] {env.py:316} DEBUG - Error handler popped.
+[2019-06-17 10:31:48,724] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7f4e89c305f8>.
+[2019-06-17 10:31:48,724] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-17 10:31:48,724] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7f4eb131ccf8>
+[2019-06-17 10:31:48,826] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kottawa North Dharmapala School" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-17 10:31:49,061] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c', 'Leecom', 'WeatherStation', 'Kottawa North Dharmapala School', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:31:49,061] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kottawa North Dharmapala School', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': 'aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c'}]
+[2019-06-17 10:31:49,061] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c" AND `time`>="2019-06-11 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:31:49,354] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="IBATTARA2" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-17 10:31:49,589] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd', 'CUrW IoT', 'WeatherStation', 'IBATTARA2', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:31:49,590] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'IBATTARA2', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd'}]
+[2019-06-17 10:31:49,591] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd" AND `time`>="2019-06-11 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:31:49,889] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Malabe" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:31:50,121] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a', 'A&T Labs', 'WeatherStation', 'Malabe', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:31:50,122] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Malabe', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a'}]
+[2019-06-17 10:31:50,122] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a" AND `time`>="2019-06-11 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:31:50,354] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kotikawatta" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-17 10:31:50,587] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8', 'Leecom', 'WeatherStation', 'Kotikawatta', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:31:50,588] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kotikawatta', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': '1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8'}]
+[2019-06-17 10:31:50,588] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8" AND `time`>="2019-06-11 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:31:50,879] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mulleriyawa" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:31:51,111] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01', 'A&T Labs', 'WeatherStation', 'Mulleriyawa', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:31:51,111] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mulleriyawa', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01'}]
+[2019-06-17 10:31:51,112] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01" AND `time`>="2019-06-11 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:31:51,382] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7f4e89c30f60>
+[2019-06-17 10:31:51,382] {env.py:225} DEBUG - Starting outermost env
+[2019-06-17 10:31:51,382] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-17 10:31:51,382] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7f4e89bee550> created
+[2019-06-17 10:31:51,382] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-17 10:31:51,383] {env.py:280} DEBUG - All drivers registered.
+[2019-06-17 10:31:51,383] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-17 10:31:51,384] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-17 10:31:51,384] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7f4e89bee550>.
+[2019-06-17 10:31:51,384] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7f4e89bee550> with options {}
+[2019-06-17 10:31:51,384] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7f4e89c30f60>
+[2019-06-17 10:31:51,486] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-17 10:31:51,486] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-17 10:31:51,487] {collection.py:256} DEBUG - Index: 0
+[2019-06-17 10:31:51,494] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-17 10:31:51,495] {collection.py:447} DEBUG - Stopped session
+[2019-06-17 10:31:51,495] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7f4e89c30f60>
+[2019-06-17 10:31:51,496] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7f4e89bee550> options
+[2019-06-17 10:31:51,496] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7f4e89bee550>.
+[2019-06-17 10:31:51,496] {env.py:316} DEBUG - Error handler popped.
+[2019-06-17 10:31:51,496] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7f4e89bee550>.
+[2019-06-17 10:31:51,497] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-17 10:31:51,497] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7f4e89c30f60>
+[2019-06-17 10:36:27,240] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-17 10:36:27,242] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mahapallegama" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:36:27,480] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85', 'A&T Labs', 'WeatherStation', 'Mahapallegama', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:36:27,482] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mahapallegama', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85'}]
+[2019-06-17 10:36:27,483] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:36:27,981] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Hingurana" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-17 10:36:28,215] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016', 'CUrW IoT', 'WeatherStation', 'Hingurana', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:36:28,216] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Hingurana', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016'}]
+[2019-06-17 10:36:28,216] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:36:28,491] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Dickoya" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:36:28,725] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828', 'A&T Labs', 'WeatherStation', 'Dickoya', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:36:28,726] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Dickoya', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828'}]
+[2019-06-17 10:36:28,726] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:36:29,000] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Waga" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:36:29,234] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c', 'A&T Labs', 'WeatherStation', 'Waga', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:36:29,234] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Waga', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c'}]
+[2019-06-17 10:36:29,235] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:36:29,509] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7f6aceafacf8>
+[2019-06-17 10:36:29,509] {env.py:225} DEBUG - Starting outermost env
+[2019-06-17 10:36:29,509] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-17 10:36:29,509] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7f6aa742a668> created
+[2019-06-17 10:36:29,509] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-17 10:36:29,510] {env.py:280} DEBUG - All drivers registered.
+[2019-06-17 10:36:29,510] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-17 10:36:29,510] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-17 10:36:29,510] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7f6aa742a668>.
+[2019-06-17 10:36:29,510] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7f6aa742a668> with options {}
+[2019-06-17 10:36:29,511] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7f6aceafacf8>
+[2019-06-17 10:36:29,517] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-17 10:36:29,517] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-17 10:36:29,517] {collection.py:256} DEBUG - Index: 0
+[2019-06-17 10:36:29,520] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-17 10:36:29,520] {collection.py:447} DEBUG - Stopped session
+[2019-06-17 10:36:29,520] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7f6aceafacf8>
+[2019-06-17 10:36:29,520] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7f6aa742a668> options
+[2019-06-17 10:36:29,520] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7f6aa742a668>.
+[2019-06-17 10:36:29,520] {env.py:316} DEBUG - Error handler popped.
+[2019-06-17 10:36:29,520] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7f6aa742a668>.
+[2019-06-17 10:36:29,520] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-17 10:36:29,520] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7f6aceafacf8>
+[2019-06-17 10:36:29,535] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kottawa North Dharmapala School" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-17 10:36:29,779] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c', 'Leecom', 'WeatherStation', 'Kottawa North Dharmapala School', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:36:29,779] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kottawa North Dharmapala School', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': 'aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c'}]
+[2019-06-17 10:36:29,779] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:36:30,047] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="IBATTARA2" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-17 10:36:30,281] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd', 'CUrW IoT', 'WeatherStation', 'IBATTARA2', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:36:30,282] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'IBATTARA2', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd'}]
+[2019-06-17 10:36:30,282] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:36:30,554] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Malabe" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:36:30,790] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a', 'A&T Labs', 'WeatherStation', 'Malabe', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:36:30,791] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Malabe', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a'}]
+[2019-06-17 10:36:30,791] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:36:31,024] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kotikawatta" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-17 10:36:31,257] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8', 'Leecom', 'WeatherStation', 'Kotikawatta', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:36:31,258] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kotikawatta', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': '1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8'}]
+[2019-06-17 10:36:31,258] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:36:31,526] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mulleriyawa" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:36:31,794] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01', 'A&T Labs', 'WeatherStation', 'Mulleriyawa', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:36:31,795] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mulleriyawa', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01'}]
+[2019-06-17 10:36:31,795] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:36:32,063] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7f6aa742af28>
+[2019-06-17 10:36:32,063] {env.py:225} DEBUG - Starting outermost env
+[2019-06-17 10:36:32,063] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-17 10:36:32,063] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7f6aa73f0588> created
+[2019-06-17 10:36:32,063] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-17 10:36:32,064] {env.py:280} DEBUG - All drivers registered.
+[2019-06-17 10:36:32,064] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-17 10:36:32,064] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-17 10:36:32,065] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7f6aa73f0588>.
+[2019-06-17 10:36:32,065] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7f6aa73f0588> with options {}
+[2019-06-17 10:36:32,065] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7f6aa742af28>
+[2019-06-17 10:36:32,065] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-17 10:36:32,066] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-17 10:36:32,066] {collection.py:256} DEBUG - Index: 0
+[2019-06-17 10:36:32,071] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-17 10:36:32,071] {collection.py:447} DEBUG - Stopped session
+[2019-06-17 10:36:32,071] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7f6aa742af28>
+[2019-06-17 10:36:32,071] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7f6aa73f0588> options
+[2019-06-17 10:36:32,071] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7f6aa73f0588>.
+[2019-06-17 10:36:32,071] {env.py:316} DEBUG - Error handler popped.
+[2019-06-17 10:36:32,071] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7f6aa73f0588>.
+[2019-06-17 10:36:32,071] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-17 10:36:32,071] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7f6aa742af28>
+[2019-06-17 10:48:04,886] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-17 10:48:04,888] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mahapallegama" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:48:05,194] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85', 'A&T Labs', 'WeatherStation', 'Mahapallegama', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:48:05,195] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mahapallegama', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85'}]
+[2019-06-17 10:48:05,196] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:48:05,834] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Hingurana" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-17 10:48:06,120] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016', 'CUrW IoT', 'WeatherStation', 'Hingurana', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:48:06,121] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Hingurana', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016'}]
+[2019-06-17 10:48:06,121] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:48:06,460] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Dickoya" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:48:06,691] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828', 'A&T Labs', 'WeatherStation', 'Dickoya', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:48:06,691] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Dickoya', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828'}]
+[2019-06-17 10:48:06,691] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:48:06,973] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Waga" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:48:07,242] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c', 'A&T Labs', 'WeatherStation', 'Waga', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:48:07,242] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Waga', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c'}]
+[2019-06-17 10:48:07,242] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:48:07,592] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7fce1e3f4cf8>
+[2019-06-17 10:48:07,593] {env.py:225} DEBUG - Starting outermost env
+[2019-06-17 10:48:07,593] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-17 10:48:07,593] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7fcdf6da16a0> created
+[2019-06-17 10:48:07,593] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-17 10:48:07,594] {env.py:280} DEBUG - All drivers registered.
+[2019-06-17 10:48:07,594] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-17 10:48:07,594] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-17 10:48:07,595] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7fcdf6da16a0>.
+[2019-06-17 10:48:07,595] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7fcdf6da16a0> with options {}
+[2019-06-17 10:48:07,595] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7fce1e3f4cf8>
+[2019-06-17 10:48:07,602] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-17 10:48:07,602] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-17 10:48:07,602] {collection.py:256} DEBUG - Index: 0
+[2019-06-17 10:48:07,605] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-17 10:48:07,605] {collection.py:447} DEBUG - Stopped session
+[2019-06-17 10:48:07,605] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7fce1e3f4cf8>
+[2019-06-17 10:48:07,605] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7fcdf6da16a0> options
+[2019-06-17 10:48:07,605] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7fcdf6da16a0>.
+[2019-06-17 10:48:07,605] {env.py:316} DEBUG - Error handler popped.
+[2019-06-17 10:48:07,605] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7fcdf6da16a0>.
+[2019-06-17 10:48:07,606] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-17 10:48:07,606] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7fce1e3f4cf8>
+[2019-06-17 10:48:07,621] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kottawa North Dharmapala School" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-17 10:48:07,958] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c', 'Leecom', 'WeatherStation', 'Kottawa North Dharmapala School', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:48:07,958] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kottawa North Dharmapala School', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': 'aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c'}]
+[2019-06-17 10:48:07,959] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:48:08,306] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="IBATTARA2" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-17 10:48:08,573] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd', 'CUrW IoT', 'WeatherStation', 'IBATTARA2', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:48:08,573] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'IBATTARA2', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd'}]
+[2019-06-17 10:48:08,573] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:48:08,916] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Malabe" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:48:09,187] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a', 'A&T Labs', 'WeatherStation', 'Malabe', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:48:09,188] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Malabe', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a'}]
+[2019-06-17 10:48:09,188] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:48:09,494] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kotikawatta" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-17 10:48:09,801] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8', 'Leecom', 'WeatherStation', 'Kotikawatta', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:48:09,802] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kotikawatta', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': '1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8'}]
+[2019-06-17 10:48:09,802] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:48:10,145] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mulleriyawa" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:48:10,418] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01', 'A&T Labs', 'WeatherStation', 'Mulleriyawa', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:48:10,418] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mulleriyawa', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01'}]
+[2019-06-17 10:48:10,419] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:48:10,768] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7fcdf6da1f60>
+[2019-06-17 10:48:10,769] {env.py:225} DEBUG - Starting outermost env
+[2019-06-17 10:48:10,770] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-17 10:48:10,771] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7fcdf6cea5c0> created
+[2019-06-17 10:48:10,772] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-17 10:48:10,773] {env.py:280} DEBUG - All drivers registered.
+[2019-06-17 10:48:10,774] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-17 10:48:10,774] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-17 10:48:10,774] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7fcdf6cea5c0>.
+[2019-06-17 10:48:10,774] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7fcdf6cea5c0> with options {}
+[2019-06-17 10:48:10,774] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7fcdf6da1f60>
+[2019-06-17 10:48:10,775] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-17 10:48:10,775] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-17 10:48:10,775] {collection.py:256} DEBUG - Index: 0
+[2019-06-17 10:48:10,779] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-17 10:48:10,780] {collection.py:447} DEBUG - Stopped session
+[2019-06-17 10:48:10,780] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7fcdf6da1f60>
+[2019-06-17 10:48:10,780] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7fcdf6cea5c0> options
+[2019-06-17 10:48:10,780] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7fcdf6cea5c0>.
+[2019-06-17 10:48:10,780] {env.py:316} DEBUG - Error handler popped.
+[2019-06-17 10:48:10,780] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7fcdf6cea5c0>.
+[2019-06-17 10:48:10,780] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-17 10:48:10,780] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7fcdf6da1f60>
+[2019-06-17 10:48:10,811] {gen_sim_raincsv.py:166} ERROR - rainfall csv file generation error: tuple index out of range
+[2019-06-17 10:50:12,273] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-17 10:50:12,275] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mahapallegama" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:50:12,582] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85', 'A&T Labs', 'WeatherStation', 'Mahapallegama', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:50:12,584] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mahapallegama', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85'}]
+[2019-06-17 10:50:12,585] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:50:13,128] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Hingurana" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-17 10:50:13,401] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016', 'CUrW IoT', 'WeatherStation', 'Hingurana', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:50:13,401] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Hingurana', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016'}]
+[2019-06-17 10:50:13,402] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:50:13,746] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Dickoya" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:50:14,017] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828', 'A&T Labs', 'WeatherStation', 'Dickoya', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:50:14,018] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Dickoya', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828'}]
+[2019-06-17 10:50:14,018] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:50:14,364] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Waga" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:50:14,630] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c', 'A&T Labs', 'WeatherStation', 'Waga', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:50:14,631] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Waga', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c'}]
+[2019-06-17 10:50:14,631] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:50:14,981] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7fd10b4e3cf8>
+[2019-06-17 10:50:14,981] {env.py:225} DEBUG - Starting outermost env
+[2019-06-17 10:50:14,981] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-17 10:50:14,981] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7fd0e3e90710> created
+[2019-06-17 10:50:14,981] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-17 10:50:14,982] {env.py:280} DEBUG - All drivers registered.
+[2019-06-17 10:50:14,982] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-17 10:50:14,982] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-17 10:50:14,982] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7fd0e3e90710>.
+[2019-06-17 10:50:14,983] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7fd0e3e90710> with options {}
+[2019-06-17 10:50:14,983] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7fd10b4e3cf8>
+[2019-06-17 10:50:14,989] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-17 10:50:14,989] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-17 10:50:14,989] {collection.py:256} DEBUG - Index: 0
+[2019-06-17 10:50:14,992] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-17 10:50:14,992] {collection.py:447} DEBUG - Stopped session
+[2019-06-17 10:50:14,992] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7fd10b4e3cf8>
+[2019-06-17 10:50:14,992] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7fd0e3e90710> options
+[2019-06-17 10:50:14,992] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7fd0e3e90710>.
+[2019-06-17 10:50:14,992] {env.py:316} DEBUG - Error handler popped.
+[2019-06-17 10:50:14,992] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7fd0e3e90710>.
+[2019-06-17 10:50:14,992] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-17 10:50:14,992] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7fd10b4e3cf8>
+[2019-06-17 10:50:15,008] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kottawa North Dharmapala School" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-17 10:50:15,347] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c', 'Leecom', 'WeatherStation', 'Kottawa North Dharmapala School', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:50:15,348] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kottawa North Dharmapala School', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': 'aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c'}]
+[2019-06-17 10:50:15,348] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:50:15,693] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="IBATTARA2" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-17 10:50:15,962] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd', 'CUrW IoT', 'WeatherStation', 'IBATTARA2', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:50:15,962] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'IBATTARA2', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd'}]
+[2019-06-17 10:50:15,962] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:50:16,307] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Malabe" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:50:16,581] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a', 'A&T Labs', 'WeatherStation', 'Malabe', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:50:16,581] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Malabe', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a'}]
+[2019-06-17 10:50:16,582] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:50:16,889] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kotikawatta" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-17 10:50:17,190] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8', 'Leecom', 'WeatherStation', 'Kotikawatta', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:50:17,190] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kotikawatta', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': '1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8'}]
+[2019-06-17 10:50:17,190] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:50:17,537] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mulleriyawa" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 10:50:17,807] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01', 'A&T Labs', 'WeatherStation', 'Mulleriyawa', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 10:50:17,807] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mulleriyawa', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01'}]
+[2019-06-17 10:50:17,808] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-17 10:00:00" 
+[2019-06-17 10:50:18,149] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7fd0e3e90fd0>
+[2019-06-17 10:50:18,149] {env.py:225} DEBUG - Starting outermost env
+[2019-06-17 10:50:18,149] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-17 10:50:18,149] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7fd0e3dd9630> created
+[2019-06-17 10:50:18,149] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-17 10:50:18,150] {env.py:280} DEBUG - All drivers registered.
+[2019-06-17 10:50:18,150] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-17 10:50:18,150] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-17 10:50:18,150] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7fd0e3dd9630>.
+[2019-06-17 10:50:18,151] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7fd0e3dd9630> with options {}
+[2019-06-17 10:50:18,151] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7fd0e3e90fd0>
+[2019-06-17 10:50:18,151] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-17 10:50:18,151] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-17 10:50:18,152] {collection.py:256} DEBUG - Index: 0
+[2019-06-17 10:50:18,156] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-17 10:50:18,156] {collection.py:447} DEBUG - Stopped session
+[2019-06-17 10:50:18,157] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7fd0e3e90fd0>
+[2019-06-17 10:50:18,157] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7fd0e3dd9630> options
+[2019-06-17 10:50:18,157] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7fd0e3dd9630>.
+[2019-06-17 10:50:18,157] {env.py:316} DEBUG - Error handler popped.
+[2019-06-17 10:50:18,157] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7fd0e3dd9630>.
+[2019-06-17 10:50:18,157] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-17 10:50:18,157] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7fd0e3e90fd0>
+[2019-06-17 11:20:09,640] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-17 11:20:09,642] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mahapallegama" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 11:20:09,882] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85', 'A&T Labs', 'WeatherStation', 'Mahapallegama', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:20:09,883] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mahapallegama', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85'}]
+[2019-06-17 11:20:09,884] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:20:10,672] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Hingurana" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-17 11:20:10,909] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016', 'CUrW IoT', 'WeatherStation', 'Hingurana', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:20:10,909] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Hingurana', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016'}]
+[2019-06-17 11:20:10,909] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:20:11,423] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Dickoya" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 11:20:11,659] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828', 'A&T Labs', 'WeatherStation', 'Dickoya', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:20:11,659] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Dickoya', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828'}]
+[2019-06-17 11:20:11,659] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:20:12,164] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Waga" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 11:20:12,399] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c', 'A&T Labs', 'WeatherStation', 'Waga', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:20:12,400] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Waga', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c'}]
+[2019-06-17 11:20:12,400] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:20:12,634] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Urumewella" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 11:20:12,869] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('0af5ecec986be44699e267415799b8b349eeb4e4925881a9fad5cf47fa8f3019', 'A&T Labs', 'WeatherStation', 'Urumewella', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:20:12,869] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Urumewella', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '0af5ecec986be44699e267415799b8b349eeb4e4925881a9fad5cf47fa8f3019'}]
+[2019-06-17 11:20:12,869] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="0af5ecec986be44699e267415799b8b349eeb4e4925881a9fad5cf47fa8f3019" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:20:13,465] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7fc1cd0f4da0>
+[2019-06-17 11:20:13,465] {env.py:225} DEBUG - Starting outermost env
+[2019-06-17 11:20:13,465] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-17 11:20:13,466] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7fc1a59dd7f0> created
+[2019-06-17 11:20:13,466] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-17 11:20:13,466] {env.py:280} DEBUG - All drivers registered.
+[2019-06-17 11:20:13,466] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-17 11:20:13,466] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-17 11:20:13,466] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7fc1a59dd7f0>.
+[2019-06-17 11:20:13,466] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7fc1a59dd7f0> with options {}
+[2019-06-17 11:20:13,467] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7fc1cd0f4da0>
+[2019-06-17 11:20:13,472] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-17 11:20:13,472] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-17 11:20:13,472] {collection.py:256} DEBUG - Index: 0
+[2019-06-17 11:20:13,474] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-17 11:20:13,474] {collection.py:447} DEBUG - Stopped session
+[2019-06-17 11:20:13,474] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7fc1cd0f4da0>
+[2019-06-17 11:20:13,474] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7fc1a59dd7f0> options
+[2019-06-17 11:20:13,474] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7fc1a59dd7f0>.
+[2019-06-17 11:20:13,474] {env.py:316} DEBUG - Error handler popped.
+[2019-06-17 11:20:13,474] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7fc1a59dd7f0>.
+[2019-06-17 11:20:13,474] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-17 11:20:13,474] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7fc1cd0f4da0>
+[2019-06-17 11:20:13,488] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kottawa North Dharmapala School" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-17 11:20:13,735] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c', 'Leecom', 'WeatherStation', 'Kottawa North Dharmapala School', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:20:13,735] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kottawa North Dharmapala School', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': 'aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c'}]
+[2019-06-17 11:20:13,735] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:20:14,324] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="IBATTARA2" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-17 11:20:14,564] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd', 'CUrW IoT', 'WeatherStation', 'IBATTARA2', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:20:14,564] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'IBATTARA2', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd'}]
+[2019-06-17 11:20:14,565] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:20:15,101] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Malabe" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 11:20:15,336] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a', 'A&T Labs', 'WeatherStation', 'Malabe', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:20:15,336] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Malabe', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a'}]
+[2019-06-17 11:20:15,337] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:20:15,571] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kotikawatta" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-17 11:20:15,805] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8', 'Leecom', 'WeatherStation', 'Kotikawatta', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:20:15,806] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kotikawatta', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': '1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8'}]
+[2019-06-17 11:20:15,806] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:20:16,380] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mulleriyawa" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 11:20:16,615] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01', 'A&T Labs', 'WeatherStation', 'Mulleriyawa', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:20:16,615] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mulleriyawa', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01'}]
+[2019-06-17 11:20:16,616] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:20:16,888] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7fc1cd0f4c50>
+[2019-06-17 11:20:16,888] {env.py:225} DEBUG - Starting outermost env
+[2019-06-17 11:20:16,888] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-17 11:20:16,888] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7fc1a59dd908> created
+[2019-06-17 11:20:16,888] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-17 11:20:16,889] {env.py:280} DEBUG - All drivers registered.
+[2019-06-17 11:20:16,890] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-17 11:20:16,890] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-17 11:20:16,891] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7fc1a59dd908>.
+[2019-06-17 11:20:16,891] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7fc1a59dd908> with options {}
+[2019-06-17 11:20:16,891] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7fc1cd0f4c50>
+[2019-06-17 11:20:16,892] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-17 11:20:16,892] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-17 11:20:16,892] {collection.py:256} DEBUG - Index: 0
+[2019-06-17 11:20:16,895] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-17 11:20:16,895] {collection.py:447} DEBUG - Stopped session
+[2019-06-17 11:20:16,895] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7fc1cd0f4c50>
+[2019-06-17 11:20:16,895] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7fc1a59dd908> options
+[2019-06-17 11:20:16,895] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7fc1a59dd908>.
+[2019-06-17 11:20:16,895] {env.py:316} DEBUG - Error handler popped.
+[2019-06-17 11:20:16,895] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7fc1a59dd908>.
+[2019-06-17 11:20:16,895] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-17 11:20:16,895] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7fc1cd0f4c50>
+[2019-06-17 11:29:45,637] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-17 11:29:45,638] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mahapallegama" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 11:29:45,877] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85', 'A&T Labs', 'WeatherStation', 'Mahapallegama', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:29:45,878] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mahapallegama', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85'}]
+[2019-06-17 11:29:45,879] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:29:46,628] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Hingurana" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-17 11:29:46,863] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016', 'CUrW IoT', 'WeatherStation', 'Hingurana', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:29:46,863] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Hingurana', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016'}]
+[2019-06-17 11:29:46,864] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:29:47,364] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Dickoya" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 11:29:47,598] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828', 'A&T Labs', 'WeatherStation', 'Dickoya', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:29:47,599] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Dickoya', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828'}]
+[2019-06-17 11:29:47,599] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:29:48,126] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Waga" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 11:29:48,360] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c', 'A&T Labs', 'WeatherStation', 'Waga', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:29:48,360] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Waga', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c'}]
+[2019-06-17 11:29:48,361] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:29:48,594] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Urumewella" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 11:29:48,828] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('0af5ecec986be44699e267415799b8b349eeb4e4925881a9fad5cf47fa8f3019', 'A&T Labs', 'WeatherStation', 'Urumewella', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:29:48,829] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Urumewella', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '0af5ecec986be44699e267415799b8b349eeb4e4925881a9fad5cf47fa8f3019'}]
+[2019-06-17 11:29:48,829] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="0af5ecec986be44699e267415799b8b349eeb4e4925881a9fad5cf47fa8f3019" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:29:49,359] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7fb8edfd0da0>
+[2019-06-17 11:29:49,359] {env.py:225} DEBUG - Starting outermost env
+[2019-06-17 11:29:49,359] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-17 11:29:49,359] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7fb8c68b97f0> created
+[2019-06-17 11:29:49,359] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-17 11:29:49,360] {env.py:280} DEBUG - All drivers registered.
+[2019-06-17 11:29:49,360] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-17 11:29:49,360] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-17 11:29:49,360] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7fb8c68b97f0>.
+[2019-06-17 11:29:49,360] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7fb8c68b97f0> with options {}
+[2019-06-17 11:29:49,360] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7fb8edfd0da0>
+[2019-06-17 11:29:49,365] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-17 11:29:49,365] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-17 11:29:49,365] {collection.py:256} DEBUG - Index: 0
+[2019-06-17 11:29:49,367] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-17 11:29:49,367] {collection.py:447} DEBUG - Stopped session
+[2019-06-17 11:29:49,367] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7fb8edfd0da0>
+[2019-06-17 11:29:49,367] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7fb8c68b97f0> options
+[2019-06-17 11:29:49,367] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7fb8c68b97f0>.
+[2019-06-17 11:29:49,367] {env.py:316} DEBUG - Error handler popped.
+[2019-06-17 11:29:49,367] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7fb8c68b97f0>.
+[2019-06-17 11:29:49,367] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-17 11:29:49,367] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7fb8edfd0da0>
+[2019-06-17 11:29:49,380] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kottawa North Dharmapala School" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-17 11:29:49,615] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c', 'Leecom', 'WeatherStation', 'Kottawa North Dharmapala School', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:29:49,615] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kottawa North Dharmapala School', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': 'aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c'}]
+[2019-06-17 11:29:49,616] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:29:50,126] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="IBATTARA2" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-17 11:29:50,361] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd', 'CUrW IoT', 'WeatherStation', 'IBATTARA2', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:29:50,361] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'IBATTARA2', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd'}]
+[2019-06-17 11:29:50,361] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:29:50,870] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Malabe" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 11:29:51,105] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a', 'A&T Labs', 'WeatherStation', 'Malabe', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:29:51,105] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Malabe', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a'}]
+[2019-06-17 11:29:51,105] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:29:51,339] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kotikawatta" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-17 11:29:51,572] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8', 'Leecom', 'WeatherStation', 'Kotikawatta', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:29:51,572] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kotikawatta', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': '1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8'}]
+[2019-06-17 11:29:51,572] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:29:52,080] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mulleriyawa" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-17 11:29:52,315] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01', 'A&T Labs', 'WeatherStation', 'Mulleriyawa', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-17 11:29:52,315] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mulleriyawa', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01'}]
+[2019-06-17 11:29:52,315] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01" AND `time`>="2019-06-10 00:00:00" AND `time`<="2019-06-17 11:00:00" 
+[2019-06-17 11:29:52,583] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7fb8edfd0c50>
+[2019-06-17 11:29:52,583] {env.py:225} DEBUG - Starting outermost env
+[2019-06-17 11:29:52,583] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-17 11:29:52,583] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7fb8c68b94a8> created
+[2019-06-17 11:29:52,584] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-17 11:29:52,584] {env.py:280} DEBUG - All drivers registered.
+[2019-06-17 11:29:52,584] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-17 11:29:52,585] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-17 11:29:52,585] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7fb8c68b94a8>.
+[2019-06-17 11:29:52,585] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7fb8c68b94a8> with options {}
+[2019-06-17 11:29:52,585] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7fb8edfd0c50>
+[2019-06-17 11:29:52,586] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-17 11:29:52,586] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-17 11:29:52,586] {collection.py:256} DEBUG - Index: 0
+[2019-06-17 11:29:52,589] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-17 11:29:52,589] {collection.py:447} DEBUG - Stopped session
+[2019-06-17 11:29:52,589] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7fb8edfd0c50>
+[2019-06-17 11:29:52,589] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7fb8c68b94a8> options
+[2019-06-17 11:29:52,589] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7fb8c68b94a8>.
+[2019-06-17 11:29:52,589] {env.py:316} DEBUG - Error handler popped.
+[2019-06-17 11:29:52,589] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7fb8c68b94a8>.
+[2019-06-17 11:29:52,589] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-17 11:29:52,589] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7fb8edfd0c50>
+[2019-06-18 09:45:09,080] {mysqladapter.py:35} INFO - Database version : 5.7.26-0ubuntu0.16.04.1-log 
+[2019-06-18 09:45:09,108] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mahapallegama" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-18 09:45:09,345] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85', 'A&T Labs', 'WeatherStation', 'Mahapallegama', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-18 09:45:09,346] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mahapallegama', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85'}]
+[2019-06-18 09:45:09,346] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="a82afc7cfdcc8ab72b0538fa2f5c8160638cf63bfdafa1e1fe7928f6660c4f85" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-18 09:00:00" 
+[2019-06-18 09:45:09,952] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Hingurana" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-18 09:45:10,186] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016', 'CUrW IoT', 'WeatherStation', 'Hingurana', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-18 09:45:10,186] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Hingurana', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016'}]
+[2019-06-18 09:45:10,187] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="c63f18446b83d42252c903df305c0a14622490c004cc35c1fd5d359bb0fdd016" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-18 09:00:00" 
+[2019-06-18 09:45:10,476] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Dickoya" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-18 09:45:10,710] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828', 'A&T Labs', 'WeatherStation', 'Dickoya', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-18 09:45:10,710] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Dickoya', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828'}]
+[2019-06-18 09:45:10,710] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="f2104d445b7df5ff1134ff0abb1aaf4c613af83ee454a5e6990022e2f6482828" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-18 09:00:00" 
+[2019-06-18 09:45:11,016] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Waga" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-18 09:45:11,253] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c', 'A&T Labs', 'WeatherStation', 'Waga', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-18 09:45:11,254] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Waga', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c'}]
+[2019-06-18 09:45:11,254] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="7faf3000db22cd73e09590f00a739e8a361d838cca49c2ba899aa3e6f4809e2c" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-18 09:00:00" 
+[2019-06-18 09:45:11,485] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Urumewella" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-18 09:45:11,717] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('0af5ecec986be44699e267415799b8b349eeb4e4925881a9fad5cf47fa8f3019', 'A&T Labs', 'WeatherStation', 'Urumewella', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-18 09:45:11,718] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Urumewella', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '0af5ecec986be44699e267415799b8b349eeb4e4925881a9fad5cf47fa8f3019'}]
+[2019-06-18 09:45:11,718] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="0af5ecec986be44699e267415799b8b349eeb4e4925881a9fad5cf47fa8f3019" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-18 09:00:00" 
+[2019-06-18 09:45:12,099] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7fb275d8ccf8>
+[2019-06-18 09:45:12,099] {env.py:225} DEBUG - Starting outermost env
+[2019-06-18 09:45:12,099] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-18 09:45:12,099] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7fb24e6f69e8> created
+[2019-06-18 09:45:12,100] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-18 09:45:12,100] {env.py:280} DEBUG - All drivers registered.
+[2019-06-18 09:45:12,100] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-18 09:45:12,100] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-18 09:45:12,101] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7fb24e6f69e8>.
+[2019-06-18 09:45:12,101] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7fb24e6f69e8> with options {}
+[2019-06-18 09:45:12,101] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7fb275d8ccf8>
+[2019-06-18 09:45:12,292] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-18 09:45:12,328] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-18 09:45:12,329] {collection.py:256} DEBUG - Index: 0
+[2019-06-18 09:45:12,351] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-18 09:45:12,352] {collection.py:447} DEBUG - Stopped session
+[2019-06-18 09:45:12,352] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7fb275d8ccf8>
+[2019-06-18 09:45:12,352] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7fb24e6f69e8> options
+[2019-06-18 09:45:12,352] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7fb24e6f69e8>.
+[2019-06-18 09:45:12,353] {env.py:316} DEBUG - Error handler popped.
+[2019-06-18 09:45:12,353] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7fb24e6f69e8>.
+[2019-06-18 09:45:12,353] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-18 09:45:12,353] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7fb275d8ccf8>
+[2019-06-18 09:45:12,461] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kottawa North Dharmapala School" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-18 09:45:12,696] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c', 'Leecom', 'WeatherStation', 'Kottawa North Dharmapala School', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-18 09:45:12,696] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kottawa North Dharmapala School', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': 'aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c'}]
+[2019-06-18 09:45:12,696] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="aeddcaddfe82d0abb1c8434f5e82933aa3ff3c63aa55bf80ba87b212aba58d8c" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-18 09:00:00" 
+[2019-06-18 09:45:13,047] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="IBATTARA2" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="CUrW IoT" 
+[2019-06-18 09:45:13,281] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd', 'CUrW IoT', 'WeatherStation', 'IBATTARA2', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-18 09:45:13,282] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'IBATTARA2', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'CUrW IoT', 'id': 'b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd'}]
+[2019-06-18 09:45:13,282] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="b7751a87e5ef0b31bc57a1809459dde62e80a1d908a60e8ee10358603b3141fd" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-18 09:00:00" 
+[2019-06-18 09:45:13,557] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Malabe" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-18 09:45:13,792] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a', 'A&T Labs', 'WeatherStation', 'Malabe', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-18 09:45:13,793] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Malabe', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': '198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a'}]
+[2019-06-18 09:45:13,793] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="198e7bfa7c80a03e4fa2d5c8caebf4701cdc924b9de6990c7795256ed119824a" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-18 09:00:00" 
+[2019-06-18 09:45:14,024] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Kotikawatta" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="Leecom" 
+[2019-06-18 09:45:14,256] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8', 'Leecom', 'WeatherStation', 'Kotikawatta', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-18 09:45:14,257] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Kotikawatta', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'Leecom', 'id': '1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8'}]
+[2019-06-18 09:45:14,257] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="1ce1d5b46adc69d29c3dfde3f0f956d06050792827d4340cabd1079162c6bff8" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-18 09:00:00" 
+[2019-06-18 09:45:14,534] {mysqladapter.py:343} DEBUG - sql (get_event_ids):: SELECT `id` as `id`,`name` as `name`,`source` as `source`,`station` as `station`,`type` as `type`,`unit` as `unit`,`variable` as `variable` FROM `run_view` WHERE `station`="Mulleriyawa" AND `variable`="Precipitation" AND `unit`="mm" AND `type`="Observed" AND `source`="WeatherStation" AND `name`="A&T Labs" 
+[2019-06-18 09:45:14,767] {mysqladapter.py:346} DEBUG - Events (get_event_ids):: (('da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01', 'A&T Labs', 'WeatherStation', 'Mulleriyawa', 'Observed', 'mm', 'Precipitation'),)
+[2019-06-18 09:45:14,767] {mysqladapter.py:414} DEBUG - event_ids :: [{'station': 'Mulleriyawa', 'variable': 'Precipitation', 'unit': 'mm', 'type': 'Observed', 'source': 'WeatherStation', 'name': 'A&T Labs', 'id': 'da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01'}]
+[2019-06-18 09:45:14,768] {mysqladapter.py:430} DEBUG - sql (retrieve_timeseries):: SELECT `time`,`value` FROM `data` WHERE `id`="da0fd39ffc9aadf4ed9f027994470123dce48b7a52ec7ed2139b07b2beac5f01" AND `time`>="2019-06-15 00:00:00" AND `time`<="2019-06-18 09:00:00" 
+[2019-06-18 09:45:15,035] {env.py:223} DEBUG - Entering env context: <fiona.env.Env object at 0x7fb24e6f6c18>
+[2019-06-18 09:45:15,036] {env.py:225} DEBUG - Starting outermost env
+[2019-06-18 09:45:15,036] {env.py:275} DEBUG - No GDAL environment exists
+[2019-06-18 09:45:15,036] {env.py:279} DEBUG - New GDAL environment <fiona._env.GDALEnv object at 0x7fb24e64c7f0> created
+[2019-06-18 09:45:15,036] {env.py:280} DEBUG - Logging error handler pushed.
+[2019-06-18 09:45:15,037] {env.py:280} DEBUG - All drivers registered.
+[2019-06-18 09:45:15,037] {env.py:280} DEBUG - GDAL_DATA found in environment: '/home/hasitha/PycharmProjects/Workflow/venv/lib/python3.6/site-packages/fiona/gdal_data'.
+[2019-06-18 09:45:15,037] {env.py:280} DEBUG - PROJ data files are available at built-in paths
+[2019-06-18 09:45:15,037] {env.py:280} DEBUG - Started GDALEnv <fiona._env.GDALEnv object at 0x7fb24e64c7f0>.
+[2019-06-18 09:45:15,037] {env.py:302} DEBUG - Updated existing <fiona._env.GDALEnv object at 0x7fb24e64c7f0> with options {}
+[2019-06-18 09:45:15,037] {env.py:248} DEBUG - Entered env context: <fiona.env.Env object at 0x7fb24e6f6c18>
+[2019-06-18 09:45:15,042] {collection.py:212} DEBUG - Got coordinate system
+[2019-06-18 09:45:15,042] {collection.py:219} DEBUG - Got coordinate system
+[2019-06-18 09:45:15,043] {collection.py:256} DEBUG - Index: 0
+[2019-06-18 09:45:15,045] {collection.py:445} DEBUG - Flushed buffer
+[2019-06-18 09:45:15,045] {collection.py:447} DEBUG - Stopped session
+[2019-06-18 09:45:15,046] {env.py:252} DEBUG - Exiting env context: <fiona.env.Env object at 0x7fb24e6f6c18>
+[2019-06-18 09:45:15,046] {env.py:315} DEBUG - Cleared existing <fiona._env.GDALEnv object at 0x7fb24e64c7f0> options
+[2019-06-18 09:45:15,046] {env.py:316} DEBUG - Stopping GDALEnv <fiona._env.GDALEnv object at 0x7fb24e64c7f0>.
+[2019-06-18 09:45:15,046] {env.py:316} DEBUG - Error handler popped.
+[2019-06-18 09:45:15,046] {env.py:316} DEBUG - Stopped GDALEnv <fiona._env.GDALEnv object at 0x7fb24e64c7f0>.
+[2019-06-18 09:45:15,046] {env.py:258} DEBUG - Exiting outermost env
+[2019-06-18 09:45:15,046] {env.py:267} DEBUG - Exited env context: <fiona.env.Env object at 0x7fb24e6f6c18>
+[2019-06-18 13:17:10,840] {sim_raincsv.py:131} ERROR - rainfall csv file generation error: __init__() got an unexpected keyword argument 'user'
