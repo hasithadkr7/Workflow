@@ -4,9 +4,9 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 
 
-prod_dag_name = 'flo2d-250m-dag'
+prod_dag_name = 'flo2d-150m-dag'
 queue = 'default'
-schedule_interval = '20 * * * *'
+schedule_interval = '20 */4 * * *'
 dag_pool = 'curw_prod_runs'
 
 
@@ -27,19 +27,19 @@ default_args = {
 dag = DAG(
     prod_dag_name,
     default_args=default_args,
-    description='Run Flo2d 250m DAG',
+    description='Run Flo2d 150m DAG',
     schedule_interval=schedule_interval)
 
 
-create_raincell_cmd = 'curl -X GET "http://10.138.0.4:8088/create-sim-raincell?run_date={{ macros.ds_add(ds, -1) }}&run_time={{ execution_date.strftime(\"%H:00:00\") }}&forward=3&backward=2"'
+create_raincell_cmd = 'echo "create_raincell_cmd"'
 
-create_inflow_cmd = 'curl -X GET "http://10.138.0.4:8088/create-inflow?run_date={{ macros.ds_add(ds, -1) }}&run_time={{ execution_date.strftime(\"%H:00:00\") }}"'
+create_inflow_cmd = 'echo "create_inflow_cmd"'
 
-create_outflow_cmd = 'curl -X GET "http://10.138.0.4:8088/create-outflow?run_date={{ macros.ds_add(ds, -1) }}&run_time={{ execution_date.strftime(\"%H:00:00\") }}&forward=3&backward=2"'
+create_outflow_cmd = 'echo "create_outflow_cmd"'
 
-run_flo2d_250m_cmd = 'curl -X GET "http://10.138.0.4:8088/run-flo2d?run_date={{ macros.ds_add(ds, -1) }}&run_time={{ execution_date.strftime(\"%H:00:00\") }}"'
+run_flo2d_150m_cmd = 'echo "run_flo2d_150m_cmd"'
 
-extract_water_level_cmd = 'curl -X GET "http://10.138.0.4:8088/extract-data?run_date={{ macros.ds_add(ds, -1) }}&run_time={{ execution_date.strftime(\"%H:00:00\") }}"'
+extract_water_level_cmd = 'echo "extract_water_level_cmd"'
 
 
 create_raincell = BashOperator(
@@ -63,9 +63,9 @@ create_outflow = BashOperator(
     pool=dag_pool,
 )
 
-run_flo2d_250m = BashOperator(
-    task_id='run_flo2d_250m',
-    bash_command=run_flo2d_250m_cmd,
+run_flo2d_150m = BashOperator(
+    task_id='run_flo2d_150m',
+    bash_command=run_flo2d_150m_cmd,
     dag=dag,
     pool=dag_pool,
 )
@@ -78,5 +78,5 @@ extract_water_level = BashOperator(
 )
 
 
-create_raincell >> create_inflow >> create_outflow >> run_flo2d_250m >> extract_water_level
+create_raincell >> create_inflow >> create_outflow >> run_flo2d_150m >> extract_water_level
 
