@@ -21,7 +21,7 @@ USERNAME = CURW_FCST_USERNAME
 PASSWORD = CURW_FCST_PASSWORD
 HOST = CURW_FCST_HOST
 PORT = CURW_FCST_PORT
-DATABASE = "test_schema"
+DATABASE = "curw_fcst"
 
 
 def read_attribute_from_config_file(attribute, config, compulsory):
