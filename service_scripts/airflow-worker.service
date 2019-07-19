@@ -12,14 +12,12 @@
 # limitations under the License.
 [Unit]
 Description=Airflow celery worker daemon
-After=network.target postgresql.service mysql.service redis.service rabbitmq-server.service
-Wants=postgresql.service mysql.service redis.service rabbitmq-server.service
 [Service]
 EnvironmentFile=/etc/sysconfig/airflow
-User=airflow
-Group=airflow
+User=uwcc-admin
+Group=uwcc-admin
 Type=simple
-ExecStart=/usr/bin/bash -c ‘source /home/airflow/virtualenv/bin/activate ; airflow worker’
+ExecStart=/usr/bin/bash -c ‘source /home/uwcc-admin/airflow_home/venv/bin/activate ; airflow worker’
 Restart=on-failure
 RestartSec=42s
 [Install]

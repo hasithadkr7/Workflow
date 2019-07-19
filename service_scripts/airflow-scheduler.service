@@ -12,14 +12,11 @@
 # limitations under the License.
 [Unit]
 Description=Airflow scheduler daemon
-After=network.target postgresql.service mysql.service redis.service rabbitmq-server.service
-Wants=postgresql.service mysql.service redis.service rabbitmq-server.service
 [Service]
-EnvironmentFile=/etc/sysconfig/airflow
-User=airflow
-Group=airflow
+User=uwcc-admin
+Group=uwcc-admin
 Type=simple
-ExecStart=/usr/bin/bash -c ‘source /home/airflow/virtualenv/bin/activate ; airflow scheduler -n ${SCHEDULER_RUNS}’
+ExecStart=/bin/bash -c "source /home/uwcc-admin/airflow_home/venv/bin/activate ; airflow scheduler’
 KillMode=process
 Restart=always
 RestartSec=5s

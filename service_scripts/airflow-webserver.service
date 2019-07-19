@@ -12,15 +12,12 @@
 # limitations under the License.
 [Unit]
 Description=Airflow webserver daemon
-After=network.target postgresql.service mysql.service redis.service rabbitmq-server.service
-Wants=postgresql.service mysql.service redis.service rabbitmq-server.service
 [Service]
-PIDFile=/run/airflow/webserver.pid
-EnvironmentFile=/etc/sysconfig/airflow
-User=airflow
-Group=airflow
+PIDFile=/home/uwcc-admin/airflow_home/airflow/webserver.pid
+User=uwcc-admin
+Group=uwcc-admin
 Type=forking
-ExecStart=/usr/bin/bash -c ‘source /home/airflow/virtualenv/bin/activate ; airflow webserver — pid /run/airflow/webserver.pid’
+ExecStart=/usr/bin/bash -c 'source /home/uwcc-admin/airflow_home/venv/bin/activate ; airflow initdb; airflow webserver'
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
 Restart=on-failure
