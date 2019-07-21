@@ -16,7 +16,6 @@
 0 23 * * * /mnt/disks/wrf-mod/gsmap.sh > /mnt/disks/wrf-mod/gsmap.log
 15 23 * * * /mnt/disks/wrf-mod/wrf.sh > /mnt/disks/wrf-mod/wrf.log
 
-
 # push wrf-model data to curw db at 23 everyday
 #15 18 * * * /home/uwcc-admin/wrf-model-data-pusher/runner.sh >> /home/uwcc-admin#/wrf-model-data-pusher/cronjob.log
 
