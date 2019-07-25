@@ -18,7 +18,6 @@ User=uwcc-admin
 Group=uwcc-admin
 Type=simple
 ExecStart=/bin/bash -c "source /home/uwcc-admin/airflow_home/venv/bin/activate ; /home/uwcc-admin/airflow_home/venv/bin/airflow scheduler --pid /home/uwcc-admin/airflow_home/airflow/airflow-scheduler.pid"
-KillMode=process
 Restart=always
 RestartSec=5s
 [Install]
