@@ -43,6 +43,10 @@ upload_discharge_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostK
                     "\'bash -c \"/home/uwcc-admin/hechms_hourly/upload_discharge_data.sh " \
                     "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
 
+upload_discharge_curw_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostKeyChecking no\" uwcc-admin@10.138.0.3 " \
+                    "\'bash -c \"/home/uwcc-admin/hechms_hourly/upload_discharge_data_curw.sh " \
+                    "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
+
 create_rainfall = BashOperator(
     task_id='create_rainfall',
     bash_command=create_rainfall_cmd,
@@ -64,5 +68,12 @@ upload_discharge = BashOperator(
     pool=dag_pool,
 )
 
-create_rainfall >> run_hechms >> upload_discharge
+upload_discharge_curw = BashOperator(
+    task_id='upload_discharge_curw',
+    bash_command=upload_discharge_curw_cmd,
+    dag=dag,
+    pool=dag_pool,
+)
+
+create_rainfall >> run_hechms >> upload_discharge >> upload_discharge_curw
 

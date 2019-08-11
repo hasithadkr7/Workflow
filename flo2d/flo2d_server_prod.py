@@ -8,8 +8,8 @@ from curw_sim.gen_raincell_curw_sim import create_sim_hybrid_raincell
 from inflowdat.get_inflow import create_inflow
 from outflowdat.gen_outflow import create_outflow
 from flo2d.run_model import execute_flo2d_250m, flo2d_model_completed
-# from waterlevel.upload_waterlevel import upload_waterlevels_curw
-from extract.extract_water_level_hourly_run import upload_waterlevels_curw
+from waterlevel.upload_waterlevel import upload_waterlevels_curw
+from extract.extract_water_level_hourly_run import upload_waterlevels
 from os.path import join as pjoin
 from datetime import datetime, timedelta
 
@@ -27,7 +27,6 @@ def set_daily_dir(run_date, run_time):
             os.makedirs(dir_path)
         except OSError as e:
             print(str(e))
-
     print('set_daily_dir|dir_path : ', dir_path)
     return dir_path
 
@@ -198,7 +197,33 @@ class StoreHandler(BaseHTTPRequestHandler):
                 ts_start_date = ts_start_date.strftime('%Y-%m-%d')
                 ts_start_time = '00:00:00'
                 #upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
-                upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time, run_date, '00:00:00')
+                upload_waterlevels(dir_path, ts_start_date, ts_start_time, run_date, run_time)
+                response = {'response': 'success'}
+            except Exception as e:
+                print(str(e))
+            reply = json.dumps(response)
+            self.send_response(200)
+            self.send_header('Content-type', 'text/json')
+            self.end_headers()
+            self.wfile.write(str.encode(reply))
+
+        if self.path.startswith('/extract-curw'):
+            os.chdir(r"D:\flo2d_hourly")
+            print('extract-data')
+            response = {}
+            try:
+                query_components = parse_qs(urlparse(self.path).query)
+                print('query_components : ', query_components)
+                [run_date] = query_components["run_date"]
+                [run_time] = query_components["run_time"]
+                dir_path = set_daily_dir(run_date, run_time)
+                backward = '2'
+                forward = '3'
+                duration_days = (int(backward), int(forward))
+                ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
+                ts_start_date = ts_start_date.strftime('%Y-%m-%d')
+                ts_start_time = '00:00:00'
+                upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))

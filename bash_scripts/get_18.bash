@@ -18,6 +18,7 @@ if [ -f ${datafile} ];
 then
  find2=`find ./ -size 0 | grep ${rundate}`
  echo $find2
+ # shellcheck disable=SC1035
  if [ !-e ${find2}  ]; then
     echo "Data already there";
     exit;
@@ -44,6 +45,7 @@ echo Downloading $DataName
 wget ${DataLink}/${DataName} -O ./${rundate}.${DataName} 
 find3=`find ./ -size 0 | grep ${rundate}`
 echo $find3
+# shellcheck disable=SC1035
 if [ !-e ${find3}  ]; then
 DN=$(( $DN+3 )) 
 else
