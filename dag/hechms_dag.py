@@ -3,12 +3,10 @@ import airflow
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 
-
 prod_dag_name = 'hec-hms-dag'
 queue = 'default'
 schedule_interval = '10 * * * *'
 dag_pool = 'curw_prod_runs'
-
 
 default_args = {
     'owner': 'curwsl admin',
@@ -27,25 +25,24 @@ default_args = {
 dag = DAG(
     prod_dag_name,
     default_args=default_args,
-    description='Run HecHms DAG',
+    description='Run HecHms DAG using curw_sim db',
     schedule_interval=schedule_interval)
 
-
 create_rainfall_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostKeyChecking no\" uwcc-admin@10.138.0.3 " \
-                    "\'bash -c \"/home/uwcc-admin/hechms_hourly/gen_rainfall_csv.sh " \
-                    "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
+                      "\'bash -c \"/home/uwcc-admin/hechms_hourly/gen_rainfall_csv.sh " \
+                      "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
 
 run_hechms_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostKeyChecking no\" uwcc-admin@10.138.0.3 " \
-                    "\'bash -c \"/home/uwcc-admin/hechms_hourly/hec_hms_runner.sh " \
-                    "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
+                 "\'bash -c \"/home/uwcc-admin/hechms_hourly/hec_hms_runner.sh " \
+                 "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
 
 upload_discharge_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostKeyChecking no\" uwcc-admin@10.138.0.3 " \
-                    "\'bash -c \"/home/uwcc-admin/hechms_hourly/upload_discharge_data.sh " \
-                    "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
+                       "\'bash -c \"/home/uwcc-admin/hechms_hourly/upload_discharge_data.sh " \
+                       "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
 
 upload_discharge_curw_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostKeyChecking no\" uwcc-admin@10.138.0.3 " \
-                    "\'bash -c \"/home/uwcc-admin/hechms_hourly/upload_discharge_data_curw.sh " \
-                    "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
+                            "\'bash -c \"/home/uwcc-admin/hechms_hourly/upload_discharge_data_curw.sh " \
+                            "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
 
 create_rainfall = BashOperator(
     task_id='create_rainfall',
@@ -76,4 +73,3 @@ upload_discharge_curw = BashOperator(
 )
 
 create_rainfall >> run_hechms >> upload_discharge >> upload_discharge_curw
-
