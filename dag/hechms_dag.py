@@ -30,19 +30,23 @@ dag = DAG(
 
 create_rainfall_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostKeyChecking no\" uwcc-admin@10.138.0.3 " \
                       "\'bash -c \"/home/uwcc-admin/hechms_hourly/gen_rainfall_csv.sh " \
-                      "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
+                      "-d {{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }} " \
+                      "-t {{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }} \" \'"
 
 run_hechms_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostKeyChecking no\" uwcc-admin@10.138.0.3 " \
                  "\'bash -c \"/home/uwcc-admin/hechms_hourly/hec_hms_runner.sh " \
-                 "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
+                 "-d {{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }} " \
+                 "-t {{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }} \" \'"
 
 upload_discharge_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostKeyChecking no\" uwcc-admin@10.138.0.3 " \
                        "\'bash -c \"/home/uwcc-admin/hechms_hourly/upload_discharge_data.sh " \
-                       "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
+                       "-d {{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}" \
+                       "-t {{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }} \" \'"
 
 upload_discharge_curw_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostKeyChecking no\" uwcc-admin@10.138.0.3 " \
                             "\'bash -c \"/home/uwcc-admin/hechms_hourly/upload_discharge_data_curw.sh " \
-                            "-d {{ macros.ds_add(ds, -1) }} -t {{ execution_date.strftime(\"%H:00:00\") }} \" \'"
+                            "-d {{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }} " \
+                            "-t {{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }} \" \'"
 
 create_rainfall = BashOperator(
     task_id='create_rainfall',
