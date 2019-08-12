@@ -67,7 +67,7 @@ class CurwSimAdapter:
             return None
 
     def get_station_timeseries(self, timeseries_start, timeseries_end, station_name, source, model='hechms',
-                               value_interpolation='MME', grid_interpolation='MDPA', acceppted_error=20):
+                               value_interpolation='MME', grid_interpolation='MDPA', acceppted_error=30):
         cursor = self.cursor
         try:
             grid_id = 'rainfall_{}_{}_{}'.format(source, station_name, grid_interpolation)
