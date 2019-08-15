@@ -124,6 +124,18 @@
       "event_type": "Observed",
       "source": "WeatherStation",
       "fcst_id": "1104389"
+    },
+    "Urumewella": {
+      "lon_lat": [
+        80.348785,
+        7.079348
+      ],
+      "run_name": "A&T Labs",
+      "variable": "Precipitation",
+      "unit": "mm",
+      "event_type": "Observed",
+      "source": "WeatherStation",
+      "fcst_id": ""
     }
   }
 }
