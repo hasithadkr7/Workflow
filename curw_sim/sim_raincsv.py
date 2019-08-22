@@ -9,19 +9,11 @@ import getopt
 from datetime import datetime, timedelta
 from db_layer import CurwSimAdapter
 import pkg_resources
-import logging
 import numpy as np
 from scipy.spatial import Voronoi
 from shapely.geometry import Polygon, Point
 import geopandas as gpd
 import pandas as pd
-
-LOG_FORMAT = '[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s'
-logging.basicConfig(filename='/home/uwcc-admin/hechms_hourly/Workflow/curw_sim/sim_rainfall.log',
-                        level=logging.DEBUG,
-                        format=LOG_FORMAT)
-log = logging.getLogger()
-
 
 def get_resource_path(resource):
     res = pkg_resources.resource_filename(__name__, resource)
@@ -556,4 +548,3 @@ try:
                 mean_df.to_csv(f, header=False)
 except Exception as e:
     print('rainfall csv file generation error: {}'.format(str(e)))
-

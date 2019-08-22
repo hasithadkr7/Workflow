@@ -1,15 +1,7 @@
-import logging
-
 import mysql.connector
 import pandas as pd
 from datetime import datetime, timedelta
 from decimal import Decimal
-
-LOG_FORMAT = '[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s'
-logging.basicConfig(filename='/home/uwcc-admin/hechms_hourly/Workflow/curw_sim/db_layer.log',
-                    level=logging.DEBUG,
-                    format=LOG_FORMAT)
-log = logging.getLogger()
 
 
 class CurwSimAdapter:
@@ -34,13 +26,13 @@ class CurwSimAdapter:
         cursor = self.cursor
         try:
             sql = 'select id,obs_end from curw_sim.run where model=\'{}\' and method=\'{}\' '.format(model, method)
-            log.info('sql : ', sql)
+            print('sql : ', sql)
             cursor.execute(sql)
             results = cursor.fetchall()
             for row in results:
                 id_date_list.append([row[0], row[1]])
         except Exception as e:
-            log.error('save_init_state|Exception:', e)
+            print('save_init_state|Exception:', e)
         finally:
             return id_date_list
 
@@ -50,13 +42,13 @@ class CurwSimAdapter:
         try:
             sql = 'select id,grid_id,obs_end from curw_sim.run where model=\'{}\' and method=\'{}\' '.format(model,
                                                                                                              method)
-            log.info('sql : ', sql)
+            print('sql : ', sql)
             cursor.execute(sql)
             results = cursor.fetchall()
             for row in results:
                 id_date_list.append({'hash_id': row[0], 'grid_id': row[1], 'obs_end': row[2]})
         except Exception as e:
-            log.error('save_init_state|Exception:', e)
+            print('save_init_state|Exception:', e)
         finally:
             return id_date_list
 
@@ -73,7 +65,7 @@ class CurwSimAdapter:
             else:
                 return None
         except Exception as e:
-            log.error('get_cell_timeseries|Exception:', e)
+            print('get_cell_timeseries|Exception:', e)
             return None
 
     def get_station_timeseries(self, timeseries_start, timeseries_end, station_name, source, model='hechms',
@@ -83,16 +75,16 @@ class CurwSimAdapter:
             grid_id = 'rainfall_{}_{}_{}'.format(source, station_name, grid_interpolation)
             sql = 'select id, obs_end from curw_sim.run where model=\'{}\' and method=\'{}\'  and grid_id=\'{}\''.format(
                 model, value_interpolation, grid_id)
-            log.info('sql : ', sql)
+            print('sql : ', sql)
             cursor.execute(sql)
             result = cursor.fetchone()
             if result:
                 hash_id = result[0]
-                log.info('hash_id : ', hash_id)
+                print('hash_id : ', hash_id)
                 data_sql = 'select time,value from curw_sim.data where time>=\'{}\' and time<=\'{}\' and id=\'{}\' '.format(
                     timeseries_start, timeseries_end, hash_id)
                 try:
-                    log.info('data_sql : ', data_sql)
+                    print('data_sql : ', data_sql)
                     cursor.execute(data_sql)
                     results = cursor.fetchall()
                     # print('results : ', results)
@@ -100,19 +92,18 @@ class CurwSimAdapter:
                         time_step_count = int((datetime.strptime(timeseries_end, '%Y-%m-%d %H:%M:%S')
                                                - datetime.strptime(timeseries_start,
                                                                    '%Y-%m-%d %H:%M:%S')).total_seconds() / (60 * 5))
-                        log.info('timeseries_start : ', timeseries_start)
-                        log.info('timeseries_end : ', timeseries_end)
-                        log.info('time_step_count : ', time_step_count)
-                        log.info('len(results) : ', len(results))
+                        print('timeseries_start : {}'.format(timeseries_start))
+                        print('timeseries_end : {}'.format(timeseries_end))
+                        print('time_step_count : {}'.format(time_step_count))
+                        print('len(results) : {}'.format(len(results)))
                         data_error = ((time_step_count - len(results)) / time_step_count) * 100
-                        log.info('data_error : ', data_error)
+                        print('data_error : {}'.format(data_error))
 
                         if data_error < 1:
                             df = pd.DataFrame(data=results, columns=['time', 'value']).set_index(keys='time')
-                            print('get_station_timeseries|df: ', df)
                             return df
                         elif data_error <= acceppted_error:
-                            log.info('filling missing data.')
+                            print('filling missing data.')
                             formatted_ts = []
                             i = 0
                             for step in range(time_step_count):
@@ -126,19 +117,19 @@ class CurwSimAdapter:
                             print('get_station_timeseries|df: ', df)
                             return df
                         else:
-                            log.error('Missing data.')
+                            print('Missing data.')
                             return None
                     else:
-                        log.error('No data.')
+                        print('No data.')
                         return None
                 except Exception as e:
-                    log.error('get_station_timeseries|data fetch|Exception:', e)
+                    print('get_station_timeseries|data fetch|Exception:', e)
                     return None
             else:
-                log.error('No hash id.')
+                print('No hash id.')
                 return None
         except Exception as e:
-            log.error('get_station_timeseries|Exception:', e)
+            print('get_station_timeseries|Exception:', e)
             return None
 
 
@@ -186,11 +177,11 @@ class CurwFcstAdapter:
                         if len(results) > 0:
                             fcst_ts[station_id] = pd.DataFrame(data=results, columns=['time', 'value'])
                     except Exception as e:
-                        log.error('Exception:', str(e))
+                        print('Exception:', str(e))
                 return fcst_ts
             else:
                 return None
         except Exception as e:
-            log.error('save_init_state|Exception:', e)
+            print('save_init_state|Exception:', e)
             return None
 
