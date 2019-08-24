@@ -136,6 +136,30 @@
       "event_type": "Observed",
       "source": "WeatherStation",
       "fcst_id": ""
+    },
+    "Dickoya": {
+      "lon_lat": [
+        80.603120,
+        6.872200
+      ],
+      "run_name": "A&T Labs",
+      "variable": "Precipitation",
+      "unit": "mm",
+      "event_type": "Observed",
+      "source": "WeatherStation",
+      "fcst_id": ""
+    },
+    "Waga": {
+      "lon_lat": [
+        80.118275,
+        6.906780
+      ],
+      "run_name": "Leecom",
+      "variable": "Precipitation",
+      "unit": "mm",
+      "event_type": "Observed",
+      "source": "WeatherStation",
+      "fcst_id": ""
     }
   }
 }

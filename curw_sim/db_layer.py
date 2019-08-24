@@ -69,7 +69,7 @@ class CurwSimAdapter:
             return None
 
     def get_station_timeseries(self, timeseries_start, timeseries_end, station_name, source, model='hechms',
-                               value_interpolation='MME', grid_interpolation='MDPA', acceppted_error=30):
+                               value_interpolation='MME', grid_interpolation='MDPA', acceppted_error=40):
         cursor = self.cursor
         try:
             grid_id = 'rainfall_{}_{}_{}'.format(source, station_name, grid_interpolation)
@@ -97,12 +97,11 @@ class CurwSimAdapter:
                         print('time_step_count : {}'.format(time_step_count))
                         print('len(results) : {}'.format(len(results)))
                         data_error = ((time_step_count - len(results)) / time_step_count) * 100
-                        print('data_error : {}'.format(data_error))
-
                         if data_error < 1:
                             df = pd.DataFrame(data=results, columns=['time', 'value']).set_index(keys='time')
                             return df
                         elif data_error <= acceppted_error:
+                            print('data_error : {}'.format(data_error))
                             print('filling missing data.')
                             formatted_ts = []
                             i = 0
