@@ -48,6 +48,12 @@ upload_discharge_curw_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"Strict
                             "-d {{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }} " \
                             "-t {{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }} \" \'"
 
+create_mike_input_cmd = "ssh -i /home/uwcc-admin/.ssh/uwcc-admin -o \"StrictHostKeyChecking no\" uwcc-admin@10.138.0.3 " \
+                            "\'bash -c \"/home/uwcc-admin/hechms_hourly/upload_discharge_data_curw.sh " \
+                            "-d {{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }} " \
+                            "-t {{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }} \" " \
+                            " -f 2 -b 3 -m \'individual\' \'"
+
 create_rainfall = BashOperator(
     task_id='create_rainfall',
     bash_command=create_rainfall_cmd,
@@ -76,4 +82,11 @@ upload_discharge_curw = BashOperator(
     pool=dag_pool,
 )
 
-create_rainfall >> run_hechms >> upload_discharge >> upload_discharge_curw
+create_mike_input = BashOperator(
+    task_id='create_mike_input',
+    bash_command=create_mike_input_cmd,
+    dag=dag,
+    pool=dag_pool,
+)
+
+create_rainfall >> run_hechms >> upload_discharge >> upload_discharge_curw >> create_mike_input
