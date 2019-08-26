@@ -15,6 +15,7 @@ from shapely.geometry import Polygon, Point
 import geopandas as gpd
 import pandas as pd
 
+
 def get_resource_path(resource):
     res = pkg_resources.resource_filename(__name__, resource)
     if os.path.exists(res):
