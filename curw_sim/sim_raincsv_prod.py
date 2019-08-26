@@ -360,7 +360,7 @@ class KLBObservationMean:
 
         return station_fractions
 
-    def calc_klb_mean(self, timerseries_dict, normalizing_factor='H', filler=0.0, precision_decimal_points=3):
+    def calc_klb_mean(self, hourly_csv_file_dir, timerseries_dict, normalizing_factor='H', filler=0.0, precision_decimal_points=3):
         """
         :param timeseries: dict of (station_name: dict_inside) pairs. dict_inside should have
             ('lon_lat': [lon, lat]) and ('timeseries': pandas df with time(index), value columns)
@@ -378,6 +378,9 @@ class KLBObservationMean:
             # tms = timerseries_dict[key]['timeseries'].astype('float').resample(normalizing_factor).sum()
             tms = timerseries_dict[key]['timeseries'].astype('float')
             # Rename coulmn_name 'value' to its own staion_name.
+            file_name = '{}_rain.csv'.format(key)
+            full_path = os.path.join(hourly_csv_file_dir, file_name)
+            tms.to_csv(full_path, header=False)
             tms = tms.rename(axis='columns', mapper={'value': key})
             timerseries_list.append(tms)
 
@@ -402,7 +405,7 @@ class KLBObservationMean:
         matrix.fillna(value=np.round(filler, precision_decimal_points), inplace=True, axis='columns')
 
         station_fractions = self.calc_station_fraction(stations)
-
+        print('station_fractions : ', station_fractions)
         # Make sure only the required station weights remain in the station_fractions, else raise ValueError.
         matrix_station_list = list(matrix.columns.values)
         weights_station_list = list(station_fractions.keys())
@@ -458,11 +461,11 @@ def get_kub_mean(db_adapter, stations, ts_start, ts_end):
         return pd.DataFrame(columns=['time', 'value'])
 
 
-def get_klb_mean(db_adapter, stations, ts_start, ts_end):
+def get_klb_mean(hourly_csv_file_dir, db_adapter, stations, ts_start, ts_end):
     try:
         timeseries_data = get_stations_timeseries(db_adapter, stations, ts_start, ts_end)
         klb_mean = KLBObservationMean()
-        klb_mean_timeseries = klb_mean.calc_klb_mean(timeseries_data)
+        klb_mean_timeseries = klb_mean.calc_klb_mean(hourly_csv_file_dir, timeseries_data)
         return klb_mean_timeseries
     except Exception as e:
         print('get_klb_mean|Exception : ', str(e))
@@ -536,7 +539,7 @@ try:
                                          sim_db_config['db'])
             forecast_duration = int((ts_end_datetime - ts_start_datetime).total_seconds() / (60 * time_step))
             # sim_adapter.get_station_timeseries('2019-06-16 00:00:00', '2019-06-19 23:30:00', 'Kotikawatta', 'Leecom')
-            klb_ts = get_klb_mean(sim_adapter, klb_stations, ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'),
+            klb_ts = get_klb_mean(hourly_csv_file_dir, sim_adapter, klb_stations, ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'),
                                   ts_end_datetime.strftime('%Y-%m-%d %H:%M:%S'))
             kub_ts = get_kub_mean(sim_adapter, kub_stations, ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'),
                                   ts_end_datetime.strftime('%Y-%m-%d %H:%M:%S'))
