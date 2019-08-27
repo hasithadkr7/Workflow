@@ -135,6 +135,25 @@ class CurwSimAdapter:
             print('get_station_timeseries|Exception:', e)
             return None
 
+    def get_available_stations(self, date_time, model='hechms', method='MME'):
+        available_list = []
+        print('get_available_stations|date_time : ', date_time)
+        cursor = self.cursor
+        try:
+            sql = 'select id,grid_id from curw_sim.run where model=\'{}\' and method=\'{}\'  and obs_end>=\'{}\''.format(
+                model, method, date_time)
+            print('sql : ', sql)
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            for row in results:
+                hash_id = row[0]
+                station = row[1].split('_')[2]
+                available_list.append([hash_id, station])
+        except Exception as e:
+            print('get_available_stations|Exception:', e)
+        finally:
+            return available_list
+
 
 class CurwFcstAdapter:
     def __init__(self, mysql_user, mysql_password, mysql_host, mysql_db):
