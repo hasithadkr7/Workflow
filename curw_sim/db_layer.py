@@ -140,7 +140,7 @@ class CurwSimAdapter:
         print('get_available_stations|date_time : ', date_time)
         cursor = self.cursor
         try:
-            sql = 'select id,grid_id from curw_sim.run where model=\'{}\' and method=\'{}\'  and obs_end>=\'{}\''.format(
+            sql = 'select id,grid_id, latitude, longitude from curw_sim.run where model=\'{}\' and method=\'{}\'  and obs_end>=\'{}\''.format(
                 model, method, date_time)
             print('sql : ', sql)
             cursor.execute(sql)
@@ -153,6 +153,35 @@ class CurwSimAdapter:
             print('get_available_stations|Exception:', e)
         finally:
             return available_list
+
+    def get_available_stations_info(self, date_time, model='hechms', method='MME'):
+        """
+        To get station information where it has obs_end for before the given limit
+        :param date_time: '2019-08-27 05:00:00'
+        :param model:
+        :param method:
+        :return: {station_name:{'hash_id': hash_id, 'latitude': latitude, 'longitude': longitude},
+        station_name1:{'hash_id': hash_id1, 'latitude': latitude1, 'longitude': longitude1}}
+        """
+        available_stations = {}
+        print('get_available_stations_info|date_time : ', date_time)
+        cursor = self.cursor
+        try:
+            sql = 'select id, grid_id, latitude, longitude from curw_sim.run where model=\'{}\' and method=\'{}\'  and obs_end>=\'{}\''.format(
+                model, method, date_time)
+            print('sql : ', sql)
+            cursor.execute(sql)
+            results = cursor.fetchall()
+            for row in results:
+                hash_id = row[0]
+                station = row[1].split('_')[2]
+                latitude = Decimal(row[2])
+                longitude = Decimal(row[3])
+                available_stations[station] = {'hash_id': hash_id, 'latitude': latitude, 'longitude': longitude}
+        except Exception as e:
+            print('get_available_stations_info|Exception:', e)
+        finally:
+            return available_stations
 
 
 class CurwFcstAdapter:
