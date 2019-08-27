@@ -11,7 +11,9 @@ import copy
 import pkg_resources
 import numpy as np
 from scipy.spatial import Voronoi
+import shapefile
 from shapely.geometry import Polygon, Point
+from shapely.geometry import shape
 import geopandas as gpd
 import pandas as pd
 
@@ -133,6 +135,14 @@ def _voronoi_finite_polygons_2d(vor, radius=None):
         new_regions.append(new_region.tolist())
 
     return new_regions, np.asarray(new_vertices)
+
+
+def get_available_stations_in_sub_basin(db_adapter, sub_basin, shape_file, date_time):
+    available_stations = db_adapter.get_available_stations_info(date_time)
+    if len(available_stations):
+        print('')
+    else:
+        print('')
 
 
 def get_voronoi_polygons(points_dict, shape_file, shape_attribute=None, output_shape_file=None, add_total_area=True):
