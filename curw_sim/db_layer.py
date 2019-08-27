@@ -72,7 +72,7 @@ class CurwSimAdapter:
                                value_interpolation='MME', grid_interpolation='MDPA', acceppted_error=40):
         cursor = self.cursor
         try:
-            grid_id = 'rainfall_{}_{}'.format(source, station_name, grid_interpolation)
+            grid_id = 'rainfall_{}_{}'.format(station_name, grid_interpolation)
             sql = 'select id, obs_end from curw_sim.run where model=\'{}\' and method=\'{}\'  and grid_id=\'{}\''.format(
                 model, value_interpolation, grid_id)
             print('sql : ', sql)
@@ -108,10 +108,19 @@ class CurwSimAdapter:
                             for step in range(time_step_count):
                                 tms_step = datetime.strptime(timeseries_start, '%Y-%m-%d %H:%M:%S') + timedelta(
                                     minutes=step * 5)
-                                if tms_step == results[i][0]:
-                                    formatted_ts.append(results[i])
+                                print('tms_step : ', tms_step)
+                                print('results[i][0] : ', results[i][0])
+                                if step <= len(results):
+                                    if tms_step == results[i][0]:
+                                        print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+                                        formatted_ts.append(results[i])
+                                    else:
+                                        print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+                                        formatted_ts.append((tms_step, Decimal(0)))
                                 else:
+                                    print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
                                     formatted_ts.append((tms_step, Decimal(0)))
+                                i += 1
                             df = pd.DataFrame(data=formatted_ts, columns=['time', 'value']).set_index(keys='time')
                             print('get_station_timeseries|df: ', df)
                             return df
