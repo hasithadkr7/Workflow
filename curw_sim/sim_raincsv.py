@@ -206,7 +206,7 @@ class KUBObservationMean:
                                                       precision_decimal_points)
             return station_fractions
 
-        station_fractions = {}
+        # station_fractions = {}
         total_area = 0
 
         # calculate the voronoi/thesian polygons w.r.t given station points.
@@ -214,6 +214,7 @@ class KUBObservationMean:
 
         for row in voronoi_polygons[['id', 'area']].itertuples(index=False, name=None):
             id = row[0]
+            print('voronoi_polygons id: ', id)
             area = np.round(row[1], precision_decimal_points)
             station_fractions[id] = area
             # get_voronoi_polygons calculated total might not equal to sum of the rest, thus calculating total.
