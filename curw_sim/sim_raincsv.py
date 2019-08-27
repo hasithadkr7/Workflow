@@ -4,10 +4,10 @@ import csv
 import sys
 import os
 import json
-import copy
 import getopt
 from datetime import datetime, timedelta
 from db_layer import CurwSimAdapter
+import copy
 import pkg_resources
 import numpy as np
 from scipy.spatial import Voronoi
@@ -269,6 +269,7 @@ class KUBObservationMean:
         matrix.fillna(value=np.round(filler, precision_decimal_points), inplace=True, axis='columns')
         print('4')
         station_fractions = self.calc_station_fraction(stations)
+        print('--------------------------------station_fractions : ', station_fractions)
         print('5')
         # Make sure only the required station weights remain in the station_fractions, else raise ValueError.
         matrix_station_list = list(matrix.columns.values)
@@ -285,13 +286,13 @@ class KUBObservationMean:
         weights = pd.DataFrame.from_dict(data=station_fractions, orient='index', dtype='float')
         print('9')
         weights = weights.divide(self.percentage_factor, axis='columns')
-        print('weights.shape : ', weights.shape)
-        print('matrix.shape : ', matrix.shape)
-        print('weights : ', weights)
-        print('matrix : ', matrix)
-        print('type(matrix) : ', type(matrix))
-        print('weights[0] : ', weights[0])
-        print('type(weights[0]) : ', type(weights[0]))
+        # print('weights.shape : ', weights.shape)
+        # print('matrix.shape : ', matrix.shape)
+        # print('weights : ', weights)
+        # print('matrix : ', matrix)
+        # print('type(matrix) : ', type(matrix))
+        # print('weights[0] : ', weights[0])
+        # print('type(weights[0]) : ', type(weights[0]))
         print('10')
         # kub_mean = (matrix * weights[0]).sum(axis='columns')
         # kub_mean = matrix.mul(weights[0], axis=0).sum(axis='columns')
@@ -381,9 +382,9 @@ class KLBObservationMean:
             matrix = timerseries_list[0]
         else:
             print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
-            print('len(timerseries_list): ', len(timerseries_list))
-            print('timerseries_list[0]: ', timerseries_list[0])
-            print('timerseries_list[1]: ', timerseries_list[1])
+            # print('len(timerseries_list): ', len(timerseries_list))
+            # print('timerseries_list[0]: ', timerseries_list[0])
+            # print('timerseries_list[1]: ', timerseries_list[1])
             matrix = timerseries_list[0].join(other=timerseries_list[1:len(timerseries_list)], how='outer')
 
         # Note:
@@ -395,7 +396,7 @@ class KLBObservationMean:
         matrix.fillna(value=np.round(filler, precision_decimal_points), inplace=True, axis='columns')
 
         station_fractions = self.calc_station_fraction(stations)
-
+        print('----------------------------------station_fractions : ', station_fractions)
         # Make sure only the required station weights remain in the station_fractions, else raise ValueError.
         matrix_station_list = list(matrix.columns.values)
         weights_station_list = list(station_fractions.keys())
@@ -425,7 +426,7 @@ def datetime_utc_to_lk(timestamp_utc, shift_mins=0):
     return timestamp_utc + timedelta(hours=5, minutes=30 + shift_mins)
 
 
-def get_stations_timeseries(adapter, stations, start_time, end_time):
+def get_stations_timeseries(hourly_csv_file_dir, adapter, stations, start_time, end_time):
     print('[start_time, end_time] : ', [start_time, end_time])
     timeseries_data = copy.deepcopy(stations)
     for key, value in stations.items():
@@ -435,14 +436,17 @@ def get_stations_timeseries(adapter, stations, start_time, end_time):
                 timeseries_data.pop(key, None)
             else:
                 timeseries_data[key]['timeseries'] = ts_df
+                file_name = '{}_rain.csv'.format(key)
+                full_path = os.path.join(hourly_csv_file_dir, file_name)
+                ts_df.to_csv(full_path, header=False)
         else:
             timeseries_data.pop(key, None)
     return timeseries_data
 
 
-def get_kub_mean(db_adapter, stations, ts_start, ts_end):
+def get_kub_mean(hourly_csv_file_dir, db_adapter, stations, ts_start, ts_end):
     try:
-        timeseries_data = get_stations_timeseries(db_adapter, stations, ts_start, ts_end)
+        timeseries_data = get_stations_timeseries(hourly_csv_file_dir, db_adapter, stations, ts_start, ts_end)
         kub_mean = KUBObservationMean()
         kub_mean_timeseries = kub_mean.calc_kub_mean(timeseries_data)
         return kub_mean_timeseries
@@ -451,9 +455,9 @@ def get_kub_mean(db_adapter, stations, ts_start, ts_end):
         return pd.DataFrame(columns=['time', 'value'])
 
 
-def get_klb_mean(db_adapter, stations, ts_start, ts_end):
+def get_klb_mean(hourly_csv_file_dir, db_adapter, stations, ts_start, ts_end):
     try:
-        timeseries_data = get_stations_timeseries(db_adapter, stations, ts_start, ts_end)
+        timeseries_data = get_stations_timeseries(hourly_csv_file_dir, db_adapter, stations, ts_start, ts_end)
         klb_mean = KLBObservationMean()
         klb_mean_timeseries = klb_mean.calc_klb_mean(timeseries_data)
         return klb_mean_timeseries
@@ -529,9 +533,11 @@ try:
                                          sim_db_config['db'])
             forecast_duration = int((ts_end_datetime - ts_start_datetime).total_seconds() / (60 * time_step))
             # sim_adapter.get_station_timeseries('2019-06-16 00:00:00', '2019-06-19 23:30:00', 'Kotikawatta', 'Leecom')
-            klb_ts = get_klb_mean(sim_adapter, klb_stations, ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'),
+            klb_ts = get_klb_mean(hourly_csv_file_dir, sim_adapter, klb_stations,
+                                  ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'),
                                   ts_end_datetime.strftime('%Y-%m-%d %H:%M:%S'))
-            kub_ts = get_kub_mean(sim_adapter, kub_stations, ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'),
+            kub_ts = get_kub_mean(hourly_csv_file_dir, sim_adapter, kub_stations,
+                                  ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'),
                                   ts_end_datetime.strftime('%Y-%m-%d %H:%M:%S'))
             print('klb_ts: ', klb_ts)
             print('kub_ts: ', kub_ts)
