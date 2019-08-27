@@ -140,7 +140,17 @@ def _voronoi_finite_polygons_2d(vor, radius=None):
 def get_available_stations_in_sub_basin(db_adapter, sub_basin, shape_file, date_time):
     available_stations = db_adapter.get_available_stations_info(date_time)
     if len(available_stations):
-        print('')
+        for station, info in available_stations.items():
+            point = (1234, 5678)  # an x,y tuple
+            shp = shapefile.Reader('path/to/shp')  # open the shapefile
+            all_shapes = shp.shapes()  # get all the polygons
+            all_records = shp.records()
+            for i in len(all_shapes):
+                boundary = all_shapes[i]  # get a boundary polygon
+                if Point(pt).within(shape(boundary)):  # make a point and see if it's in the polygon
+                    name = all_records[i][2]  # get the second field of the corresponding record
+                    print
+                    "The point is in", name
     else:
         print('')
 
