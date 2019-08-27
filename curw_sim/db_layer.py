@@ -108,17 +108,12 @@ class CurwSimAdapter:
                             for step in range(time_step_count):
                                 tms_step = datetime.strptime(timeseries_start, '%Y-%m-%d %H:%M:%S') + timedelta(
                                     minutes=step * 5)
-                                print('tms_step : ', tms_step)
-                                print('results[i][0] : ', results[i][0])
-                                if step <= len(results):
+                                if step < len(results):
                                     if tms_step == results[i][0]:
-                                        print('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
                                         formatted_ts.append(results[i])
                                     else:
-                                        print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
                                         formatted_ts.append((tms_step, Decimal(0)))
                                 else:
-                                    print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
                                     formatted_ts.append((tms_step, Decimal(0)))
                                 i += 1
                             df = pd.DataFrame(data=formatted_ts, columns=['time', 'value']).set_index(keys='time')
