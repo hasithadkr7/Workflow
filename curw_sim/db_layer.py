@@ -221,7 +221,7 @@ class CurwSimAdapter:
             results = cursor.fetchall()
             for row in results:
                 hash_id = row[0]
-                station = row[1].split('_')[2]
+                station = row[1].split('_')[1]
                 latitude = Decimal(row[2])
                 longitude = Decimal(row[3])
                 available_stations[station] = {'hash_id': hash_id, 'latitude': latitude, 'longitude': longitude}

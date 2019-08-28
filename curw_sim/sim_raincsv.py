@@ -445,6 +445,7 @@ def get_available_stations_in_sub_basin(db_adapter, sub_basin_shape_file, date_t
     :return: {station1:{'hash_id': hash_id1, 'latitude': latitude1, 'longitude': longitude1}, station2:{}}
     """
     available_stations = db_adapter.get_available_stations_info(date_time)
+    print('available_stations : ', available_stations)
     if len(available_stations):
         for station, info in available_stations.items():
             point = (info['latitude'], info['longitude'])  # an x,y tuple
