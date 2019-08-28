@@ -137,27 +137,6 @@ def _voronoi_finite_polygons_2d(vor, radius=None):
     return new_regions, np.asarray(new_vertices)
 
 
-def get_available_stations_in_sub_basin(db_adapter, sub_basin_shape_file, date_time):
-    available_stations = db_adapter.get_available_stations_info(date_time)
-    if len(available_stations):
-        for station, info in available_stations.items():
-            point = (info['latitude'], info['longitude'])  # an x,y tuple
-            shp = shapefile.Reader(sub_basin_shape_file)  # open the shapefile
-            all_shapes = shp.shapes()  # get all the polygons
-            all_records = shp.records()
-            for i in len(all_shapes):
-                boundary = all_shapes[i]  # get a boundary polygon
-                if Point(point).within(shape(boundary)):  # make a point and see if it's in the polygon
-                    name = all_records[i][2]  # get the second field of the corresponding record
-                    print("The point is in", name)
-                else:
-                    available_stations.pop(station)
-        return available_stations
-    else:
-        print('Not available stations..')
-        return {}
-
-
 def get_voronoi_polygons(points_dict, shape_file, shape_attribute=None, output_shape_file=None, add_total_area=True):
     """
     :param points_dict: dict of points {'id' --> [lon, lat]}
@@ -228,10 +207,7 @@ class KUBObservationMean:
                 station_fractions[station] = np.round(self.percentage_factor / len(station_list),
                                                       precision_decimal_points)
             return station_fractions
-
-        # station_fractions = {}
         total_area = 0
-
         # calculate the voronoi/thesian polygons w.r.t given station points.
         voronoi_polygons = get_voronoi_polygons(points_dict=stations, shape_file=self.shape_file, add_total_area=True)
 
@@ -310,16 +286,6 @@ class KUBObservationMean:
         weights = pd.DataFrame.from_dict(data=station_fractions, orient='index', dtype='float')
         print('9')
         weights = weights.divide(self.percentage_factor, axis='columns')
-        # print('weights.shape : ', weights.shape)
-        # print('matrix.shape : ', matrix.shape)
-        # print('weights : ', weights)
-        # print('matrix : ', matrix)
-        # print('type(matrix) : ', type(matrix))
-        # print('weights[0] : ', weights[0])
-        # print('type(weights[0]) : ', type(weights[0]))
-        print('10')
-        # kub_mean = (matrix * weights[0]).sum(axis='columns')
-        # kub_mean = matrix.mul(weights[0], axis=0).sum(axis='columns')
         kub_mean = matrix.dot(weights).sum(axis='columns')
         print('11')
         kub_mean_timeseries = kub_mean.to_frame(name='value')
@@ -393,7 +359,6 @@ class KLBObservationMean:
         for key in timerseries_dict.keys():
             stations[key] = timerseries_dict[key]['lon_lat']
             # Resample given set of timeseries.
-            # tms = timerseries_dict[key]['timeseries'].astype('float').resample(normalizing_factor).sum()
             tms = timerseries_dict[key]['timeseries'].astype('float')
             # Rename coulmn_name 'value' to its own staion_name.
             tms = tms.rename(axis='columns', mapper={'value': key})
@@ -402,13 +367,8 @@ class KLBObservationMean:
         if len(timerseries_list) <= 0:
             raise ValueError('Empty timeseries_dict given.')
         elif len(timerseries_list) == 1:
-            print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz")
             matrix = timerseries_list[0]
         else:
-            print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
-            # print('len(timerseries_list): ', len(timerseries_list))
-            # print('timerseries_list[0]: ', timerseries_list[0])
-            # print('timerseries_list[1]: ', timerseries_list[1])
             matrix = timerseries_list[0].join(other=timerseries_list[1:len(timerseries_list)], how='outer')
 
         # Note:
@@ -434,7 +394,6 @@ class KLBObservationMean:
         weights = pd.DataFrame.from_dict(data=station_fractions, orient='index', dtype='float')
         weights = weights.divide(self.percentage_factor, axis='columns')
 
-        # klb_mean = (matrix * weights[0]).sum(axis='columns')
         klb_mean = matrix.dot(weights).sum(axis='columns')
         klb_mean_timeseries = klb_mean.to_frame(name='value')
         return klb_mean_timeseries
@@ -448,6 +407,59 @@ def create_dir_if_not_exists(path):
 
 def datetime_utc_to_lk(timestamp_utc, shift_mins=0):
     return timestamp_utc + timedelta(hours=5, minutes=30 + shift_mins)
+
+
+def get_available_stations_in_sub_basin(db_adapter, sub_basin_shape_file, date_time):
+    """
+    Getting station points resides in the given shapefile
+    :param db_adapter:
+    :param sub_basin_shape_file:
+    :param date_time: '2019-08-28 11:00:00'
+    :return: {station1:{'hash_id': hash_id1, 'latitude': latitude1, 'longitude': longitude1}, station2:{}}
+    """
+    available_stations = db_adapter.get_available_stations_info(date_time)
+    if len(available_stations):
+        for station, info in available_stations.items():
+            point = (info['latitude'], info['longitude'])  # an x,y tuple
+            shp = shapefile.Reader(sub_basin_shape_file)  # open the shapefile
+            all_shapes = shp.shapes()  # get all the polygons
+            all_records = shp.records()
+            for i in len(all_shapes):
+                boundary = all_shapes[i]  # get a boundary polygon
+                if Point(point).within(shape(boundary)):  # make a point and see if it's in the polygon
+                    name = all_records[i][2]  # get the second field of the corresponding record
+                    print("The point is in ", name)
+                else:
+                    available_stations.pop(station)
+        return available_stations
+    else:
+        print('Not available stations..')
+        return {}
+
+
+def get_basin_available_stations_timeseries(shape_file, hourly_csv_file_dir, adapter, start_time, end_time):
+    """
+    Add time series to the given available station list.
+    :param shape_file:
+    :param hourly_csv_file_dir:
+    :param adapter:
+    :param start_time: '2019-08-28 11:00:00'
+    :param end_time: '2019-08-28 11:00:00'
+    :return: {station1:{'hash_id': hash_id1, 'latitude': latitude1, 'longitude': longitude1, 'timeseries': timeseries1}, station2:{}}
+    """
+    basin_available_stations = get_available_stations_in_sub_basin(adapter, shape_file, start_time)
+    for station, info in basin_available_stations.items():
+        hash_id = info['hash_id']
+        station_df = adapter.get_timeseries_by_id(hash_id, start_time, end_time)
+        if station_df is not None:
+            if not station_df.empty:
+                basin_available_stations[station]['timeseries'] = station_df
+                file_name = '{}_rain.csv'.format(station)
+                full_path = os.path.join(hourly_csv_file_dir, file_name)
+                station_df.to_csv(full_path, header=False)
+        else:
+            print('No times series data avaialble for the station ', station)
+    return basin_available_stations
 
 
 def get_stations_timeseries(hourly_csv_file_dir, adapter, stations, start_time, end_time):
@@ -556,7 +568,6 @@ try:
             sim_adapter = CurwSimAdapter(sim_db_config['user'], sim_db_config['password'], sim_db_config['host'],
                                          sim_db_config['db'])
             forecast_duration = int((ts_end_datetime - ts_start_datetime).total_seconds() / (60 * time_step))
-            # sim_adapter.get_station_timeseries('2019-06-16 00:00:00', '2019-06-19 23:30:00', 'Kotikawatta', 'Leecom')
             klb_ts = get_klb_mean(hourly_csv_file_dir, sim_adapter, klb_stations,
                                   ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'),
                                   ts_end_datetime.strftime('%Y-%m-%d %H:%M:%S'))
