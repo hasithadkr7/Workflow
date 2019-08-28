@@ -135,7 +135,7 @@ class CurwSimAdapter:
             print('get_station_timeseries|Exception:', e)
             return None
 
-    def get_timeseries_by_id(self, hash_id, timeseries_start, timeseries_end, time_step=5):
+    def get_timeseries_by_id(self, hash_id, timeseries_start, timeseries_end, time_step_size=5):
         cursor = self.cursor
         data_sql = 'select time,value from curw_sim.data where time>=\'{}\' and time<=\'{}\' and id=\'{}\' '.format(
             timeseries_start, timeseries_end, hash_id)
@@ -147,7 +147,7 @@ class CurwSimAdapter:
             if len(results) > 0:
                 time_step_count = int((datetime.strptime(timeseries_end, '%Y-%m-%d %H:%M:%S')
                                        - datetime.strptime(timeseries_start,
-                                                           '%Y-%m-%d %H:%M:%S')).total_seconds() / (60 * time_step))
+                                                           '%Y-%m-%d %H:%M:%S')).total_seconds() / (60 * time_step_size))
                 print('timeseries_start : {}'.format(timeseries_start))
                 print('timeseries_end : {}'.format(timeseries_end))
                 print('time_step_count : {}'.format(time_step_count))
@@ -163,12 +163,16 @@ class CurwSimAdapter:
                     i = 0
                     for step in range(time_step_count):
                         tms_step = datetime.strptime(timeseries_start, '%Y-%m-%d %H:%M:%S') + timedelta(
-                            minutes=step * time_step)
-                        if tms_step == results[i][0]:
-                            formatted_ts.append(results[i])
+                            minutes=step * time_step_size)
+                        if step < len(results):
+                            if tms_step == results[i][0]:
+                                formatted_ts.append(results[i])
+                            else:
+                                formatted_ts.append((tms_step, Decimal(0)))
                         else:
                             formatted_ts.append((tms_step, Decimal(0)))
-                    df = pd.DataFrame(data=formatted_ts, columns=['Times', 'value']).set_index(keys='Times')
+                        i += 1
+                    df = pd.DataFrame(data=formatted_ts, columns=['time', 'value']).set_index(keys='time')
                     print('get_station_timeseries|df: ', df)
                     return df
             else:
