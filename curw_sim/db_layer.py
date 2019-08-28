@@ -154,7 +154,7 @@ class CurwSimAdapter:
                 print('len(results) : {}'.format(len(results)))
                 data_error = ((time_step_count - len(results)) / time_step_count) * 100
                 if data_error < 1:
-                    df = pd.DataFrame(data=results, columns=['Times', 'value']).set_index(keys='Times')
+                    df = pd.DataFrame(data=results, columns=['time', 'value']).set_index(keys='time')
                     return df
                 else:
                     print('data_error : {}'.format(data_error))
