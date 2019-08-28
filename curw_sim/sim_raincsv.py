@@ -445,21 +445,28 @@ def get_available_stations_in_sub_basin(db_adapter, sub_basin_shape_file, date_t
     :return: {station1:{'hash_id': hash_id1, 'latitude': latitude1, 'longitude': longitude1}, station2:{}}
     """
     available_stations = db_adapter.get_available_stations_info(date_time)
-    print('available_stations : ', available_stations)
+    corrected_available_stations = {}
     if len(available_stations):
+        print('xxxxxxx')
         for station, info in available_stations.items():
+            print('yyyyyyyyy')
             point = (info['latitude'], info['longitude'])  # an x,y tuple
             shp = shapefile.Reader(sub_basin_shape_file)  # open the shapefile
             all_shapes = shp.shapes()  # get all the polygons
+            print('all_shapes : ', all_shapes)
+            print('type(all_shapes) : ', type(all_shapes))
             all_records = shp.records()
-            for i in len(all_shapes):
+            print('all_records : ', all_records)
+            print('type(all_records) : ', type(all_records))
+            for i in range(len(all_shapes)):
+                print('zzzzzzzz')
                 boundary = all_shapes[i]  # get a boundary polygon
+                print('boundary : ', boundary)
                 if Point(point).within(shape(boundary)):  # make a point and see if it's in the polygon
                     name = all_records[i][2]  # get the second field of the corresponding record
                     print("The point is in ", name)
-                else:
-                    available_stations.pop(station)
-        return available_stations
+                    corrected_available_stations[station] = info
+        return corrected_available_stations
     else:
         print('Not available stations..')
         return {}
@@ -476,6 +483,7 @@ def get_basin_available_stations_timeseries(shape_file, hourly_csv_file_dir, ada
     :return: {station1:{'hash_id': hash_id1, 'latitude': latitude1, 'longitude': longitude1, 'timeseries': timeseries1}, station2:{}}
     """
     basin_available_stations = get_available_stations_in_sub_basin(adapter, shape_file, start_time)
+    print('get_basin_available_stations_timeseries|basin_available_stations: ', basin_available_stations)
     for station, info in basin_available_stations.items():
         hash_id = info['hash_id']
         station_df = adapter.get_timeseries_by_id(hash_id, start_time, end_time)
@@ -522,7 +530,8 @@ def get_kub_mean(hourly_csv_file_dir, db_adapter, stations, ts_start, ts_end):
 def get_klb_mean(hourly_csv_file_dir, db_adapter, stations, ts_start, ts_end):
     try:
         shape_file = get_resource_path('extraction/shp/klb-wgs84/klb-wgs84.shp')
-        basin_available_stations = get_available_stations_in_sub_basin(db_adapter, shape_file, ts_start)
+        basin_available_stations = get_basin_available_stations_timeseries(shape_file, hourly_csv_file_dir, db_adapter, ts_start, ts_end)
+        print('basin_available_stations : ', basin_available_stations)
         calculate_basin_mean_rain(hourly_csv_file_dir, shape_file, basin_available_stations)
         timeseries_data = get_stations_timeseries(hourly_csv_file_dir, db_adapter, stations, ts_start, ts_end)
         klb_mean = KLBObservationMean()
