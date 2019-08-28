@@ -135,6 +135,49 @@ class CurwSimAdapter:
             print('get_station_timeseries|Exception:', e)
             return None
 
+    def get_timeseries_by_id(self, hash_id, timeseries_start, timeseries_end, time_step=5):
+        cursor = self.cursor
+        data_sql = 'select time,value from curw_sim.data where time>=\'{}\' and time<=\'{}\' and id=\'{}\' '.format(
+            timeseries_start, timeseries_end, hash_id)
+        try:
+            print('data_sql : ', data_sql)
+            cursor.execute(data_sql)
+            results = cursor.fetchall()
+            # print('results : ', results)
+            if len(results) > 0:
+                time_step_count = int((datetime.strptime(timeseries_end, '%Y-%m-%d %H:%M:%S')
+                                       - datetime.strptime(timeseries_start,
+                                                           '%Y-%m-%d %H:%M:%S')).total_seconds() / (60 * time_step))
+                print('timeseries_start : {}'.format(timeseries_start))
+                print('timeseries_end : {}'.format(timeseries_end))
+                print('time_step_count : {}'.format(time_step_count))
+                print('len(results) : {}'.format(len(results)))
+                data_error = ((time_step_count - len(results)) / time_step_count) * 100
+                if data_error < 1:
+                    df = pd.DataFrame(data=results, columns=['Times', 'value']).set_index(keys='Times')
+                    return df
+                else:
+                    print('data_error : {}'.format(data_error))
+                    print('filling missing data.')
+                    formatted_ts = []
+                    i = 0
+                    for step in range(time_step_count):
+                        tms_step = datetime.strptime(timeseries_start, '%Y-%m-%d %H:%M:%S') + timedelta(
+                            minutes=step * time_step)
+                        if tms_step == results[i][0]:
+                            formatted_ts.append(results[i])
+                        else:
+                            formatted_ts.append((tms_step, Decimal(0)))
+                    df = pd.DataFrame(data=formatted_ts, columns=['Times', 'value']).set_index(keys='Times')
+                    print('get_station_timeseries|df: ', df)
+                    return df
+            else:
+                print('No data.')
+                return None
+        except Exception as e:
+            print('get_timeseries_by_id|data fetch|Exception:', e)
+            return None
+
     def get_available_stations(self, date_time, model='hechms', method='MME'):
         available_list = []
         print('get_available_stations|date_time : ', date_time)
