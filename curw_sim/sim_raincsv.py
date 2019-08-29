@@ -6,6 +6,8 @@ import os
 import json
 import getopt
 from datetime import datetime, timedelta
+from decimal import Decimal
+
 from db_layer import CurwSimAdapter
 import copy
 import pkg_resources
@@ -242,7 +244,6 @@ class KUBObservationMean:
 
         stations = {}
         timerseries_list = []
-        #print('1')
         for key in timerseries_dict.keys():
             stations[key] = timerseries_dict[key]['lon_lat']
             # Resample given set of timeseries.
@@ -251,15 +252,12 @@ class KUBObservationMean:
             # Rename coulmn_name 'value' to its own staion_name.
             tms = tms.rename(axis='columns', mapper={'value': key})
             timerseries_list.append(tms)
-        #print('2')
         if len(timerseries_list) <= 0:
             raise ValueError('Empty timeseries_dict given.')
         elif len(timerseries_list) == 1:
             matrix = timerseries_list[0]
         else:
             matrix = timerseries_list[0].join(other=timerseries_list[1:len(timerseries_list)], how='outer')
-        #print('3')
-
         # Note:
         # After joining resampling+sum does not work properly. Gives NaN and sum that is not correct.
         # Therefore resamplig+sum is done for each timeseries. If this issue could be solved,
@@ -267,29 +265,20 @@ class KUBObservationMean:
 
         # Fill in missing values after joining into one timeseries matrix.
         matrix.fillna(value=np.round(filler, precision_decimal_points), inplace=True, axis='columns')
-        #print('4')
         station_fractions = self.calc_station_fraction(stations)
-        #print('--------------------------------station_fractions : ', station_fractions)
-        #print('5')
         # Make sure only the required station weights remain in the station_fractions, else raise ValueError.
         matrix_station_list = list(matrix.columns.values)
         weights_station_list = list(station_fractions.keys())
-        #print('6')
         invalid_stations = [key for key in weights_station_list if key not in matrix_station_list]
-        #print('7')
         for key in invalid_stations:
             station_fractions.pop(key, None)
         if not len(matrix_station_list) == len(station_fractions.keys()):
             raise ValueError('Problem in calculated station weights.', stations, station_fractions)
-        #print('8')
         # Prepare weights to calc the kub_mean.
         weights = pd.DataFrame.from_dict(data=station_fractions, orient='index', dtype='float')
-        #print('9')
         weights = weights.divide(self.percentage_factor, axis='columns')
         kub_mean = matrix.dot(weights).sum(axis='columns')
-        #print('11')
         kub_mean_timeseries = kub_mean.to_frame(name='value')
-        #print('12')
         return kub_mean_timeseries
 
 
@@ -380,7 +369,6 @@ class KLBObservationMean:
         matrix.fillna(value=np.round(filler, precision_decimal_points), inplace=True, axis='columns')
 
         station_fractions = self.calc_station_fraction(stations)
-        #print('----------------------------------station_fractions : ', station_fractions)
         # Make sure only the required station weights remain in the station_fractions, else raise ValueError.
         matrix_station_list = list(matrix.columns.values)
         weights_station_list = list(station_fractions.keys())
@@ -411,13 +399,17 @@ def datetime_utc_to_lk(timestamp_utc, shift_mins=0):
 
 def calculate_basin_mean_rain(hourly_csv_file_dir, sub_basin_shape_file, available_stations_in_sub_basin, precision_decimal_points=3):
     station_points = {}
+    print('calculate_basin_mean_rain...')
     for station, info in available_stations_in_sub_basin.items():  # station_name: [lon, lat]
+
         station_points[station] = [info['longitude'], info['latitude']]
     voronoi_polygons = get_voronoi_polygons(points_dict=station_points, shape_file=sub_basin_shape_file,
                                             add_total_area=True)
+    print('voronoi_polygons : ', voronoi_polygons)
     station_areas = {}
     total_area = 0
     for row in voronoi_polygons[['id', 'area']].itertuples(index=False, name=None):
+        print('calculate_basin_mean_rain|row : ', row)
         station_name = row[0]
         area = np.round(row[1], precision_decimal_points)
         station_areas[station_name] = area
@@ -425,13 +417,16 @@ def calculate_basin_mean_rain(hourly_csv_file_dir, sub_basin_shape_file, availab
         if station_name != '__total_area__':
             total_area += area
     total_area = np.round(total_area, precision_decimal_points)
-
-    for station, lat_lon in station_points:
+    print('total_area : ', total_area)
+    print('station_points : ', station_points)
+    for station, lat_lon in station_points.items():
         # area_fraction also added to the available_stations_in_sub_basin dataframe.
+        print('station : ', station)
         area_fraction = np.round(station_areas[station] / total_area, precision_decimal_points)
+        print('area_fraction : ', area_fraction)
         available_stations_in_sub_basin[station]['area_fraction'] = area_fraction
         station_df = available_stations_in_sub_basin[station]['timeseries']
-        available_stations_in_sub_basin[station]['timeseries'] = station_df.multiply(area_fraction, axis='value')
+        available_stations_in_sub_basin[station]['timeseries'] = station_df.multiply(Decimal(area_fraction), axis='value')
         full_path = os.path.join(hourly_csv_file_dir, '{}_fractioned.csv'.format(station))
         available_stations_in_sub_basin[station]['timeseries'].to_csv(full_path, header=False)
 
@@ -447,25 +442,14 @@ def get_available_stations_in_sub_basin(db_adapter, sub_basin_shape_file, date_t
     available_stations = db_adapter.get_available_stations_info(date_time)
     corrected_available_stations = {}
     if len(available_stations):
-        print('xxxxxxx')
         for station, info in available_stations.items():
-            print('yyyyyyyyy')
-            point = (info['latitude'], info['longitude'])  # an x,y tuple
-            shp = shapefile.Reader(sub_basin_shape_file)  # open the shapefile
-            all_shapes = shp.shapes()  # get all the polygons
-            print('all_shapes : ', all_shapes)
-            print('type(all_shapes) : ', type(all_shapes))
-            all_records = shp.records()
-            print('all_records : ', all_records)
-            print('type(all_records) : ', type(all_records))
-            for i in range(len(all_shapes)):
-                print('zzzzzzzz')
-                boundary = all_shapes[i]  # get a boundary polygon
-                print('boundary : ', boundary)
-                if Point(point).within(shape(boundary)):  # make a point and see if it's in the polygon
-                    name = all_records[i][2]  # get the second field of the corresponding record
-                    print("The point is in ", name)
-                    corrected_available_stations[station] = info
+            shape_attribute = ['OBJECTID', 1]
+            shape_df = gpd.GeoDataFrame.from_file(sub_basin_shape_file)
+            shape_polygon_idx = shape_df.index[shape_df[shape_attribute[0]] == shape_attribute[1]][0]
+            shape_polygon = shape_df['geometry'][shape_polygon_idx]
+            if Point(info['longitude'], info['latitude']).within(shape_polygon):  # make a point and see if it's in the polygon
+                corrected_available_stations[station] = info
+                print('Station {} in the sub-basin'.format(station))
         return corrected_available_stations
     else:
         print('Not available stations..')
@@ -531,7 +515,7 @@ def get_klb_mean(hourly_csv_file_dir, db_adapter, stations, ts_start, ts_end):
     try:
         shape_file = get_resource_path('extraction/shp/klb-wgs84/klb-wgs84.shp')
         basin_available_stations = get_basin_available_stations_timeseries(shape_file, hourly_csv_file_dir, db_adapter, ts_start, ts_end)
-        print('basin_available_stations : ', basin_available_stations)
+        print('get_klb_mean|basin_available_stations: ', basin_available_stations)
         calculate_basin_mean_rain(hourly_csv_file_dir, shape_file, basin_available_stations)
         timeseries_data = get_stations_timeseries(hourly_csv_file_dir, db_adapter, stations, ts_start, ts_end)
         klb_mean = KLBObservationMean()
