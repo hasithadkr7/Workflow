@@ -219,6 +219,9 @@ def getUTCOffset(utcOffset, default=False):
 
 
 def upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time, run_date, run_time):
+    print('upload_waterlevels_curw|[ts_start_date, ts_start_time, run_date, run_time] : ', [ts_start_date,
+                                                                                            ts_start_time, run_date,
+                                                                                            run_time])
     SERIES_LENGTH = 0
     MISSING_VALUE = -999
 

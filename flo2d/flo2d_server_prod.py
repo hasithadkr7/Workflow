@@ -14,7 +14,7 @@ from os.path import join as pjoin
 from datetime import datetime, timedelta
 
 HOST_ADDRESS = '10.138.0.4'
-#HOST_ADDRESS = '0.0.0.0'
+# HOST_ADDRESS = '0.0.0.0'
 HOST_PORT = 8088
 
 
@@ -196,7 +196,7 @@ class StoreHandler(BaseHTTPRequestHandler):
                 ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
                 ts_start_date = ts_start_date.strftime('%Y-%m-%d')
                 ts_start_time = '00:00:00'
-                #upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
+                # upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
                 upload_waterlevels(dir_path, ts_start_date, ts_start_time, run_date, run_time)
                 response = {'response': 'success'}
             except Exception as e:
@@ -222,8 +222,14 @@ class StoreHandler(BaseHTTPRequestHandler):
                 duration_days = (int(backward), int(forward))
                 ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
                 ts_start_date = ts_start_date.strftime('%Y-%m-%d')
+                run_date = datetime.strptime(run_date, '%Y-%m-%d') + timedelta(days=1)
+                run_date = run_date.strftime('%Y-%m-%d')
                 ts_start_time = '00:00:00'
-                upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
+                print('upload_waterlevels_curw|[ts_start_date, ts_start_time, run_date, run_time] : ', [ts_start_date,
+                                                                                                        ts_start_time,
+                                                                                                        run_date,
+                                                                                                        run_time])
+                upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time, run_date, run_time)
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))
