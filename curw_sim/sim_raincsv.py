@@ -13,7 +13,7 @@ import copy
 import pkg_resources
 import numpy as np
 from scipy.spatial import Voronoi
-import shapefile
+# import shapefile
 from shapely.geometry import Polygon, Point
 from shapely.geometry import shape
 import geopandas as gpd
