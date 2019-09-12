@@ -220,11 +220,17 @@ class KUBObservationMean:
             if id != '__total_area__':
                 total_area += area
         total_area = np.round(total_area, precision_decimal_points)
-
+        kub_catchment_df = gpd.GeoDataFrame.from_file(self.shape_file)
+        kub_polygon = kub_catchment_df['geometry']
+        kub_area = kub_polygon.area
         for station in station_list:
             if station in station_fractions:
+                # station_fractions[station] = np.round(
+                #     (station_fractions[station] * self.percentage_factor) / total_area, precision_decimal_points)
+                # changed due to the claim of chinthana, method of calculating mean.
+                # propotion should be taken against the total catchament area not the total thessian polygon area.
                 station_fractions[station] = np.round(
-                    (station_fractions[station] * self.percentage_factor) / total_area, precision_decimal_points)
+                    (station_fractions[station] * self.percentage_factor) / kub_area, precision_decimal_points)
             else:
                 station_fractions[station] = np.round(0.0, precision_decimal_points)
 
