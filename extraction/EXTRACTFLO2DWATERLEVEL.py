@@ -101,8 +101,7 @@ def save_forecast_timeseries(my_adapter, my_timeseries, my_model_date, my_model_
 
     types = [
         'Forecast-0-d',
-        'Forecast-1-d-after',
-        'Forecast-2-d-after'
+        'Forecast-1-d-after'
     ]
     meta_data = {
         'station': station,
