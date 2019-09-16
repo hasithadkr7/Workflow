@@ -275,7 +275,7 @@ class KUBObservationMean:
         matrix.fillna(value=np.round(filler, precision_decimal_points), inplace=True, axis='columns')
         # print('4')
         station_fractions = self.calc_station_fraction(stations)
-        # print('--------------------------------station_fractions : ', station_fractions)
+        print('--------------------------------station_fractions : ', station_fractions)
         # print('5')
         # Make sure only the required station weights remain in the station_fractions, else raise ValueError.
         matrix_station_list = list(matrix.columns.values)
