@@ -97,9 +97,14 @@ class StoreHandler(BaseHTTPRequestHandler):
                 forward = '3'
                 duration_days = (int(backward), int(forward))
                 ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
+                ts_end_date = datetime.strptime(run_date, '%Y-%m-%d') + timedelta(days=duration_days[1])
+                ts_end_date = ts_end_date.strftime('%Y-%m-%d')
                 ts_start_date = ts_start_date.strftime('%Y-%m-%d')
                 ts_start_time = '00:00:00'
-                create_inflow(dir_path, ts_start_date, ts_start_time)
+                ts_start = '{} {}'.format(ts_start_date, ts_start_time)
+                ts_end = '{} {}'.format(ts_end_date, ts_start_time)
+                print('create_inflow-[ts_start, ts_end]', [ts_start, ts_end])
+                create_inflow(dir_path, ts_start, ts_end)
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))
@@ -123,10 +128,14 @@ class StoreHandler(BaseHTTPRequestHandler):
                 print('[run_date, run_time] : ', [run_date, run_time])
                 duration_days = (int(backward), int(forward))
                 ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
+                ts_end_date = datetime.strptime(run_date, '%Y-%m-%d') + timedelta(days=duration_days[1])
+                ts_end_date = ts_end_date.strftime('%Y-%m-%d')
                 ts_start_date = ts_start_date.strftime('%Y-%m-%d')
                 ts_start_time = '00:00:00'
-                dir_path = set_daily_dir(run_date, run_time)
-                create_outflow(dir_path, ts_start_date, ts_start_time, forward, backward)
+                ts_start = '{} {}'.format(ts_start_date, ts_start_time)
+                ts_end = '{} {}'.format(ts_end_date, ts_start_time)
+                print('create_outflow-[ts_start, ts_end]', [ts_start, ts_end])
+                create_outflow(dir_path, ts_start, ts_end)
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))
