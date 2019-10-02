@@ -82,6 +82,14 @@ run_flo2d_250m = BashOperator(
     pool=dag_pool,
 )
 
+# Had to run flo2d 2 times to avoid minus waterlevel results.
+run_flo2d_250m_again = BashOperator(
+    task_id='run_flo2d_250m_again',
+    bash_command=run_flo2d_250m_cmd,
+    dag=dag,
+    pool=dag_pool,
+)
+
 extract_water_level = BashOperator(
     task_id='extract_water_level',
     bash_command=extract_water_level_cmd,
@@ -96,4 +104,4 @@ extract_water_level_curw = BashOperator(
     pool=dag_pool,
 )
 
-create_raincell >> create_inflow >> create_outflow >> run_flo2d_250m >> extract_water_level >> extract_water_level_curw
+create_raincell >> create_inflow >> create_outflow >> run_flo2d_250m >> run_flo2d_250m_again >> extract_water_level >> extract_water_level_curw
