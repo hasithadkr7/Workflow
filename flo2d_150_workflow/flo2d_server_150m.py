@@ -33,7 +33,7 @@ class StoreHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         print('Handle GET request...')
         if self.path.startswith('/create-raincell'):
-            os.chdir(r"D:\flo2d_hourly")
+            os.chdir(r"C:\workflow\flo2d_150m")
             print('create-raincell')
             response = {}
             try:
@@ -56,7 +56,7 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.wfile.write(str.encode(reply))
 
         if self.path.startswith('/create-sim-raincell'):
-            os.chdir(r"D:\flo2d_hourly")
+            os.chdir(r"C:\workflow\flo2d_150m")
             print('create-sim-raincell')
             response = {}
             try:
@@ -81,7 +81,7 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.wfile.write(str.encode(reply))
 
         if self.path.startswith('/create-inflow'):
-            os.chdir(r"D:\flo2d_hourly")
+            os.chdir(r"C:\workflow\flo2d_150m")
             print('create-inflow')
             response = {}
             try:
@@ -113,7 +113,7 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.wfile.write(str.encode(reply))
 
         if self.path.startswith('/create-outflow'):
-            os.chdir(r"D:\flo2d_hourly")
+            os.chdir(r"C:\workflow\flo2d_150m")
             print('create-outflow')
             response = {}
             try:
@@ -145,7 +145,7 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.wfile.write(str.encode(reply))
 
         if self.path.startswith('/run-flo2d'):
-            os.chdir(r"D:\flo2d_hourly")
+            os.chdir(r"C:\workflow\flo2d_150m")
             print('run-flo2d')
             response = {}
             try:
@@ -166,7 +166,7 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.wfile.write(str.encode(reply))
 
         if self.path.startswith('/flo2d-completed'):
-            os.chdir(r"D:\flo2d_hourly")
+            os.chdir(r"C:\workflow\flo2d_150m")
             print('flo2d-completed')
             response = {}
             try:
@@ -189,7 +189,7 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.wfile.write(str.encode(reply))
 
         if self.path.startswith('/extract-data'):
-            os.chdir(r"D:\flo2d_hourly")
+            os.chdir(r"C:\workflow\flo2d_150m")
             print('extract-data')
             response = {}
             try:
@@ -216,7 +216,7 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.wfile.write(str.encode(reply))
 
         if self.path.startswith('/extract-curw'):
-            os.chdir(r"D:\flo2d_hourly")
+            os.chdir(r"C:\workflow\flo2d_150m")
             print('extract-data')
             response = {}
             try:
