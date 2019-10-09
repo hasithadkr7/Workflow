@@ -3,17 +3,16 @@ from builtins import print
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from urllib.parse import urlparse, parse_qs
-from raincelldat.gen_raincell import create_hybrid_raincell
-from curw_sim.gen_raincell_curw_sim import create_sim_hybrid_raincell
-from inflowdat.get_inflow import create_inflow
-from outflowdat.gen_outflow import create_outflow
-from flo2d_150_workflow.run_model import execute_flo2d_150m, flo2d_model_completed
-from waterlevel.upload_waterlevel import upload_waterlevels_curw
+from raincell.gen_raincell import create_sim_hybrid_raincell
+from inflow.get_inflow import create_inflow
+from outflow.get_outflow import create_outflow
+from run_model import execute_flo2d_150m, flo2d_model_completed
 from os.path import join as pjoin
 from datetime import datetime, timedelta
 
-HOST_ADDRESS = '10.138.0.4'
-# HOST_ADDRESS = '0.0.0.0'
+# HOST_ADDRESS = '10.138.0.4'
+# To remove the exception "[WinError 10049] The requested address is not valid in its context"
+HOST_ADDRESS = '0.0.0.0'
 HOST_PORT = 8078
 
 

@@ -15,7 +15,7 @@ def execute_flo2d_150m(dir_path, run_date, run_time):
     print("Flo2d run_date : ", run_date)
     print("Flo2d run_time : ", run_time)
     output_dir = dir_path
-    template_dir = os.path.join(os.getcwd(), 'template')
+    template_dir = os.path.join(os.getcwd(), 'Template')
     executable_dir = os.path.join(os.getcwd(), 'RunForProjectFolder')
     try:
         copy_tree(template_dir, output_dir)
