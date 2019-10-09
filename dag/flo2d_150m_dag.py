@@ -6,14 +6,14 @@ from airflow.operators.bash_operator import BashOperator
 
 prod_dag_name = 'flo2d-150m-dag'
 queue = 'default'
-schedule_interval = '20 */4 * * *'
+schedule_interval = '* */12 * * *'
 dag_pool = 'curw_prod_runs'
 
 
 default_args = {
     'owner': 'curwsl admin',
     'depends_on_past': False,
-    'start_date': airflow.utils.dates.days_ago(0, hour=6),
+    'start_date': datetime.strptime('2019-10-09 10:00:00', '%Y-%m-%d %H:%M:%S'),
     'email': ['admin@curwsl.com'],
     'email_on_failure': False,
     'email_on_retry': False,
@@ -30,16 +30,31 @@ dag = DAG(
     description='Run Flo2d 150m DAG',
     schedule_interval=schedule_interval)
 
+create_raincell_cmd = 'curl -X GET "http://10.138.0.4:8078/create-sim-raincell?' \
+                      'run_date={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}' \
+                      '&run_time={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }}' \
+                      '&forward=3&backward=2"'
 
-create_raincell_cmd = 'echo "create_raincell_cmd"'
+create_inflow_cmd = 'curl -X GET "http://10.138.0.4:8078/create-inflow?' \
+                    'run_date={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}' \
+                    '&run_time={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }}"'
 
-create_inflow_cmd = 'echo "create_inflow_cmd"'
+create_outflow_cmd = 'curl -X GET "http://10.138.0.4:8078/create-outflow?' \
+                     'run_date={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}' \
+                     '&run_time={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }}' \
+                     '&forward=3&backward=2"'
 
-create_outflow_cmd = 'echo "create_outflow_cmd"'
+run_flo2d_150m_cmd = 'curl -X GET "http://10.138.0.4:8078/run-flo2d?' \
+                     'run_date={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}' \
+                     '&run_time={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }}"'
 
-run_flo2d_150m_cmd = 'echo "run_flo2d_150m_cmd"'
+extract_water_level_cmd = 'curl -X GET "http://10.138.0.4:8078/extract-data?' \
+                          'run_date={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}' \
+                          '&run_time={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }}"'
 
-extract_water_level_cmd = 'echo "extract_water_level_cmd"'
+extract_water_level_curw_cmd = 'curl -X GET "http://10.138.0.4:8078/extract-curw?' \
+                               'run_date={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}' \
+                               '&run_time={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }}"'
 
 
 create_raincell = BashOperator(
@@ -70,13 +85,13 @@ run_flo2d_150m = BashOperator(
     pool=dag_pool,
 )
 
-extract_water_level = BashOperator(
-    task_id='extract_water_level',
-    bash_command=extract_water_level_cmd,
+extract_water_level_curw = BashOperator(
+    task_id='extract_water_level_curw',
+    bash_command=extract_water_level_curw_cmd,
     dag=dag,
     pool=dag_pool,
 )
 
 
-create_raincell >> create_inflow >> create_outflow >> run_flo2d_150m >> extract_water_level
+create_raincell >> create_inflow >> create_outflow >> run_flo2d_150m >> extract_water_level_curw
 
