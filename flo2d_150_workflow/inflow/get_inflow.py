@@ -116,6 +116,10 @@ def get_ts_start_end(run_date, run_time, forward=3, backward=2):
     :param backward:int
     :return: tuple (string, string)
     """
+    if type(forward) == str:
+        forward = int(forward)
+    if type(backward) == str:
+        backward = int(backward)
     run_datetime = datetime.strptime('%s %s' % (run_date, '00:00:00'), '%Y-%m-%d %H:%M:%S')
     ts_start_datetime = run_datetime - timedelta(days=backward)
     ts_end_datetime = run_datetime + timedelta(days=forward)

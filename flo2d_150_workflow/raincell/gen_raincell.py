@@ -33,7 +33,7 @@ def check_time_format(time, model):
             print("Seconds should be always 00")
             exit(1)
         if model == "flo2d_250" and time.strftime('%M') not in (
-        '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '00'):
+                '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '00'):
             print("Minutes should be multiple of 5 fro flo2d_250")
             exit(1)
         if model == "flo2d_150" and time.strftime('%M') not in ('15', '30', '45', '00'):
@@ -141,6 +141,10 @@ def get_ts_start_end(run_date, run_time, forward=3, backward=2):
     :param backward:int
     :return: tuple (string, string)
     """
+    if type(forward) == str:
+        forward = int(forward)
+    if type(backward) == str:
+        backward = int(backward)
     run_datetime = datetime.strptime('%s %s' % (run_date, '00:00:00'), '%Y-%m-%d %H:%M:%S')
     ts_start_datetime = run_datetime - timedelta(days=backward)
     ts_end_datetime = run_datetime + timedelta(days=forward)
