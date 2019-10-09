@@ -13,6 +13,8 @@ from db_adapter.constants import CURW_SIM_DATABASE, CURW_SIM_HOST, CURW_SIM_PASS
 from db_adapter.curw_sim.timeseries.tide import Timeseries as TideTS
 from db_adapter.constants import COMMON_DATE_TIME_FORMAT
 
+TIDE_HASH_ID = 'a7df14e51984a57aceb4075c4d4b6e1c952ec54249ad1d10a3d4797e9f71b626'
+
 
 def write_to_file(file_name, data):
     with open(file_name, 'w+') as f:
@@ -177,6 +179,15 @@ def create_dir_if_not_exists(path):
         os.makedirs(path)
 
     return path
+
+
+def create_outflow(dir_path, ts_start, ts_end):
+    outflow_file_path = os.path.join(dir_path, 'OUTFLOW.DAT')
+    if not os.path.isfile(outflow_file_path):
+        prepare_outflow_150(outflow_file_path, start=ts_start, end=ts_end, tide_id=TIDE_HASH_ID)
+        print("{} completed preparing outflow".format(datetime.now()))
+    else:
+        print('Outflow file already in path : ', outflow_file_path)
 
 
 def usage():

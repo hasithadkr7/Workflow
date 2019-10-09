@@ -131,6 +131,40 @@ def create_dir_if_not_exists(path):
     return path
 
 
+def get_ts_start_end(run_date, run_time, forward=3, backward=2):
+    result = []
+    """
+    method for geting timeseries start and end using input params.
+    :param run_date:run_date: string yyyy-mm-ddd
+    :param run_time:run_time: string hh:mm:ss
+    :param forward:int
+    :param backward:int
+    :return: tuple (string, string)
+    """
+    run_datetime = datetime.strptime('%s %s' % (run_date, '00:00:00'), '%Y-%m-%d %H:%M:%S')
+    ts_start_datetime = run_datetime - timedelta(days=backward)
+    ts_end_datetime = run_datetime + timedelta(days=forward)
+    result.append(ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'))
+    result.append(ts_end_datetime.strftime('%Y-%m-%d %H:%M:%S'))
+    print(result)
+    return result
+
+
+def create_sim_hybrid_raincell(dir_path, run_date, run_time, forward, backward,
+                               res_mins=5, flo2d_model='flo2d_150', calc_method='MME'):
+    raincell_file_path = os.path.join(dir_path, 'RAINCELL.DAT')
+    print('create_sim_hybrid_raincell|raincell_file_path : ', raincell_file_path)
+    [timeseries_start, timeseries_end] = get_ts_start_end(run_date, run_time, forward, backward)
+    print('create_sim_hybrid_raincell|[timeseries_start, timeseries_end] : ', [timeseries_start, timeseries_end])
+    if not os.path.isfile(raincell_file_path):
+        print("{} start preparing raincell".format(datetime.now()))
+        prepare_raincell(raincell_file_path, target_model=flo2d_model,
+                         start_time=timeseries_start, end_time=timeseries_end)
+        print("{} completed preparing raincell".format(datetime.now()))
+    else:
+        print('Raincell file already in path : ', raincell_file_path)
+
+
 def usage():
     usageText = """
     Usage: .\gen_raincell.py [-m flo2d_XXX][-s "YYYY-MM-DD HH:MM:SS"] [-e "YYYY-MM-DD HH:MM:SS"]

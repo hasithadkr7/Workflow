@@ -70,7 +70,7 @@ class StoreHandler(BaseHTTPRequestHandler):
                 print('[run_date, run_time] : ', [run_date, run_time])
                 dir_path = set_daily_dir(run_date, run_time)
                 create_sim_hybrid_raincell(dir_path, run_date, run_time, forward, backward,
-                                           res_mins=5, flo2d_model='flo2d_250',
+                                           res_mins=5, flo2d_model='flo2d_150',
                                            calc_method='MME')
                 response = {'response': 'success'}
             except Exception as e:
@@ -156,7 +156,7 @@ class StoreHandler(BaseHTTPRequestHandler):
                 [run_time] = query_components["run_time"]
                 print('[run_date, run_time] : ', [run_date, run_time])
                 dir_path = set_daily_dir(run_date, run_time)
-                execute_flo2d_250m(dir_path, run_date, run_time)
+                execute_flo2d_150m(dir_path, run_date, run_time)
                 response = {'response': 'success'}
             except Exception as e:
                 print(str(e))

@@ -14,6 +14,8 @@ from db_adapter.constants import CURW_OBS_DATABASE, CURW_OBS_PORT, CURW_OBS_PASS
 from db_adapter.curw_sim.timeseries.discharge import Timeseries as DisTS
 from db_adapter.constants import COMMON_DATE_TIME_FORMAT
 
+DISCHARGE_HASH_ID = '396f223fbcac81058e247cacebbf3185a660c21a5097bf9258f7db2ccbc70889'
+
 
 def write_to_file(file_name, data):
     with open(file_name, 'w+') as f:
@@ -102,6 +104,36 @@ def create_dir_if_not_exists(path):
         os.makedirs(path)
 
     return path
+
+
+def get_ts_start_end(run_date, run_time, forward=3, backward=2):
+    result = []
+    """
+    method for geting timeseries start and end using input params.
+    :param run_date:run_date: string yyyy-mm-ddd
+    :param run_time:run_time: string hh:mm:ss
+    :param forward:int
+    :param backward:int
+    :return: tuple (string, string)
+    """
+    run_datetime = datetime.strptime('%s %s' % (run_date, '00:00:00'), '%Y-%m-%d %H:%M:%S')
+    ts_start_datetime = run_datetime - timedelta(days=backward)
+    ts_end_datetime = run_datetime + timedelta(days=forward)
+    result.append(ts_start_datetime.strftime('%Y-%m-%d %H:%M:%S'))
+    result.append(ts_end_datetime.strftime('%Y-%m-%d %H:%M:%S'))
+    print(result)
+    return result
+
+
+def create_inflow(dir_path, ts_start, ts_end):
+    inflow_file_path = os.path.join(dir_path, 'INFLOW.DAT')
+    print('create_sim_hybrid_raincell|[ts_start, ts_end] : ', [ts_start, ts_end])
+    if not os.path.isfile(inflow_file_path):
+        print("{} start preparing inflow".format(datetime.now()))
+        prepare_inflow_150(inflow_file_path, start=ts_start, end=ts_end, discharge_id=DISCHARGE_HASH_ID)
+        print("{} completed preparing inflow".format(datetime.now()))
+    else:
+        print('Inflow file already in path : ', inflow_file_path)
 
 
 def usage():
