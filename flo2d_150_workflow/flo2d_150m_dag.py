@@ -5,7 +5,7 @@ from airflow.operators.bash_operator import BashOperator
 
 prod_dag_name = 'flo2d-150m-dag-1'
 queue = 'default'
-schedule_interval = '0 3,9,15,21 * * *'
+schedule_interval = '0 */6 * * *'
 dag_pool = 'curw_prod_runs'
 
 
@@ -36,7 +36,8 @@ create_raincell_cmd = 'curl -X GET "http://10.138.0.7:8089/create-sim-raincell?'
 
 create_inflow_cmd = 'curl -X GET "http://10.138.0.7:8089/create-inflow?' \
                     'run_date={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}' \
-                    '&run_time={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }}"'
+                    '&run_time={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }}' \
+                    '&forward=3&backward=5"'
 
 create_outflow_cmd = 'curl -X GET "http://10.138.0.7:8089/create-outflow?' \
                      'run_date={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}' \

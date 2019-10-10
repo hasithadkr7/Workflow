@@ -131,7 +131,7 @@ def create_dir_if_not_exists(path):
     return path
 
 
-def get_ts_start_end(run_date, run_time, forward=3, backward=2):
+def get_ts_start_end(run_date, run_time, forward=3, backward=5):
     result = []
     """
     method for geting timeseries start and end using input params.
