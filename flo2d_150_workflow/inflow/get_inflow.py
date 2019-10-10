@@ -64,7 +64,6 @@ def check_time_format(time):
 
 def prepare_inflow_150(inflow_file_path, start, end, discharge_id):
     try:
-
         curw_sim_pool = get_Pool(host=CURW_SIM_HOST, user=CURW_SIM_USERNAME, password=CURW_SIM_PASSWORD,
                                  port=CURW_SIM_PORT,
                                  db=CURW_SIM_DATABASE)

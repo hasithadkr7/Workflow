@@ -229,9 +229,9 @@ class StoreHandler(BaseHTTPRequestHandler):
                 print('query_components : ', query_components)
                 [run_date] = query_components["run_date"]
                 [run_time] = query_components["run_time"]
+                [forward] = query_components["forward"]
+                [backward] = query_components["backward"]
                 dir_path = set_daily_dir(run_date, run_time)
-                backward = '2'
-                forward = '3'
                 duration_days = (int(backward), int(forward))
                 ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
                 ts_start_date = ts_start_date.strftime('%Y-%m-%d')
