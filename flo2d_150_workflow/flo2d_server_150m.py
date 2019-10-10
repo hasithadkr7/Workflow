@@ -7,6 +7,7 @@ from raincell.gen_raincell import create_sim_hybrid_raincell
 from inflow.get_inflow import create_inflow
 from outflow.get_outflow import create_outflow
 from run_model import execute_flo2d_150m, flo2d_model_completed
+from extract.extract_curw import upload_waterlevels_curw
 from os.path import join as pjoin
 from datetime import datetime, timedelta
 
