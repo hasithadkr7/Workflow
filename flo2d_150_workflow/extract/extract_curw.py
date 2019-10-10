@@ -212,7 +212,7 @@ def upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time, run_date, ru
     MISSING_VALUE = -999
 
     try:
-        config_path = os.path.join(os.getcwd(), 'waterlevel', 'config.json')
+        config_path = os.path.join(os.getcwd(), 'extract', 'config.json')
         # print('config_path : ', config_path)
         utc_offset = ''
         with open(config_path) as json_file:
