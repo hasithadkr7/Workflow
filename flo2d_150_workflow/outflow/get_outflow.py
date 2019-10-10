@@ -105,7 +105,8 @@ def prepare_outflow_250(outflow_file_path, start, end, tide_id):
 
         write_to_file(outflow_file_path, data=outflow)
 
-        tail_file = open("tail_250.txt", "r")
+        tail_file_path = os.path.join(os.getcwd(), 'outflow', 'tail_150.txt')
+        tail_file = open(tail_file_path, "r")
         tail = tail_file.read()
         tail_file.close()
 
