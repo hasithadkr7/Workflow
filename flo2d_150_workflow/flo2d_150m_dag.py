@@ -48,6 +48,11 @@ run_flo2d_150m_cmd = 'curl -X GET "http://10.138.0.7:8089/run-flo2d?' \
                      'run_date={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}' \
                      '&run_time={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }}"'
 
+extract_water_level_curw_fcst_cmd = 'curl -X GET "http://10.138.0.7:8089/extract-curw-fcst?' \
+                               'run_date={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}' \
+                               '&run_time={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }}' \
+                               '&forward=3&backward=5"'
+
 extract_water_level_curw_cmd = 'curl -X GET "http://10.138.0.7:8089/extract-curw?' \
                      'run_date={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}' \
                      '&run_time={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }}' \
@@ -82,6 +87,13 @@ run_flo2d_150m = BashOperator(
     pool=dag_pool,
 )
 
+extract_water_level_curw_fcst = BashOperator(
+    task_id='extract_water_level_curw_fcst',
+    bash_command=extract_water_level_curw_fcst_cmd,
+    dag=dag,
+    pool=dag_pool,
+)
+
 extract_water_level_curw = BashOperator(
     task_id='extract_water_level_curw',
     bash_command=extract_water_level_curw_cmd,
@@ -89,5 +101,6 @@ extract_water_level_curw = BashOperator(
     pool=dag_pool,
 )
 
-create_raincell >> create_inflow >> create_outflow >> run_flo2d_150m >> extract_water_level_curw
+create_raincell >> create_inflow >> create_outflow >> \
+run_flo2d_150m >> extract_water_level_curw_fcst >> extract_water_level_curw
 
