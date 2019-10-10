@@ -8,6 +8,7 @@ from inflow.get_inflow import create_inflow
 from outflow.get_outflow import create_outflow
 from run_model import execute_flo2d_150m, flo2d_model_completed
 from extract.extract_curw import upload_waterlevels_curw
+from extract.extract_curw_fcst import upload_waterlevels
 from os.path import join as pjoin
 from datetime import datetime, timedelta
 
@@ -193,7 +194,7 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(str.encode(reply))
 
-        if self.path.startswith('/extract-data'):
+        if self.path.startswith('/extract-curw-fcst'):
             os.chdir(r"C:\workflow\flo2d_150m")
             print('extract-data')
             response = {}
@@ -203,13 +204,12 @@ class StoreHandler(BaseHTTPRequestHandler):
                 [run_date] = query_components["run_date"]
                 [run_time] = query_components["run_time"]
                 dir_path = set_daily_dir(run_date, run_time)
-                backward = '2'
-                forward = '3'
+                [forward] = query_components["forward"]
+                [backward] = query_components["backward"]
                 duration_days = (int(backward), int(forward))
                 ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
                 ts_start_date = ts_start_date.strftime('%Y-%m-%d')
                 ts_start_time = '00:00:00'
-                # upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
                 upload_waterlevels(dir_path, ts_start_date, ts_start_time, run_date, run_time)
                 response = {'response': 'success'}
             except Exception as e:
