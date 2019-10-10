@@ -53,6 +53,12 @@ def get_forecast_timeseries(my_adapter, my_event_id, my_opts):
 
 
 f = None
+
+
+def create_outflow(dir_path, ts_start, ts_end):
+    print('')
+
+
 try:
     CONFIG = json.loads(open('CONFIG.json').read())
     # print('Config :: ', CONFIG)

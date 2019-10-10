@@ -13,8 +13,9 @@ from datetime import datetime, timedelta
 
 # HOST_ADDRESS = '10.138.0.4'
 # To remove the exception "[WinError 10049] The requested address is not valid in its context"
-HOST_ADDRESS = '0.0.0.0'
-HOST_PORT = 8078
+#HOST_ADDRESS = '0.0.0.0'
+HOST_ADDRESS = '10.138.0.7'
+HOST_PORT = 8089
 
 
 def set_daily_dir(run_date, run_time):
@@ -67,6 +68,7 @@ class StoreHandler(BaseHTTPRequestHandler):
                 [run_time] = query_components["run_time"]
                 [forward] = query_components["forward"]
                 [backward] = query_components["backward"]
+                print('[forward, backward] : ', [forward, backward])
                 print('[run_date, run_time] : ', [run_date, run_time])
                 dir_path = set_daily_dir(run_date, run_time)
                 create_sim_hybrid_raincell(dir_path, run_date, run_time, forward, backward,
@@ -90,10 +92,11 @@ class StoreHandler(BaseHTTPRequestHandler):
                 print('query_components : ', query_components)
                 [run_date] = query_components["run_date"]
                 [run_time] = query_components["run_time"]
+                [forward] = query_components["forward"]
+                [backward] = query_components["backward"]
+                print('[forward, backward] : ', [forward, backward])
                 print('[run_date, run_time] : ', [run_date, run_time])
                 dir_path = set_daily_dir(run_date, run_time)
-                backward = '2'
-                forward = '3'
                 duration_days = (int(backward), int(forward))
                 ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
                 ts_end_date = datetime.strptime(run_date, '%Y-%m-%d') + timedelta(days=duration_days[1])
