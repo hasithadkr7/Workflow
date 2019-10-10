@@ -70,8 +70,9 @@ class StoreHandler(BaseHTTPRequestHandler):
                 [backward] = query_components["backward"]
                 print('[forward, backward] : ', [forward, backward])
                 print('[run_date, run_time] : ', [run_date, run_time])
+                duration_days = (int(backward), int(forward))
                 dir_path = set_daily_dir(run_date, run_time)
-                create_sim_hybrid_raincell(dir_path, run_date, run_time, forward, backward,
+                create_sim_hybrid_raincell(dir_path, run_date, run_time, duration_days[1], duration_days[0],
                                            res_mins=5, flo2d_model='flo2d_150',
                                            calc_method='MME')
                 response = {'response': 'success'}
