@@ -148,7 +148,6 @@ class StoreHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(str.encode(reply))
 
-
         if self.path.startswith('/create-outflow-old'):
             os.chdir(r"D:\flo2d_hourly")
             print('create-outflow')
@@ -164,8 +163,7 @@ class StoreHandler(BaseHTTPRequestHandler):
                 dir_path = set_daily_dir(run_date, run_time)
                 duration_days = (int(backward), int(forward))
                 ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
-                # ts_end_date added extra one day to increase hour count beyond 120
-                ts_end_date = datetime.strptime(run_date, '%Y-%m-%d') + timedelta(days=duration_days[1]+1)
+                ts_end_date = datetime.strptime(run_date, '%Y-%m-%d') + timedelta(days=duration_days[1] + 1)
                 ts_end_date = ts_end_date.strftime('%Y-%m-%d')
                 ts_start_date = ts_start_date.strftime('%Y-%m-%d')
                 ts_start_time = '00:00:00'
