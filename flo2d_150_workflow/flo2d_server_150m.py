@@ -35,6 +35,7 @@ def set_daily_dir(run_date, run_time):
 
 class StoreHandler(BaseHTTPRequestHandler):
     def do_GET(self):
+        self.timeout = 18000
         print('Handle GET request...')
         if self.path.startswith('/create-raincell'):
             os.chdir(r"C:\workflow\flo2d_150m")
