@@ -37,7 +37,7 @@ def check_time_format(time, model):
         exit(1)
 
 
-def prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value, timestep=15, target_model="flo2d_250"):
+def prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value, timestep=15, target_model='flo2d_250'):
     """
     :param raincell_file_path: str
     :param start_time: str '2019-10-23 15:40:00'
@@ -82,6 +82,7 @@ def prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value, 
         append_to_file(raincell_file_path, raincell)
     except Exception as ex:
         print('prepare_raincell|Exception : ', str(ex))
+        traceback.print_exc()
     finally:
         print("{} raincell generation process completed".format(datetime.now()))
 
@@ -128,9 +129,9 @@ if __name__ == "__main__":
             elif opt in ("-e", "--end_time"):
                 end_time = arg.strip()
             elif opt in ("-t", "--timestep"):
-                timestep = arg.strip()
+                timestep = int(arg.strip())
             elif opt in ("-r", "--rain_fall_value"):
-                rain_fall_value = arg.strip()
+                rain_fall_value = float(arg.strip())
 
         print('User inputs|flo2d_model : ', flo2d_model)
         print('User inputs|start_time : ', start_time)
@@ -138,8 +139,8 @@ if __name__ == "__main__":
         print('User inputs|timestep : ', timestep)
         print('User inputs|rain_fall_value : ', rain_fall_value)
 
-        os.chdir(r"D:\raincells")
-        os.system(r"venv\Scripts\activate")
+        # os.chdir(r"D:\raincells")
+        # os.system(r"venv\Scripts\activate")
 
         if flo2d_model is None:
             flo2d_model = "flo2d_250"
@@ -160,15 +161,13 @@ if __name__ == "__main__":
             check_time_format(time=end_time, model=flo2d_model)
 
         raincell_file_path = os.path.join(r"D:\raincells",
-                                          'RAINCELL_DESIGN_{}_{}_{}.DAT'.format(flo2d_model, start_time, end_time).replace(' ',
-                                                                                                                    '_').replace(
-                                              ':', '-'))
+                'RAINCELL_DESIGN_{}_{}_{}.DAT'.format(flo2d_model, start_time, end_time).replace(' ', '_').replace(':', '-'))
 
         if not os.path.isfile(raincell_file_path):
             print("{} start preparing raincell".format(datetime.now()))
-            prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value,
-                             timestep=timestep, target_model=flo2d_model, start_time=start_time,
-                             end_time=end_time)
+            raincell_file_path='/home/hasitha/PycharmProjects/Workflow/output/RAINCELL.DAT'
+            prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value, timestep=timestep,
+                             target_model=flo2d_model)
             print("{} completed preparing raincell".format(datetime.now()))
         else:
             print('Raincell file already in path : ', raincell_file_path)
