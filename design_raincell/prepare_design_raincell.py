@@ -76,7 +76,7 @@ def prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value, 
             raincell.append('')
             print(timestamp)
             timestamp = timestamp + timedelta(minutes=timestep)
-        append_to_file(raincell_file_path, raincell)
+            append_to_file(raincell_file_path, raincell)
     except Exception as ex:
         print('prepare_raincell|Exception : ', str(ex))
         traceback.print_exc()
@@ -136,8 +136,8 @@ if __name__ == "__main__":
         print('User inputs|timestep : ', timestep)
         print('User inputs|rain_fall_value : ', rain_fall_value)
 
-        # os.chdir(r"D:\raincells")
-        # os.system(r"venv\Scripts\activate")
+        os.chdir(r"D:\raincells")
+        os.system(r"venv\Scripts\activate")
 
         if flo2d_model is None:
             flo2d_model = "flo2d_250"
@@ -164,10 +164,9 @@ if __name__ == "__main__":
             grid_points = 9348
         elif flo2d_model == 'flo2d_150':
             grid_points = 41767
-
+        # raincell_file_path='/home/hasitha/PycharmProjects/Workflow/output/RAINCELL.DAT'
         if not os.path.isfile(raincell_file_path):
             print("{} start preparing raincell".format(datetime.now()))
-            raincell_file_path='/home/hasitha/PycharmProjects/Workflow/output/RAINCELL.DAT'
             prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value, grid_points, timestep=timestep,
                              target_model=flo2d_model)
             print("{} completed preparing raincell".format(datetime.now()))
