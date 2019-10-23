@@ -60,10 +60,10 @@ def prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value, 
     if end_time < start_time:
         print("start_time should be less than end_time")
         exit(1)
-    if target_model is "flo2d_250":
-        grid_points = 5
-    elif target_model is "flo2d_150":
-        grid_points = 15
+    if target_model is 'flo2d_250':
+        grid_points = 100
+    elif target_model is 'flo2d_150':
+        grid_points = 100
 
     length = int(((end_time - start_time).total_seconds() / 60) / timestep)
 
