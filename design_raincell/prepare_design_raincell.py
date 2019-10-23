@@ -37,7 +37,7 @@ def check_time_format(time, model):
         exit(1)
 
 
-def prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value, timestep=15, target_model='flo2d_250'):
+def prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value, grid_points, timestep=15, target_model='flo2d_250'):
     """
     :param raincell_file_path: str
     :param start_time: str '2019-10-23 15:40:00'
@@ -53,6 +53,7 @@ def prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value, 
     print('prepare_raincell|timestep : ', timestep)
     print('prepare_raincell|target_model : ', target_model)
     print('prepare_raincell|rain_fall_value : ', rain_fall_value)
+    print('prepare_raincell|grid_points : ', grid_points)
 
     end_time = datetime.strptime(end_time, DATE_TIME_FORMAT)
     start_time = datetime.strptime(start_time, DATE_TIME_FORMAT)
@@ -60,10 +61,6 @@ def prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value, 
     if end_time < start_time:
         print("start_time should be less than end_time")
         exit(1)
-    if target_model is 'flo2d_250':
-        grid_points = 100
-    elif target_model is 'flo2d_150':
-        grid_points = 100
 
     length = int(((end_time - start_time).total_seconds() / 60) / timestep)
 
@@ -163,10 +160,15 @@ if __name__ == "__main__":
         raincell_file_path = os.path.join(r"D:\raincells",
                 'RAINCELL_DESIGN_{}_{}_{}.DAT'.format(flo2d_model, start_time, end_time).replace(' ', '_').replace(':', '-'))
 
+        if flo2d_model == 'flo2d_250':
+            grid_points = 9348
+        elif flo2d_model == 'flo2d_150':
+            grid_points = 41767
+
         if not os.path.isfile(raincell_file_path):
             print("{} start preparing raincell".format(datetime.now()))
             raincell_file_path='/home/hasitha/PycharmProjects/Workflow/output/RAINCELL.DAT'
-            prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value, timestep=timestep,
+            prepare_raincell(raincell_file_path, start_time, end_time, rain_fall_value, grid_points, timestep=timestep,
                              target_model=flo2d_model)
             print("{} completed preparing raincell".format(datetime.now()))
         else:
