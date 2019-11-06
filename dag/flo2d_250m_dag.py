@@ -11,7 +11,7 @@ dag_pool = 'curw_prod_runs'
 default_args = {
     'owner': 'curwsl admin',
     'depends_on_past': False,
-    'start_date': datetime.strptime('2019-07-19 12:00:00', '%Y-%m-%d %H:%M:%S'),
+    'start_date': datetime.strptime('2019-11-06 10:00:00', '%Y-%m-%d %H:%M:%S'),
     'email': ['admin@curwsl.com'],
     'email_on_failure': False,
     'email_on_retry': False,
@@ -23,7 +23,8 @@ default_args = {
 
 # initiate the DAG
 dag = DAG(
-    prod_dag_name,
+    prod_dag_name, catchup=False,
+    dagrun_timeout=3300,
     default_args=default_args,
     description='Run Flo2d 250m DAG using curw_sim db',
     schedule_interval=schedule_interval)
