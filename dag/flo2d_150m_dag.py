@@ -61,6 +61,7 @@ extract_water_level_curw_cmd = 'curl -X GET "http://10.138.0.4:8078/extract-curw
 create_raincell = BashOperator(
     task_id='create_raincell',
     bash_command=create_raincell_cmd,
+    execution_timeout=5400,
     dag=dag,
     pool=dag_pool,
 )
@@ -68,6 +69,7 @@ create_raincell = BashOperator(
 create_inflow = BashOperator(
     task_id='create_inflow',
     bash_command=create_inflow_cmd,
+    execution_timeout=300,
     dag=dag,
     pool=dag_pool,
 )
@@ -75,6 +77,7 @@ create_inflow = BashOperator(
 create_outflow = BashOperator(
     task_id='create_outflow',
     bash_command=create_outflow_cmd,
+    execution_timeout=300,
     dag=dag,
     pool=dag_pool,
 )
@@ -82,6 +85,7 @@ create_outflow = BashOperator(
 run_flo2d_150m = BashOperator(
     task_id='run_flo2d_150m',
     bash_command=run_flo2d_150m_cmd,
+    execution_timeout=14400,
     dag=dag,
     pool=dag_pool,
 )
@@ -89,6 +93,7 @@ run_flo2d_150m = BashOperator(
 extract_water_level_curw = BashOperator(
     task_id='extract_water_level_curw',
     bash_command=extract_water_level_curw_cmd,
+    execution_timeout=18000,
     dag=dag,
     pool=dag_pool,
 )
