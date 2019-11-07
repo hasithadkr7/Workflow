@@ -6,7 +6,7 @@ from airflow.operators.bash_operator import BashOperator
 prod_dag_name = 'flo2d-150m-dag-1'
 queue = 'default'
 schedule_interval = '0 */6 * * *'
-dag_pool = 'curw_prod_runs'
+dag_pool = 'flo2d_150_pool'
 
 
 default_args = {
@@ -24,7 +24,8 @@ default_args = {
 
 # initiate the DAG
 dag = DAG(
-    prod_dag_name,
+    prod_dag_name, catchup=False,
+    dagrun_timeout=timedelta(hours=6),
     default_args=default_args,
     description='Run Flo2d 150m DAG',
     schedule_interval=schedule_interval)
@@ -62,6 +63,7 @@ extract_water_level_curw_cmd = 'curl -X GET "http://10.138.0.7:8089/extract-curw
 create_raincell = BashOperator(
     task_id='create_raincell',
     bash_command=create_raincell_cmd,
+    execution_timeout=timedelta(hours=1),
     dag=dag,
     pool=dag_pool,
 )
@@ -69,6 +71,7 @@ create_raincell = BashOperator(
 create_inflow = BashOperator(
     task_id='create_inflow',
     bash_command=create_inflow_cmd,
+    execution_timeout=timedelta(minutes=10),
     dag=dag,
     pool=dag_pool,
 )
@@ -76,6 +79,7 @@ create_inflow = BashOperator(
 create_outflow = BashOperator(
     task_id='create_outflow',
     bash_command=create_outflow_cmd,
+    execution_timeout=timedelta(minutes=10),
     dag=dag,
     pool=dag_pool,
 )
@@ -83,6 +87,7 @@ create_outflow = BashOperator(
 run_flo2d_150m = BashOperator(
     task_id='run_flo2d_150m',
     bash_command=run_flo2d_150m_cmd,
+    execution_timeout=timedelta(hours=4, minutes=30),
     dag=dag,
     pool=dag_pool,
 )
@@ -90,6 +95,7 @@ run_flo2d_150m = BashOperator(
 extract_water_level_curw_fcst = BashOperator(
     task_id='extract_water_level_curw_fcst',
     bash_command=extract_water_level_curw_fcst_cmd,
+    execution_timeout=timedelta(minutes=20),
     dag=dag,
     pool=dag_pool,
 )
@@ -97,6 +103,7 @@ extract_water_level_curw_fcst = BashOperator(
 extract_water_level_curw = BashOperator(
     task_id='extract_water_level_curw',
     bash_command=extract_water_level_curw_cmd,
+    execution_timeout=timedelta(minutes=20),
     dag=dag,
     pool=dag_pool,
 )

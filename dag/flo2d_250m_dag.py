@@ -6,7 +6,7 @@ from airflow.operators.bash_operator import BashOperator
 prod_dag_name = 'flo2d-250m-dag-3'
 queue = 'default'
 schedule_interval = '20 * * * *'
-dag_pool = 'curw_prod_runs'
+dag_pool = 'flo2d_250_pool'
 
 default_args = {
     'owner': 'curwsl admin',
