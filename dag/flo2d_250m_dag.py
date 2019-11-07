@@ -11,7 +11,7 @@ dag_pool = 'flo2d_250_pool'
 default_args = {
     'owner': 'curwsl admin',
     'depends_on_past': False,
-    'start_date': datetime.strptime('2019-11-06 10:00:00', '%Y-%m-%d %H:%M:%S'),
+    'start_date': datetime.strptime('2019-07-19 12:00:00', '%Y-%m-%d %H:%M:%S'),
     'email': ['admin@curwsl.com'],
     'email_on_failure': False,
     'email_on_retry': False,
@@ -24,8 +24,8 @@ default_args = {
 # initiate the DAG
 dag = DAG(
     prod_dag_name, catchup=False,
-    dagrun_timeout=timedelta(minutes=55),
     default_args=default_args,
+    dagrun_timeout=timedelta(minutes=55),
     description='Run Flo2d 250m DAG using curw_sim db',
     schedule_interval=schedule_interval)
 
@@ -38,7 +38,7 @@ create_inflow_cmd = 'curl -X GET "http://10.138.0.4:8088/create-inflow?' \
                     'run_date={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}' \
                     '&run_time={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }}"'
 
-create_outflow_cmd = 'curl -X GET "http://10.138.0.4:8088/create-outflow?' \
+create_outflow_cmd = 'curl -X GET "http://10.138.0.4:8088/create-outflow-old?' \
                      'run_date={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%Y-%m-%d\") }}' \
                      '&run_time={{ (execution_date - macros.timedelta(days=1) + macros.timedelta(hours=5,minutes=30)).strftime(\"%H:00:00\") }}' \
                      '&forward=3&backward=2"'
@@ -58,7 +58,7 @@ extract_water_level_curw_cmd = 'curl -X GET "http://10.138.0.4:8088/extract-curw
 create_raincell = BashOperator(
     task_id='create_raincell',
     bash_command=create_raincell_cmd,
-    execution_timeout=timedelta(minutes=10),
+    execution_timeout=timedelta(minutes=15),
     dag=dag,
     pool=dag_pool,
 )
@@ -87,11 +87,18 @@ run_flo2d_250m = BashOperator(
     pool=dag_pool,
 )
 
+# Had to run flo2d 2 times to avoid minus waterlevel results.
+# run_flo2d_250m_again = BashOperator(
+#    task_id='run_flo2d_250m_again',
+#    bash_command=run_flo2d_250m_cmd,
+#    dag=dag,
+#    pool=dag_pool,
+# )
 
 extract_water_level = BashOperator(
     task_id='extract_water_level',
     bash_command=extract_water_level_cmd,
-    execution_timeout=timedelta(minutes=5),
+    execution_timeout=timedelta(minutes=10),
     dag=dag,
     pool=dag_pool,
 )
@@ -99,9 +106,10 @@ extract_water_level = BashOperator(
 extract_water_level_curw = BashOperator(
     task_id='extract_water_level_curw',
     bash_command=extract_water_level_curw_cmd,
-    execution_timeout=timedelta(minutes=5),
+    execution_timeout=timedelta(minutes=10),
     dag=dag,
     pool=dag_pool,
 )
 
 create_raincell >> create_inflow >> create_outflow >> run_flo2d_250m >> extract_water_level >> extract_water_level_curw
+
