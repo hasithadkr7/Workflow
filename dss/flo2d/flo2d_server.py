@@ -69,10 +69,11 @@ class StoreHandler(BaseHTTPRequestHandler):
                 print('query_components : ', query_components)
                 [run_date] = query_components["run_date"]
                 [run_time] = query_components["run_time"]
+                [forward] = query_components["forward"]
+                [backward] = query_components["backward"]
+                [model] = query_components["model"]
                 print('[run_date, run_time] : ', [run_date, run_time])
                 dir_path = set_daily_dir(run_date, run_time)
-                backward = '2'
-                forward = '3'
                 duration_days = (int(backward), int(forward))
                 ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
                 ts_end_date = datetime.strptime(run_date, '%Y-%m-%d') + timedelta(days=duration_days[1])
@@ -82,7 +83,7 @@ class StoreHandler(BaseHTTPRequestHandler):
                 ts_start = '{} {}'.format(ts_start_date, ts_start_time)
                 ts_end = '{} {}'.format(ts_end_date, ts_start_time)
                 print('create_inflow-[ts_start, ts_end]', [ts_start, ts_end])
-                create_inflow(dir_path, ts_start, ts_end)
+                create_inflow(dir_path, ts_start, ts_end, model)
                 response = {'response': 'success'}
             except Exception as ex:
                 print(str(ex))
