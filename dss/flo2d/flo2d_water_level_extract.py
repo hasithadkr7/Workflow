@@ -186,6 +186,11 @@ def save_forecast_timeseries_to_db(pool, timeseries, run_date, run_time, opts, f
         traceback.print_exc()
 
 
+def extract_water_levels(flo2d_rule, exec_date):
+
+    print('')
+
+
 def upload_waterlevels(dir_path, ts_start_date, ts_start_time, run_date, run_time):
     """
     Config.json
