@@ -7,7 +7,7 @@ from dss.flo2d.gen_raincell_curw_sim import create_sim_hybrid_raincell
 from inflowdat.get_inflow import create_inflow
 from outflowdat.gen_outflow_old import create_outflow_old
 from outflowdat.gen_outflow import create_outflow
-from flo2d.run_model import execute_flo2d_250m, flo2d_model_completed
+from flo2d.run_model import execute_flo2d, flo2d_model_completed
 from waterlevel.upload_waterlevel import upload_waterlevels_curw
 from extract.extract_water_level_hourly_run import upload_waterlevels
 from os.path import join as pjoin
@@ -169,7 +169,7 @@ class StoreHandler(BaseHTTPRequestHandler):
                 [run_time] = query_components["run_time"]
                 print('[run_date, run_time] : ', [run_date, run_time])
                 dir_path = set_daily_dir(run_date, run_time)
-                execute_flo2d_250m(dir_path, run_date, run_time)
+                execute_flo2d(dir_path, run_date, run_time)
                 response = {'response': 'success'}
             except Exception as ex:
                 print(str(ex))
