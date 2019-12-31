@@ -125,7 +125,7 @@ def extractForecastTimeseries(timeseries, extract_date, extract_time, by_day=Fal
     return new_timeseries
 
 
-def save_forecast_timeseries_to_db(pool, timeseries, run_date, run_time, opts, flo2d_stations):
+def save_forecast_timeseries_to_db(pool, timeseries, run_date, run_time, opts, flo2d_stations, fgt):
     print('EXTRACTFLO2DWATERLEVEL:: save_forecast_timeseries >>', opts)
 
     # {
@@ -162,8 +162,6 @@ def save_forecast_timeseries_to_db(pool, timeseries, run_date, run_time, opts, f
 
     tms_meta = opts.get('tms_meta')
 
-    print("############### 2nd occurrence ############", flo2d_stations)
-
     tms_meta['latitude'] = str(flo2d_stations.get(elementNo)[1])
     tms_meta['longitude'] = str(flo2d_stations.get(elementNo)[2])
     tms_meta['station_id'] = flo2d_stations.get(elementNo)[0]
@@ -178,10 +176,10 @@ def save_forecast_timeseries_to_db(pool, timeseries, run_date, run_time, opts, f
             tms_id = TS.generate_timeseries_id(meta_data=tms_meta)
             tms_meta['tms_id'] = tms_id
             TS.insert_run(run_meta=tms_meta)
-            TS.update_start_date(id_=tms_id, start_date=('%s %s' % (run_date, run_time)))
+            TS.update_start_date(id_=tms_id, start_date=fgt)
 
-        TS.insert_data(timeseries=forecast_timeseries, tms_id=tms_id, fgt=('%s %s' % (run_date, run_time)), upsert=True)
-        TS.update_latest_fgt(id_=tms_id, fgt=('%s %s' % (run_date, run_time)))
+        TS.insert_data(timeseries=forecast_timeseries, tms_id=tms_id, fgt=fgt, upsert=True)
+        TS.update_latest_fgt(id_=tms_id, fgt=fgt)
 
     except Exception:
         logger.error("Exception occurred while pushing data to the curw_fcst database")
@@ -251,17 +249,12 @@ def upload_waterlevels(dir_path, ts_start_date, ts_start_time, run_date, run_tim
         pool = get_Pool(host=CURW_FCST_HOST, port=CURW_FCST_PORT, db=CURW_FCST_DATABASE, user=CURW_FCST_USERNAME,
                         password=CURW_FCST_PASSWORD)
 
-        # pool = get_Pool(host=HOST, port=PORT, user=USERNAME, password=PASSWORD, db=DATABASE)
 
         flo2d_model_name = '{}_{}'.format(model, version)
 
         flo2d_source = json.loads(get_source_parameters(pool=pool, model=model, version=version))
 
-        print("############### source ############", flo2d_source)
-
         flo2d_stations = get_flo2d_output_stations(pool=pool, flo2d_model=StationEnum.getType(flo2d_model_name))
-
-        print("############### 1st occurrence ############", flo2d_stations)
 
         source_id = get_source_id(pool=pool, model=model, version=version)
 
@@ -291,6 +284,8 @@ def upload_waterlevels(dir_path, ts_start_date, ts_start_time, run_date, run_tim
         MISSING_VALUE = -999
 
         utcOffset = getUTCOffset(utc_offset, default=True)
+
+        fgt = (datetime.now() + timedelta(hours=5, minutes=30)).strftime(COMMON_DATE_TIME_FORMAT)
 
         print('Extract Water Level Result of FLO2D on', run_date, '@', run_time, 'with Base time of', ts_start_date,
               '@', ts_start_time)
@@ -396,7 +391,7 @@ def upload_waterlevels(dir_path, ts_start_date, ts_start_time, run_date, run_tim
                         # Push timeseries to database
                         save_forecast_timeseries_to_db(pool=pool, timeseries=timeseries,
                                                        run_date=run_date, run_time=run_time, opts=opts,
-                                                       flo2d_stations=flo2d_stations)
+                                                       flo2d_stations=flo2d_stations, fgt=fgt)
 
                         isWaterLevelLines = False
                         isSeriesComplete = False
@@ -464,11 +459,9 @@ def upload_waterlevels(dir_path, ts_start_date, ts_start_time, run_date, run_tim
                 # Push timeseries to database
                 save_forecast_timeseries_to_db(pool=pool, timeseries=waterLevelSeriesDict[elementNo],
                                                run_date=run_date, run_time=run_time, opts=opts,
-                                               flo2d_stations=flo2d_stations)
+                                               flo2d_stations=flo2d_stations, fgt=fgt)
 
     except Exception as e:
-        logger.error('JSON config data loading error.')
-        print('JSON config data loading error.')
         traceback.print_exc()
     finally:
         logger.info("Process finished.")
