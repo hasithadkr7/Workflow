@@ -3,13 +3,16 @@ from builtins import print
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from urllib.parse import urlparse, parse_qs
-from dss.flo2d.gen_raincell_curw_sim import create_sim_hybrid_raincell
+# from raincelldat.gen_raincell import create_hybrid_raincell
+from curw_sim.gen_raincell_curw_sim import create_sim_hybrid_raincell
 from inflowdat.get_inflow import create_inflow
 from outflowdat.gen_outflow_old import create_outflow_old
 from outflowdat.gen_outflow import create_outflow
-from flo2d.run_model import execute_flo2d, flo2d_model_completed
+from flo2d.run_model import execute_flo2d_250m, flo2d_model_completed
 from waterlevel.upload_waterlevel import upload_waterlevels_curw
 from extract.extract_water_level_hourly_run import upload_waterlevels
+from extract.extract_discharge_hourly_run import upload_discharges
+from chan.gen_chan import create_chan
 from os.path import join as pjoin
 from datetime import datetime, timedelta
 
@@ -33,8 +36,31 @@ def set_daily_dir(run_date, run_time):
 
 class StoreHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        self.timeout = 2700
+        self.timeout = 2100
         print('Handle GET request...')
+        if self.path.startswith('/create-raincell'):
+            os.chdir(r"D:\flo2d_hourly")
+            print('create-raincell')
+            response = {}
+            try:
+                query_components = parse_qs(urlparse(self.path).query)
+                print('query_components : ', query_components)
+                [run_date] = query_components["run_date"]
+                [run_time] = query_components["run_time"]
+                [forward] = query_components["forward"]
+                [backward] = query_components["backward"]
+                print('[run_date, run_time] : ', [run_date, run_time])
+                dir_path = set_daily_dir(run_date, run_time)
+                create_hybrid_raincell(dir_path, run_date, run_time, forward, backward)
+                response = {'response': 'success'}
+            except Exception as e:
+                print(str(e))
+            reply = json.dumps(response)
+            self.send_response(200)
+            self.send_header('Content-type', 'text/json')
+            self.end_headers()
+            self.wfile.write(str.encode(reply))
+
         if self.path.startswith('/create-sim-raincell'):
             os.chdir(r"D:\flo2d_hourly")
             print('create-sim-raincell')
@@ -46,14 +72,14 @@ class StoreHandler(BaseHTTPRequestHandler):
                 [run_time] = query_components["run_time"]
                 [forward] = query_components["forward"]
                 [backward] = query_components["backward"]
-                [model] = query_components["model"]
                 print('[run_date, run_time] : ', [run_date, run_time])
                 dir_path = set_daily_dir(run_date, run_time)
                 create_sim_hybrid_raincell(dir_path, run_date, run_time, forward, backward,
-                                           res_mins=5, flo2d_model=model, calc_method='MME')
+                                           res_mins=5, flo2d_model='flo2d_250',
+                                           calc_method='MME')
                 response = {'response': 'success'}
-            except Exception as ex:
-                print(str(ex))
+            except Exception as e:
+                print(str(e))
             reply = json.dumps(response)
             self.send_response(200)
             self.send_header('Content-type', 'text/json')
@@ -69,9 +95,40 @@ class StoreHandler(BaseHTTPRequestHandler):
                 print('query_components : ', query_components)
                 [run_date] = query_components["run_date"]
                 [run_time] = query_components["run_time"]
+                print('[run_date, run_time] : ', [run_date, run_time])
+                dir_path = set_daily_dir(run_date, run_time)
+                backward = '2'
+                forward = '3'
+                duration_days = (int(backward), int(forward))
+                ts_start_date = datetime.strptime(run_date, '%Y-%m-%d') - timedelta(days=duration_days[0])
+                ts_end_date = datetime.strptime(run_date, '%Y-%m-%d') + timedelta(days=duration_days[1])
+                ts_end_date = ts_end_date.strftime('%Y-%m-%d')
+                ts_start_date = ts_start_date.strftime('%Y-%m-%d')
+                ts_start_time = '00:00:00'
+                ts_start = '{} {}'.format(ts_start_date, ts_start_time)
+                ts_end = '{} {}'.format(ts_end_date, ts_start_time)
+                print('create_inflow-[ts_start, ts_end]', [ts_start, ts_end])
+                create_inflow(dir_path, ts_start, ts_end)
+                response = {'response': 'success'}
+            except Exception as e:
+                print(str(e))
+            reply = json.dumps(response)
+            self.send_response(200)
+            self.send_header('Content-type', 'text/json')
+            self.end_headers()
+            self.wfile.write(str.encode(reply))
+
+        if self.path.startswith('/create-chan'):
+            os.chdir(r"D:\flo2d_hourly")
+            print('create-chan')
+            response = {}
+            try:
+                query_components = parse_qs(urlparse(self.path).query)
+                print('query_components : ', query_components)
+                [run_date] = query_components["run_date"]
+                [run_time] = query_components["run_time"]
                 [forward] = query_components["forward"]
                 [backward] = query_components["backward"]
-                [model] = query_components["model"]
                 print('[run_date, run_time] : ', [run_date, run_time])
                 dir_path = set_daily_dir(run_date, run_time)
                 duration_days = (int(backward), int(forward))
@@ -82,11 +139,11 @@ class StoreHandler(BaseHTTPRequestHandler):
                 ts_start_time = '00:00:00'
                 ts_start = '{} {}'.format(ts_start_date, ts_start_time)
                 ts_end = '{} {}'.format(ts_end_date, ts_start_time)
-                print('create_inflow-[ts_start, ts_end]', [ts_start, ts_end])
-                create_inflow(dir_path, ts_start, ts_end, model)
+                print('create-chan-[ts_start, ts_end]', [ts_start, ts_end])
+                create_chan(dir_path, ts_start, 'flo2d_250')
                 response = {'response': 'success'}
-            except Exception as ex:
-                print(str(ex))
+            except Exception as e:
+                print(str(e))
             reply = json.dumps(response)
             self.send_response(200)
             self.send_header('Content-type', 'text/json')
@@ -104,7 +161,6 @@ class StoreHandler(BaseHTTPRequestHandler):
                 [run_time] = query_components["run_time"]
                 [forward] = query_components["forward"]
                 [backward] = query_components["backward"]
-                [model] = query_components["model"]
                 print('[run_date, run_time] : ', [run_date, run_time])
                 dir_path = set_daily_dir(run_date, run_time)
                 duration_days = (int(backward), int(forward))
@@ -116,10 +172,10 @@ class StoreHandler(BaseHTTPRequestHandler):
                 ts_start = '{} {}'.format(ts_start_date, ts_start_time)
                 ts_end = '{} {}'.format(ts_end_date, ts_start_time)
                 print('create_outflow-[ts_start, ts_end]', [ts_start, ts_end])
-                create_outflow(dir_path, ts_start, ts_end, model)
+                create_outflow(dir_path, ts_start, ts_end)
                 response = {'response': 'success'}
-            except Exception as ex:
-                print(str(ex))
+            except Exception as e:
+                print(str(e))
             reply = json.dumps(response)
             self.send_response(200)
             self.send_header('Content-type', 'text/json')
@@ -150,8 +206,8 @@ class StoreHandler(BaseHTTPRequestHandler):
                 print('create_outflow-[ts_start, ts_end]', [ts_start, ts_end])
                 create_outflow_old(dir_path, ts_start, ts_end)
                 response = {'response': 'success'}
-            except Exception as ex:
-                print(str(ex))
+            except Exception as e:
+                print(str(e))
             reply = json.dumps(response)
             self.send_response(200)
             self.send_header('Content-type', 'text/json')
@@ -169,10 +225,10 @@ class StoreHandler(BaseHTTPRequestHandler):
                 [run_time] = query_components["run_time"]
                 print('[run_date, run_time] : ', [run_date, run_time])
                 dir_path = set_daily_dir(run_date, run_time)
-                execute_flo2d(dir_path, run_date, run_time)
+                execute_flo2d_250m(dir_path, run_date, run_time)
                 response = {'response': 'success'}
-            except Exception as ex:
-                print(str(ex))
+            except Exception as e:
+                print(str(e))
             reply = json.dumps(response)
             self.send_response(200)
             self.send_header('Content-type', 'text/json')
@@ -194,8 +250,8 @@ class StoreHandler(BaseHTTPRequestHandler):
                 except Exception as ex:
                     print('flo2d_model_completed|Exception : ', str(ex))
                 response = {'response': 'success'}
-            except Exception as ex:
-                print(str(ex))
+            except Exception as e:
+                print(str(e))
             reply = json.dumps(response)
             self.send_response(200)
             self.send_header('Content-type', 'text/json')
@@ -220,9 +276,11 @@ class StoreHandler(BaseHTTPRequestHandler):
                 ts_start_time = '00:00:00'
                 # upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time)
                 upload_waterlevels(dir_path, ts_start_date, ts_start_time, run_date, run_time)
+                # upload discharges to curw_fcst database
+                upload_discharges(dir_path, ts_start_date, ts_start_time, run_date, run_time)
                 response = {'response': 'success'}
-            except Exception as ex:
-                print(str(ex))
+            except Exception as e:
+                print(str(e))
             reply = json.dumps(response)
             self.send_response(200)
             self.send_header('Content-type', 'text/json')
@@ -253,8 +311,8 @@ class StoreHandler(BaseHTTPRequestHandler):
                                                                                                         run_time])
                 upload_waterlevels_curw(dir_path, ts_start_date, ts_start_time, run_date, run_time)
                 response = {'response': 'success'}
-            except Exception as ex:
-                print(str(ex))
+            except Exception as e:
+                print(str(e))
             reply = json.dumps(response)
             self.send_response(200)
             self.send_header('Content-type', 'text/json')
